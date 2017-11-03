@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgeit.entity.User;
+import com.bridgeit.service.TokenService;
 import com.bridgeit.service.UserService;
 import com.bridgeit.socialUtility.GoogleConnection;
-import com.bridgeit.tokenAuthentication.TokenGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -29,7 +29,7 @@ public class GoogleLoginController {
 	UserService userService;
 
 	@Autowired
-	TokenGenerator tokenService;
+	TokenService tokenService;
 
 	@RequestMapping(value = "/gconnect", method = RequestMethod.GET)
 	public void initialConnect(HttpServletResponse response) {
@@ -89,10 +89,9 @@ public class GoogleLoginController {
 				} else {
 
 					logger.info("existing user is logging thru' google. let's allocate tokens to user");
-					System.out.println("user before tokemn Id: " + user.getId());
 					tokenService.generateTokenAndPushIntoRedis(user.getId(), "accesstoken");
 					tokenService.generateTokenAndPushIntoRedis(user.getId(), "refreshtoken");
-					RequestDispatcher dispatcher = request.getRequestDispatcher("fbsuccess.jsp");
+					RequestDispatcher dispatcher = request.getRequestDispatcher("googlesuccess.jsp");
 					request.setAttribute("user", user);
 					dispatcher.forward(request, response);
 				}

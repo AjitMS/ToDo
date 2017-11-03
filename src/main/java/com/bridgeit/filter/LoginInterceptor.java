@@ -11,14 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.bridgeit.tokenAuthentication.TokenGenerator;
+import com.bridgeit.service.TokenService;
 
 @Component
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 	Logger logger = Logger.getLogger(LoginInterceptor.class);
 
 	@Autowired
-	TokenGenerator tokenService;
+	TokenService tokenService;
 
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {

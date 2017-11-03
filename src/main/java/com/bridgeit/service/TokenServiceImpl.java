@@ -1,4 +1,4 @@
-package com.bridgeit.tokenAuthentication;
+package com.bridgeit.service;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -12,13 +12,13 @@ import org.redisson.Redisson;
 import org.redisson.api.RMapCache;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.bridgeit.entity.Token;
 
-@Service("/tokenService")
-public class TokenGenerator {
-	Logger logger = Logger.getLogger(TokenGenerator.class);
+@Component("tokenService")
+public class TokenServiceImpl {
+	Logger logger = Logger.getLogger(TokenServiceImpl.class);
 	Config config;
 	RedissonClient redisson;
 	RMapCache<String, Token> tokenMap;

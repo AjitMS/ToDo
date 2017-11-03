@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgeit.entity.User;
+import com.bridgeit.service.TokenService;
 import com.bridgeit.service.UserService;
 import com.bridgeit.socialUtility.FBConnection;
 import com.bridgeit.socialUtility.FBGraph;
-import com.bridgeit.tokenAuthentication.TokenGenerator;
 
 @RestController
 public class FacebookLoginController {
@@ -31,10 +31,9 @@ public class FacebookLoginController {
 	FBConnection fbConnection;
 
 	@Autowired
-	TokenGenerator tokenService;
+	TokenService tokenService;
 
 	@GetMapping("/fbconnect")
-
 	public void initialConnect(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		logger.info("Initial login");

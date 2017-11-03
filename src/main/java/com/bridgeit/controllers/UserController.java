@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgeit.emailUtility.EmailUtility;
 import com.bridgeit.entity.Token;
 import com.bridgeit.entity.User;
 import com.bridgeit.entity.UserLoginPair;
+import com.bridgeit.service.TokenService;
 import com.bridgeit.service.UserService;
-import com.bridgeit.tokenAuthentication.TokenGenerator;
 import com.bridgeit.utilities.Encryption;
 
 @RestController("/")
@@ -37,9 +38,11 @@ public class UserController {
 	User user;
 
 	@Autowired
-	TokenGenerator generator;
+	TokenService tokenService;
 	@Autowired
 	Encryption encryption;
+	@Autowired
+	EmailUtility emailUtility;
 
 	@GetMapping("/")
 	public ResponseEntity<String> welcomeUser() {
@@ -59,7 +62,7 @@ public class UserController {
 		// grab entire user by email if proper credentials
 		user = userService.getUserByEmail(email, user);
 		System.out.println("user is valid ");
-		System.out.println("user is valid "+user.getIsValid());
+		System.out.println("user is valid " + user.getIsValid());
 		if (!user.getIsValid())
 			return new ResponseEntity<String>("Account not validated. please check email or register",
 					HttpStatus.FORBIDDEN);
@@ -74,8 +77,8 @@ public class UserController {
 			// mistakenly @Autowired token and it returned the same token always for both
 			// refresh and access
 
-			Token accessToken = generator.generateTokenAndPushIntoRedis(user.getId(), "accesstoken");
-			Token refreshToken = generator.generateTokenAndPushIntoRedis(user.getId(), "refreshtoken");
+			Token accessToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), "accesstoken");
+			Token refreshToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), "refreshtoken");
 			List<Token> tokenList = new ArrayList<>();
 			tokenList.add(accessToken);
 			tokenList.add(refreshToken);
@@ -83,7 +86,6 @@ public class UserController {
 
 			logger.info("ACCESS TOKEN: " + accessToken);
 			logger.info("REFRESH TOKEN: " + refreshToken);
-			logger.info("Token List is " + tokenList);
 
 			// send token link to user email
 			userService.sendLoginVerificationToken(user, accessToken, request);
@@ -103,17 +105,17 @@ public class UserController {
 
 		// first validate access token is intact, if yes login
 
-		if (generator.verifyUserToken(userTokenId).compareTo(userId) == 0) {
+		if (tokenService.verifyUserToken(userTokenId).compareTo(userId) == 0) {
 			logger.info("Congratulations ! Access Token validation sucess");
 			return new ResponseEntity<String>("Token authenticated ! Redirecting...", HttpStatus.ACCEPTED);
 		} else {
 			// else validate refresh token
 
 			logger.error("Access token validation failed, starting refresh token validation");
-			if (generator.verifyUserToken(userTokenId).compareTo(userId) == 0) {
+			if (tokenService.verifyUserToken(userTokenId).compareTo(userId) == 0) {
 
 				// and generate another new access token and login
-				Token newToken = generator.generateTokenAndPushIntoRedis(userId, "accessToken");
+				Token newToken = tokenService.generateTokenAndPushIntoRedis(userId, "accessToken");
 
 				logger.info("New access token is generated as: +" + newToken + " for user " + user.getId());
 				return new ResponseEntity<String>("Token authenticated ! Redirecting...", HttpStatus.ACCEPTED);
@@ -143,7 +145,7 @@ public class UserController {
 		// generating user token for forgot password
 		// generator is autowired
 		String tokenType = "forgottoken";
-		Token token = generator.generateTokenAndPushIntoRedis(user.getId(), tokenType);
+		Token token = tokenService.generateTokenAndPushIntoRedis(user.getId(), tokenType);
 		userService.sendResetPasswordMail(user, request, token);
 
 		return new ResponseEntity<String>("reset password link has been sent to " + user.getEmail(),
@@ -153,7 +155,7 @@ public class UserController {
 	@GetMapping("/resetpasswordtoken/{userId}/{userTokenId}")
 	public ResponseEntity<String> validateResetPasswordToken(@PathVariable("userId") Integer userId,
 			@PathVariable("userTokenId") String userTokenId) {
-		if (generator.verifyUserToken(userTokenId).compareTo(userId) == 0)
+		if (tokenService.verifyUserToken(userTokenId).compareTo(userId) == 0)
 			return new ResponseEntity<String>("Redirecting to the password resetting page..", HttpStatus.OK);
 		return new ResponseEntity<String>("Invalid link or incorrect token. password resetting failed. try again",
 				HttpStatus.NO_CONTENT);
