@@ -20,6 +20,10 @@ import com.bridgeit.service.UserService;
 import com.bridgeit.socialUtility.GoogleConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author Ajit Shikalgar
+ *
+ */
 @RestController
 public class GoogleLoginController {
 
@@ -31,6 +35,10 @@ public class GoogleLoginController {
 	@Autowired
 	TokenService tokenService;
 
+	/**
+	 * @param response
+	 * redirecting user to google via link googleLoginPageUrl
+	 */
 	@RequestMapping(value = "/gconnect", method = RequestMethod.GET)
 	public void initialConnect(HttpServletResponse response) {
 		String googleLoginPageUrl = GoogleConnection.generateLoginUrl();
@@ -41,6 +49,15 @@ public class GoogleLoginController {
 		}
 	}
 
+	/**
+	 * @param request
+	 * @param response
+	 * @param session
+	 * @throws ServletException
+	 * google provides access token as URL parameter. using this, we ge request for profile data in JSON format.
+	 * parsing and mapping this JSON into User Object directly using Object Mapper.
+	 * finally saving object with appropriate tokens and setters.
+	 */
 	@RequestMapping(value = "/glogin", method = RequestMethod.GET)
 	public void googleLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session)
 			throws ServletException {

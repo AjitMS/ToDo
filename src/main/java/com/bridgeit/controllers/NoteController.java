@@ -24,6 +24,11 @@ import com.bridgeit.entity.Note;
 import com.bridgeit.service.NoteService;
 import com.bridgeit.service.UserService;
 
+/**
+ * @author Ajit Shikalgar Controller for managing notes such as CRUD operations,
+ *         trashing, pinning etc.
+ *
+ */
 @RestController("{uid}/homepage")
 public class NoteController {
 
@@ -35,6 +40,11 @@ public class NoteController {
 	@Autowired
 	UserService userService;
 
+	/**
+	 * @param request
+	 * @param response
+	 * @return a function that returns list of notes for particular user.
+	 */
 	@GetMapping("/homepage") // userId
 	public ResponseEntity<List<Note>> showNotes(HttpServletRequest request, HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
@@ -51,6 +61,12 @@ public class NoteController {
 
 	}
 
+	/**
+	 * @param note
+	 * @param request
+	 * @param response
+	 * @return API that manages the creation of notes
+	 */
 	@PostMapping(value = "homepage/createnote")
 	public ResponseEntity<String> createNote(@RequestBody Note note, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -68,6 +84,12 @@ public class NoteController {
 
 	}
 
+	/**
+	 * @param nId
+	 * @param request
+	 * @param response
+	 * @return API to get a note of particular id
+	 */
 	@GetMapping(value = "homepage/shownote/{nId}") // noteId
 	public ResponseEntity<Note> showNote(@PathVariable("nId") Integer nId, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -86,6 +108,15 @@ public class NoteController {
 		return new ResponseEntity<Note>(note, HttpStatus.OK);
 	}
 
+	/**
+	 * @param updatedNote
+	 * @param nId
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 *             API needed to manage updating of notes
+	 */
 	@PutMapping(value = "/homepage/updatenote/{nId}")
 	public ResponseEntity<Note> updateNote(@RequestBody Note updatedNote, @PathVariable("nId") Integer nId,
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -104,6 +135,12 @@ public class NoteController {
 		return new ResponseEntity<Note>(updatedNote, HttpStatus.OK);
 	}
 
+	/**
+	 * @param nId
+	 * @param request
+	 * @param response
+	 * @return in order to delete notes permanently, use deleteNode API
+	 */
 	@DeleteMapping(value = "homepage/deletenote/{nId}")
 	public ResponseEntity<String> deleteNode(@PathVariable("nId") Integer nId, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -114,6 +151,13 @@ public class NoteController {
 		return new ResponseEntity<String>("Note Deleted. CHECK DB", HttpStatus.OK);
 	}
 
+	/**
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws IOException
+	 *             API needed to get trashed notes list
+	 */
 	@GetMapping(value = "/homepage/trashedlist")
 	public ResponseEntity<List<Note>> getTrashedNoteList(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {

@@ -17,6 +17,10 @@ import javax.persistence.Transient;
 import com.bridgeit.customAnnotation.FieldMatch;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * @author Ajit Shikalgar User entity with fields userId, firstName, lastName,
+ *         email, gender, phone, dob, password, isValid and it's noteList
+ */
 @Entity
 @Table(name = "user")
 @FieldMatch(message = "Passwords do not match")

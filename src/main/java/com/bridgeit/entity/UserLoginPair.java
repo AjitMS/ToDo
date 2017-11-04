@@ -1,5 +1,9 @@
 package com.bridgeit.entity;
 
+/**
+ * @author Ajit Shikalgar Entity used for login purposes since JSON can be
+ *         parsed into object only
+ */
 public class UserLoginPair {
 
 	private String email;

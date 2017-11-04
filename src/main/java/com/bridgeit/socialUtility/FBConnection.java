@@ -13,6 +13,10 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Ajit Shikalgar gets the initial connection and retrieves the
+ *         accessToken from facebook
+ */
 @Component
 public class FBConnection {
 	// get api to connect to FB
@@ -28,7 +32,10 @@ public class FBConnection {
 
 	static String accessToken = "";
 
-	// generates initial link to access
+	/**
+	 * @return generates initial link to access user will be redirected to fb login
+	 *         if proper credetials, we get secret code in url else errors in url
+	 */
 	public String getFBAuthUrl() {
 		String fbLoginUrl = "";
 		try {
@@ -44,6 +51,10 @@ public class FBConnection {
 		return fbLoginUrl;
 	}
 
+	/**
+	 * @param code
+	 * @return using retrieved code we form a accessToken
+	 */
 	public String getFBGraphUrl(String code) {
 		String fbGraphUrl = "";
 		try {
@@ -57,6 +68,10 @@ public class FBConnection {
 		return fbGraphUrl;
 	}
 
+	/**
+	 * @param code
+	 * @return retrieve accessToken to get fbprofile through graph URL
+	 */
 	public String getAccessToken(String code) {
 		if ("".equals(accessToken)) {
 			URL fbGraphURL;

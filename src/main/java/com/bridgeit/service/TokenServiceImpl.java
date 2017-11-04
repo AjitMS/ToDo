@@ -12,12 +12,12 @@ import org.redisson.Redisson;
 import org.redisson.api.RMapCache;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.bridgeit.entity.Token;
 
-@Component("tokenService")
-public class TokenServiceImpl {
+@Service
+public class TokenServiceImpl implements TokenService {
 	Logger logger = Logger.getLogger(TokenServiceImpl.class);
 	Config config;
 	RedissonClient redisson;

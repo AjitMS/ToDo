@@ -129,7 +129,7 @@ public class NoteDaoImpl implements NoteDao {
 		List<Note> noteList = new ArrayList<>();
 		for (Note tempNote : entireNoteList)
 			if (tempNote.getUser().getId().compareTo(uId) == 0 && tempNote.isInTrash()) {
-				System.out.println("Tempnote: "+tempNote);
+				System.out.println("Tempnote: " + tempNote);
 				noteList.add(tempNote);
 			}
 		return noteList;

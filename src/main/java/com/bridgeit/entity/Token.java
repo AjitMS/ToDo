@@ -2,6 +2,10 @@ package com.bridgeit.entity;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Ajit Shikalgar Token Entity with fields userId it belongs to,
+ *         tokenType to know accessToken/refreshToken/forgotToken and actual token value
+ */
 @Component("token")
 public class Token {
 

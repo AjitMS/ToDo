@@ -27,6 +27,10 @@ import com.bridgeit.service.TokenService;
 import com.bridgeit.service.UserService;
 import com.bridgeit.utilities.Encryption;
 
+/**
+ * @author Ajit Shikalgar
+ *
+ */
 @RestController("/")
 public class UserController {
 
@@ -44,12 +48,26 @@ public class UserController {
 	@Autowired
 	EmailUtility emailUtility;
 
+	/**
+	 * @return welcome screen (default)
+	 */
 	@GetMapping("/")
 	public ResponseEntity<String> welcomeUser() {
 		String welcome = "**Welcome to ToDo App**<br> use /login to login, \t<br> use /register to register,<br> \n use /fbconnect to login social<br>";
 		return new ResponseEntity<String>(welcome, HttpStatus.ACCEPTED);
 	}
 
+	/**
+	 * @param loginPair
+	 * @param request
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 *             API required to login and authentiaction of user 2 step
+	 *             verification is implemented while login after login success, user
+	 *             is assigned tokens
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<String> loginUser(@RequestBody UserLoginPair loginPair, HttpServletRequest request)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
@@ -99,6 +117,13 @@ public class UserController {
 		return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	/**
+	 * @param userId
+	 * @param userTokenId
+	 * @return an email is sent to user while log in with a accessToken in it this
+	 *         API checks if token in mail matches accessToken stored in redis for
+	 *         same user
+	 */
 	@GetMapping("/login/{userId}/{tokenId}")
 	public ResponseEntity<String> verifyLoginToken(@PathVariable("userId") Integer userId,
 			@PathVariable("tokenId") String userTokenId) {
@@ -128,6 +153,18 @@ public class UserController {
 
 	}
 
+	/**
+	 * @param user
+	 * @param request
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 *             this API will be hit when user clicks on forgot password user
+	 *             will be redirected to a page where user must enter email. if
+	 *             email exists, user will be sent a verification mail with a token
+	 *             in it.
+	 */
 	@PostMapping("/forgotpassword")
 	public ResponseEntity<String> forgotPassword(@RequestBody User user, HttpServletRequest request)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
@@ -152,6 +189,14 @@ public class UserController {
 				HttpStatus.ACCEPTED);
 	}
 
+	/**
+	 * @param userId
+	 * @param userTokenId
+	 * @return if user has proper forgot password token, as in email sent, user will
+	 *         be redirected to another page in which user should enter a new
+	 *         password
+	 * 
+	 */
 	@GetMapping("/resetpasswordtoken/{userId}/{userTokenId}")
 	public ResponseEntity<String> validateResetPasswordToken(@PathVariable("userId") Integer userId,
 			@PathVariable("userTokenId") String userTokenId) {
@@ -172,6 +217,15 @@ public class UserController {
 		return new ResponseEntity<>("passwords do not match", HttpStatus.NO_CONTENT);
 	}
 
+	/**
+	 * @param user
+	 * @param bindingResult
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 *             API that deals with registering user.
+	 */
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody @Valid User user, BindingResult bindingResult)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
@@ -201,6 +255,11 @@ public class UserController {
 		return new ResponseEntity<String>(greeting, HttpStatus.OK);
 	}
 
+	/**
+	 * @param id
+	 * @return registered user must be activated by accessing link provided in the
+	 *         email.
+	 */
 	@GetMapping("/register/activateuser/{id}")
 	public ResponseEntity<String> activateUser(@PathVariable("id") Integer id) {
 		userService.activateUser(id);

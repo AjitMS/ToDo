@@ -5,9 +5,19 @@ import java.security.MessageDigest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Ajit Shikalgar
+ *
+ */
 @Component
 public class Encryption {
-	Logger logger = Logger.getLogger(Encryption.class);	
+	Logger logger = Logger.getLogger(Encryption.class);
+
+	/**
+	 * @param password
+	 * @return for password in DB, we must not explicitly store it. so we use a MD5
+	 *         password encryption technique.
+	 */
 	public String encryptPassword(String password) {
 		String generatedPassword = null;
 		try {

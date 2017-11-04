@@ -20,6 +20,11 @@ public class FBGraph {
 		this.accessToken = accessToken;
 	}
 
+	/**
+	 * @return
+	 * @throws IOException
+	 *             retrieve fbProfile in a String format
+	 */
 	public String getFBGraph() throws IOException {
 		String graph = null;
 
@@ -33,10 +38,14 @@ public class FBGraph {
 			b.append(inputLine + "\n");
 		in.close();
 		graph = b.toString();
-		logger.debug("Graph String is: "+ graph);
+		logger.debug("Graph String is: " + graph);
 		return graph;
 	}
 
+	/**
+	 * @param fbGraph
+	 * @return convert the fb graph data from string to JSON
+	 */
 	public Map<String, String> getGraphData(String fbGraph) {
 		Map<String, String> fbProfile = new HashMap<>();
 		try {
@@ -51,7 +60,7 @@ public class FBGraph {
 			e.printStackTrace();
 			throw new RuntimeException("ERROR in parsing FB graph data. " + e);
 		}
-		logger.debug("fbProfile is: "+ fbProfile);
+		logger.debug("fbProfile is: " + fbProfile);
 		return fbProfile;
 	}
 }

@@ -13,6 +13,10 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * @author Ajit Shikalgar Note entity with fields as noteId, title, description,
+ *         pinned archived, created and modeified date
+ */
 @Entity
 @Table(name = "notes")
 public class Note {

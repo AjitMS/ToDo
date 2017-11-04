@@ -14,13 +14,28 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
-
+/**
+ * @author Ajit Shikalgar
+ *
+ */
+@Service
 public class EmailUtility {
 	Logger logger = Logger.getLogger(EmailUtility.class);
+
+	/**
+	 * @param toMail
+	 * @param subject
+	 * @param messageBody
+	 * @throws FileNotFoundException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 *             static method used to send mail for various purposes used by APIs
+	 */
 	public static void sendMail(String toMail, String subject, String messageBody)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
-		
+
 		// add relative path to the java class later we have used hardcoded path
 		EmailInfo emailInfo = EmailCredentialSerializer.getEmailInfo();
 		String fromMail = emailInfo.getEmail();

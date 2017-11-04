@@ -13,12 +13,29 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.bridgeit.service.TokenService;
 
+/**
+ * @author Ajit Shikalgar 
+ * Each Request to controller is intercepted by
+ *         interceptor. HandlerInterceptor is registered at
+ *         DefaultAnnotationHandlerAdapter. hence it knows which classes are
+ *         controllers and appropriately intercepts them
+ */
 @Component
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 	Logger logger = Logger.getLogger(LoginInterceptor.class);
 
 	@Autowired
 	TokenService tokenService;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.springframework.web.servlet.handler.HandlerInterceptorAdapter#preHandle(
+	 * javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse, java.lang.Object) before request from
+	 * user hits controller, it hits preHandle() to verify user is aunthenticated
+	 */
 
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws Exception {

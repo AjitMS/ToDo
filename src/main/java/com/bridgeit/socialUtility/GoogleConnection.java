@@ -13,11 +13,14 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author Ajit Shikalgar
+ *
+ */
 public class GoogleConnection {
-	
+
 	Logger logger = Logger.getLogger(GoogleConnection.class);
 
-	
 	private static final String CLIENT_ID = "953161329586-7b7o3dp1b55t7d0c86no9iifm3vfhvjh.apps.googleusercontent.com";
 	private static final String REDIRECT_URI = "http://localhost:8080/ToDo/glogin";
 	private static final String CLIENT_SECRET = "QzHjxOQOwv0eI8PHV2KEEQe_";
@@ -33,10 +36,17 @@ public class GoogleConnection {
 		}
 	}
 
+	/**
+	 * @return returns a Parameter loaded link for initial connect to google
+	 */
 	public static String generateLoginUrl() {
 		return googleLoginUrl;
 	}
 
+	/**
+	 * @param code
+	 * @return retreives access token from url if initial connect successful
+	 */
 	public static String getAccessToken(String code) {
 		String urlParameters = "code=" + code + "&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET
 				+ "&redirect_uri=" + REDIRECT_URI + "&grant_type=authorization_code";
@@ -72,6 +82,12 @@ public class GoogleConnection {
 		return null;
 	}
 
+	/**
+	 * @param googleAccessToken
+	 * @return if the retrieved access code correct, retreive profile data else
+	 *         error string in the url
+	 * 
+	 */
 	public static String getProfileData(String googleAccessToken) {
 		try {
 			URL urlInfo = new URL("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + googleAccessToken);
