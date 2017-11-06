@@ -54,7 +54,7 @@ public interface NoteDao {
 	 *            in order to delete a note temporarily, moveToTrash method is
 	 *            called by moveToTrash API from UserController
 	 */
-	public void moveToTrash(Note note);
+	public void moveToTrash(Integer nId);
 
 	/**
 	 * @param uId

@@ -29,7 +29,7 @@ import com.bridgeit.service.UserService;
  *         trashing, pinning etc.
  *
  */
-@RestController("{uid}/homepage")
+@RestController("/usernotes")
 public class NoteController {
 
 	Logger logger = Logger.getLogger(NoteController.class);
@@ -45,7 +45,7 @@ public class NoteController {
 	 * @param response
 	 * @return a function that returns list of notes for particular user.
 	 */
-	@GetMapping("/homepage") // userId
+	@GetMapping("/usernotes") // userId
 	public ResponseEntity<List<Note>> showNotes(HttpServletRequest request, HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
@@ -53,7 +53,7 @@ public class NoteController {
 
 		noteList = noteService.getNoteList(uId);
 
-		if (noteList.size() == 0) {
+		if (noteList == null) {
 			System.out.println("No notes found for user ID: " + uId);
 			return new ResponseEntity<List<Note>>(HttpStatus.NOT_FOUND);
 		}
@@ -67,7 +67,7 @@ public class NoteController {
 	 * @param response
 	 * @return API that manages the creation of notes
 	 */
-	@PostMapping(value = "homepage/createnote")
+	@PostMapping(value = "usernotes/createnote")
 	public ResponseEntity<String> createNote(@RequestBody Note note, HttpServletRequest request,
 			HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
@@ -90,7 +90,7 @@ public class NoteController {
 	 * @param response
 	 * @return API to get a note of particular id
 	 */
-	@GetMapping(value = "homepage/shownote/{nId}") // noteId
+	@GetMapping(value = "usernotes/{nId}") // noteId
 	public ResponseEntity<Note> showNote(@PathVariable("nId") Integer nId, HttpServletRequest request,
 			HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
@@ -117,7 +117,7 @@ public class NoteController {
 	 * @throws IOException
 	 *             API needed to manage updating of notes
 	 */
-	@PutMapping(value = "/homepage/updatenote/{nId}")
+	@PutMapping(value = "/usernotes/updatenote/{nId}")
 	public ResponseEntity<Note> updateNote(@RequestBody Note updatedNote, @PathVariable("nId") Integer nId,
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
 		Integer uId = (Integer) request.getAttribute("userId");
@@ -141,7 +141,7 @@ public class NoteController {
 	 * @param response
 	 * @return in order to delete notes permanently, use deleteNode API
 	 */
-	@DeleteMapping(value = "homepage/deletenote/{nId}")
+	@DeleteMapping(value = "usernotes/deletenote/{nId}")
 	public ResponseEntity<String> deleteNode(@PathVariable("nId") Integer nId, HttpServletRequest request,
 			HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
@@ -158,7 +158,7 @@ public class NoteController {
 	 * @throws IOException
 	 *             API needed to get trashed notes list
 	 */
-	@GetMapping(value = "/homepage/trashedlist")
+	@GetMapping(value = "/usernotes/trashedlist")
 	public ResponseEntity<List<Note>> getTrashedNoteList(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		Integer uId = (Integer) request.getAttribute("userId");
@@ -173,6 +173,20 @@ public class NoteController {
 			out.print("Empty trash");
 			return new ResponseEntity<List<Note>>(HttpStatus.NO_CONTENT);
 		}
+	}
+
+	@PutMapping(value = "/usernotes/movetotrash/{nId}")
+	public ResponseEntity<String> moveToTrash(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("nId") Integer nId) throws IOException {
+		Integer uId = (Integer) request.getAttribute("userId");
+		logger.info("userId in request is: " + uId);
+		try {
+			noteService.moveToTrash(nId);
+		} catch (Exception E) {
+			E.printStackTrace();
+			return new ResponseEntity<String>("Note does not exists", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Note moved to trash", HttpStatus.OK);
 	}
 
 }

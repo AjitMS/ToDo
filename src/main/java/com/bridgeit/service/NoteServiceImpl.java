@@ -53,8 +53,8 @@ public class NoteServiceImpl implements NoteService {
 
 	@Override
 	@Transactional
-	public void moveToTrash(Note note) {
-		dao.moveToTrash(note);
+	public void moveToTrash(Integer nId) {
+		dao.moveToTrash(nId);
 	}
 
 	@Override

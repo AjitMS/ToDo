@@ -21,8 +21,8 @@ import com.bridgeit.service.TokenService;
  *         controllers and appropriately intercepts them
  */
 @Component
-public class LoginInterceptor extends HandlerInterceptorAdapter {
-	Logger logger = Logger.getLogger(LoginInterceptor.class);
+public class RequestInterceptor extends HandlerInterceptorAdapter {
+	Logger logger = Logger.getLogger(RequestInterceptor.class);
 
 	@Autowired
 	TokenService tokenService;
@@ -43,10 +43,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		String accessToken = req.getHeader("accessToken");
 		String refreshToken = req.getHeader("refreshToken");
 		if (accessToken == null || refreshToken == null) {
-			res.setStatus(HttpStatus.BAD_REQUEST.value());
-			res.getWriter().print("Token is null. Authentication failed");
 			logger.info("Token is null. authentication is failed");
-			
 			return false;
 		}
 		Integer rUserId;

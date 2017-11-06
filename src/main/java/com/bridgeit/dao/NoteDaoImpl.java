@@ -50,10 +50,10 @@ public class NoteDaoImpl implements NoteDao {
 	}
 
 	@Override
-	public void moveToTrash(Note note) {
+	public void moveToTrash(Integer nId) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		note = session.get(Note.class, note.getNoteId());
+		Note note = session.get(Note.class, nId);
 		note.setInTrash(true);
 		tx.commit();
 		return;
@@ -95,6 +95,7 @@ public class NoteDaoImpl implements NoteDao {
 	@Override
 	public List<Note> getNoteList(Integer uId) {
 		// bring entire note list from database
+		logger.info("Into getNoteList()");
 		Session session = sessionFactory.openSession();
 
 		// since session.createCriteria() is deprecated
@@ -107,15 +108,14 @@ public class NoteDaoImpl implements NoteDao {
 
 		criteria.from(Note.class);
 		List<Note> entireNoteList = session.createQuery(criteria).getResultList();
-
 		// learn a more efficient way to retrieve notes
-
 		List<Note> noteList = new ArrayList<>();
-		for (Note tempNote : entireNoteList)
-			// if note is temporarily deleted
-			if (tempNote.getUser().getId().compareTo(uId) == 0 && !tempNote.isInTrash())
-				noteList.add(tempNote);
 
+		if (entireNoteList.size() != 0)
+			for (Note tempNote : entireNoteList)
+				if (tempNote.getUser().getId().compareTo(uId) == 0 && !tempNote.isInTrash()) {
+					noteList.add(tempNote);
+				}
 		return noteList;
 	}
 

@@ -47,7 +47,7 @@ public interface NoteService {
 	/**
 	 * @param note
 	 */
-	public void moveToTrash(Note note);
+	public void moveToTrash(Integer nId);
 
 	/**
 	 * @param uId
