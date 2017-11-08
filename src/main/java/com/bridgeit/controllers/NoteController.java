@@ -158,7 +158,7 @@ public class NoteController {
 	 * @throws IOException
 	 *             API needed to get trashed notes list
 	 */
-	@GetMapping(value = "/usernotes/trashedlist")
+	@GetMapping(value = "/usernotes/trashed")
 	public ResponseEntity<List<Note>> getTrashedNoteList(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		Integer uId = (Integer) request.getAttribute("userId");

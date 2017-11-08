@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bridgeit.emailUtility.EmailUtility;
 import com.bridgeit.entity.Token;
 import com.bridgeit.entity.User;
 import com.bridgeit.entity.UserLoginPair;
@@ -45,8 +44,6 @@ public class UserController {
 	TokenService tokenService;
 	@Autowired
 	Encryption encryption;
-	@Autowired
-	EmailUtility emailUtility;
 
 	/**
 	 * @return welcome screen (default)
