@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -30,7 +31,7 @@ import com.bridgeit.utilities.Encryption;
  * @author Ajit Shikalgar
  *
  */
-@RestController("/")
+@RestController
 public class UserController {
 
 	Logger logger = Logger.getLogger(UserController.class);
@@ -48,12 +49,12 @@ public class UserController {
 	/**
 	 * @return welcome screen (default)
 	 */
-	@GetMapping("/")
-	public ResponseEntity<String> welcomeUser() {
-		String welcome = "**Welcome to ToDo App**<br> use /login to login, \t<br> use /register to register,<br> \n use /fbconnect to login social<br>";
-		return new ResponseEntity<String>(welcome, HttpStatus.ACCEPTED);
-	}
-
+	/*
+	 * @GetMapping("/") public ResponseEntity<String> welcomeUser() { String welcome
+	 * =
+	 * "**Welcome to ToDo App**<br> use /login to login, \t<br> use /register to register,<br> \n use /fbconnect to login social<br>"
+	 * ; return new ResponseEntity<String>(welcome, HttpStatus.ACCEPTED); }
+	 */
 	/**
 	 * @param loginPair
 	 * @param request
@@ -66,9 +67,12 @@ public class UserController {
 	 *             is assigned tokens
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<String> loginUser(@RequestBody UserLoginPair loginPair, HttpServletRequest request)
+	public ResponseEntity<List<Token>> loginUser(@RequestBody UserLoginPair loginPair, HttpServletRequest request)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 
+		if (loginPair.getEmail() == null || loginPair.getPassword() == null || loginPair.getEmail() == ""
+				|| loginPair.getPassword() == "")
+			return new ResponseEntity<List<Token>>(HttpStatus.BAD_REQUEST);
 		logger.info("Only an activated user can log in");
 		logger.info("Into Login");
 		logger.info("loign pair is: " + loginPair);
@@ -79,8 +83,7 @@ public class UserController {
 		System.out.println("user is valid ");
 		System.out.println("user is valid " + user.getIsValid());
 		if (!user.getIsValid())
-			return new ResponseEntity<String>("Account not validated. please check email or register",
-					HttpStatus.FORBIDDEN);
+			return new ResponseEntity<List<Token>>(HttpStatus.FORBIDDEN);
 		if (userService.loginUser(email, password)) {
 			System.out.println("login success");
 			user = userService.getUserByEmail(email, user);
@@ -103,15 +106,12 @@ public class UserController {
 			logger.info("REFRESH TOKEN: " + refreshToken);
 
 			// send token link to user email
-			userService.sendLoginVerificationToken(user, accessToken, request);
+			// userService.sendLoginVerificationToken(user, accessToken, request);
 			logger.info("Email has been sent to  " + user.getEmail() + " .please check");
-			return new ResponseEntity<String>(
-					"Access Token: " + accessToken + "<br>Refresh Token: " + refreshToken + " <br>please check mail",
-					HttpStatus.OK);
-
+			return new ResponseEntity<List<Token>>(tokenList, HttpStatus.OK);
 		}
 		logger.error("Login failed");
-		return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<List<Token>>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	/**
@@ -121,9 +121,9 @@ public class UserController {
 	 *         API checks if token in mail matches accessToken stored in redis for
 	 *         same user
 	 */
-	@GetMapping("/login/{userId}/{tokenId}")
+	@GetMapping("#!/login/{userId}/{tokenId}")
 	public ResponseEntity<String> verifyLoginToken(@PathVariable("userId") Integer userId,
-			@PathVariable("tokenId") String userTokenId) {
+			@PathVariable("tokenId") String userTokenId, HttpServletResponse response) {
 
 		// first validate access token is intact, if yes login
 
@@ -140,11 +140,13 @@ public class UserController {
 				Token newToken = tokenService.generateTokenAndPushIntoRedis(userId, "accessToken");
 
 				logger.info("New access token is generated as: +" + newToken + " for user " + user.getId());
-				return new ResponseEntity<String>("Token authenticated ! Redirecting...", HttpStatus.ACCEPTED);
+				ResponseEntity.ok();
+				return new ResponseEntity<String>(HttpStatus.OK);
 			}
 			// if refresh token fails, login fails
 			else
 				System.out.println("Refresh token validation failed");
+
 			return new ResponseEntity<String>("Token not authenticated !", HttpStatus.NO_CONTENT);
 		}
 

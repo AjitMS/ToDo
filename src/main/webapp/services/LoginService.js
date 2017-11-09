@@ -12,5 +12,21 @@ login.loginuser = function(user){
     console.log('user is: '+user)
 }
 //return login response from backend
+
+login.fbLogin = function(user){
+	return $http({
+		url : 'fbconnect',
+		method : 'GET',
+		data : 'user'
+	});
+}
+
+login.gLogin = function(user){
+	return $http({
+		url : 'gconnect',
+		method : 'GET',
+		data : 'user'
+	});
+}
 return login;
 });

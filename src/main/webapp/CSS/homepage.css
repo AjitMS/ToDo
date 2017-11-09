@@ -22,18 +22,18 @@ margin:0px;
 }
 
 .grey-nav-icons{
-	color:#747474;
-	font-size: 2em !important;
+	color:#261C07;
+	font-size: 1.5em !important;
 }
 
 .top-navbar{
-    height: 64px;
+    height: 58px;
 	background-color: #FFB934;	
 	box-shadow: 10px, 10px, 10px,10px;
 }
 
 .nav-input-group{
-	margin-top:16px;
+	//margin-top:16px;
 	height:48px;
 }
 

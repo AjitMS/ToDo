@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 
 		String link = "http://localhost:8080/ToDo/register/activateuser/" + id;
-		logger.info("registration link is: "+link);
+		logger.info("registration link is: " + link);
 		EmailUtility.sendMail(email, "Confirm Registration", link);
 
 	}
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 		String subject = "Bridgelabz Secure Login Link";
 		String link = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath()
-				+ request.getServletPath() + user.getId() + "/" + accessToken.getTokenValue();
+				+ "/#!" +request.getServletPath() + "/" + user.getId() + "/" + accessToken.getTokenValue();
 		System.out.println("link is: " + link);
 		String msg = "Dear " + user.getFirstName().toUpperCase() + ", Login from below secure link\n" + link + "";
 		EmailUtility.sendMail(user.getEmail(), subject, msg);

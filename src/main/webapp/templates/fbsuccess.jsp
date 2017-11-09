@@ -7,5 +7,6 @@
 <title>Facebook Login Success</title>
 </head>
 <body>Success ! user is: ${user.id} and ${user.firstName}
+
 </body>
 </html>

@@ -3,13 +3,14 @@ package com.bridgeit.controllers;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,8 +35,6 @@ public class FacebookLoginController {
 
 	@Autowired
 	FBConnection fbConnection;
-
-
 
 	@Autowired
 	TokenService tokenService;
@@ -68,7 +67,8 @@ public class FacebookLoginController {
 	 *             page.
 	 */
 	@GetMapping("/fblogin")
-	public void fbLogin(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	public ResponseEntity<User> fbLogin(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException {
 		String code;
 		code = req.getParameter("code");
 		logger.info("Code is: " + code);
@@ -87,10 +87,7 @@ public class FacebookLoginController {
 
 		// for debugging
 		logger.info("Fb Profile Data: " + fbProfileData);
-
-		logger.info("Homepage");
-		RequestDispatcher dispatcher = req.getRequestDispatcher("fbsuccess.jsp");
-		req.setAttribute("user", user);
-		dispatcher.forward(req, res);
+		ResponseEntity.ok();
+		return new ResponseEntity<User>(user ,HttpStatus.OK);
 	}
 }

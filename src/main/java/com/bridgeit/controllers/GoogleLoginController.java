@@ -1,6 +1,8 @@
 package com.bridgeit.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgeit.entity.Token;
 import com.bridgeit.entity.User;
 import com.bridgeit.service.TokenService;
 import com.bridgeit.service.UserService;
@@ -37,7 +40,7 @@ public class GoogleLoginController {
 
 	/**
 	 * @param response
-	 * redirecting user to google via link googleLoginPageUrl
+	 *            redirecting user to google via link googleLoginPageUrl
 	 */
 	@RequestMapping(value = "/gconnect", method = RequestMethod.GET)
 	public void initialConnect(HttpServletResponse response) {
@@ -54,9 +57,10 @@ public class GoogleLoginController {
 	 * @param response
 	 * @param session
 	 * @throws ServletException
-	 * google provides access token as URL parameter. using this, we ge request for profile data in JSON format.
-	 * parsing and mapping this JSON into User Object directly using Object Mapper.
-	 * finally saving object with appropriate tokens and setters.
+	 *             google provides access token as URL parameter. using this, we ge
+	 *             request for profile data in JSON format. parsing and mapping this
+	 *             JSON into User Object directly using Object Mapper. finally
+	 *             saving object with appropriate tokens and setters.
 	 */
 	@RequestMapping(value = "/glogin", method = RequestMethod.GET)
 	public void googleLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session)
@@ -106,10 +110,14 @@ public class GoogleLoginController {
 				} else {
 
 					logger.info("existing user is logging thru' google. let's allocate tokens to user");
-					tokenService.generateTokenAndPushIntoRedis(user.getId(), "accesstoken");
-					tokenService.generateTokenAndPushIntoRedis(user.getId(), "refreshtoken");
-					RequestDispatcher dispatcher = request.getRequestDispatcher("googlesuccess.jsp");
+					Token accessToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), "accesstoken");
+					Token refreshToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), "refreshtoken");
+					List<Token> tokenList = new ArrayList<>();
+					tokenList.add(accessToken);
+					tokenList.add(refreshToken);
+					RequestDispatcher dispatcher = request.getRequestDispatcher("templates/googlesuccess.jsp");
 					request.setAttribute("user", user);
+					request.setAttribute("token", tokenList);
 					dispatcher.forward(request, response);
 				}
 

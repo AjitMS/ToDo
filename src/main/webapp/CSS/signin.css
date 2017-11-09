@@ -2,6 +2,11 @@ body {
 	background-color: #E8E8E8;
 }
 
+.login-errors{
+	color: red;
+	font-size: 13px;
+}
+
 .hrmargin {
 	margin: 20px;
 	color: lightgrey;

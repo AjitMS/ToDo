@@ -1,5 +1,5 @@
 var todo = angular
-	.module('todo', ['ui.router', 'ngSanitize', 'ui.bootstrap']);
+	.module('todo', ['ui.router']);
 
 todo.config(function ($stateProvider, $urlRouterProvider) {
 	$stateProvider.state('registration', {
@@ -17,7 +17,7 @@ todo.config(function ($stateProvider, $urlRouterProvider) {
 	}).state('home', {
 		url: '/home',
 		controller: 'homeController',
-		templateUrl: 'homepage.html'
+		templateUrl: 'templates/homepage.html'
 	}).state('trash', {
 		url: '/trash',
 		controller: 'homeController',
@@ -28,6 +28,6 @@ todo.config(function ($stateProvider, $urlRouterProvider) {
 		templateUrl: 'templates/archives.html'
 	})
 
-	$urlRouterProvider.otherwise('home');
+	$urlRouterProvider.otherwise('login');
 
 });

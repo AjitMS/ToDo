@@ -4,7 +4,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Library Login</title>
+<title>ToDo</title>
 
 <!-- Bootstrap References -->
 <link rel="stylesheet"
@@ -25,15 +25,19 @@
 	integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
 	crossorigin="anonymous"></script>
 
-<link rel="stylesheet" type="text/css" href="/CSS/signin.css" />
+<link rel="stylesheet" type="text/css" href="CSS/signin.css" />
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
-<script src="/script/app.js"></script>
-<script src="/services/LoginService.js"></script>
-<script src="/controllers/loginController.js"></script>
+<script src="script/app.js"></script>
+
+<script src="services/LoginService.js"></script>
+<script src="services/HomeService.js"></script>
+
+<script src="controllers/loginController.js"></script>
+<script src="controllers/homeController.js"></script>
 
 </head>
 
