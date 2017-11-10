@@ -127,8 +127,9 @@ public class UserServiceImpl implements UserService {
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 
 		String subject = "Bridgelabz Secure Login Link";
-		String link = request.getServerName() + ":" + request.getServerPort() + request.getContextPath()
-				+ "/resetpasswordtoken/" + user.getId() + "/" + token.getTokenValue();
+		//String link = "http://localhost:8080/ToDo/login";
+		String link = "http://"+request.getServerName() + ":" + request.getServerPort() + request.getContextPath()
+				+"/#!"+ "/resetPassword/" + user.getId() + "/" + token.getTokenValue();
 		String msg = "Dear " + user.getFirstName() + ", Access below link to reset password\n" + link + "";
 		EmailUtility.sendMail(user.getEmail(), subject, msg);
 

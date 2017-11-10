@@ -6,17 +6,24 @@ todo.controller('loginController', function($scope, loginService, $location) {
 	// for logging user
 	$scope.loginUser = function() {
 		var httpLogin = loginService.loginuser($scope.user);
+		/* localStorage.setItem(); */
 		httpLogin.then(function(response) {
-			/* localStorage.setItem(); */
 			// success logic
 			console.log('Login success');
 			alert('login success');
 			$location.path('/home');
 		}, function(response) {
 			// failure logic
+			headers: {
+				status: '200';
+			}
 			console.log('Login failed');
-			alert('login failed');
-			$location.path('/login');
+			// alert('login failed');
+			$scope.custom = true;
+			$scope.toggleCustom = function() {
+				$scope.custom === false ? true : false;
+			};
+			// $location.path('/login');
 		});
 
 	}
@@ -32,7 +39,7 @@ todo.controller('loginController', function($scope, loginService, $location) {
 			$location.path('/login');
 		}
 	}
-	
+
 	$scope.gLogin = function() {
 		var glogin = loginService.gLogin($scope.user);
 		glogin.then(function(response) {

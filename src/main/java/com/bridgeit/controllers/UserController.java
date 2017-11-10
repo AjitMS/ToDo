@@ -71,19 +71,26 @@ public class UserController {
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 
 		if (loginPair.getEmail() == null || loginPair.getPassword() == null || loginPair.getEmail() == ""
-				|| loginPair.getPassword() == "")
+				|| loginPair.getPassword() == "") {
+			logger.info("Empty Creds !");
 			return new ResponseEntity<List<Token>>(HttpStatus.BAD_REQUEST);
+		}
 		logger.info("Only an activated user can log in");
-		logger.info("Into Login");
-		logger.info("loign pair is: " + loginPair);
+		logger.info("login pair is: " + loginPair);
 		String email = loginPair.getEmail();
 		String password = loginPair.getPassword();
 		// grab entire user by email if proper credentials
-		user = userService.getUserByEmail(email, user);
-		System.out.println("user is valid ");
+		try {
+			user = userService.getUserByEmail(email, user);
+		} catch (Exception E) {
+			logger.info("Invalid User credentials");
+			return new ResponseEntity<List<Token>>(HttpStatus.BAD_REQUEST);
+		}
 		System.out.println("user is valid " + user.getIsValid());
-		if (!user.getIsValid())
+		if (!user.getIsValid()) {
+			logger.info("Please acivate user");
 			return new ResponseEntity<List<Token>>(HttpStatus.FORBIDDEN);
+		}
 		if (userService.loginUser(email, password)) {
 			System.out.println("login success");
 			user = userService.getUserByEmail(email, user);
@@ -100,18 +107,17 @@ public class UserController {
 			List<Token> tokenList = new ArrayList<>();
 			tokenList.add(accessToken);
 			tokenList.add(refreshToken);
+
 			// generate token for specific user id and store it in REDIS
-
-			logger.info("ACCESS TOKEN: " + accessToken);
-			logger.info("REFRESH TOKEN: " + refreshToken);
-
 			// send token link to user email
 			// userService.sendLoginVerificationToken(user, accessToken, request);
+
 			logger.info("Email has been sent to  " + user.getEmail() + " .please check");
 			return new ResponseEntity<List<Token>>(tokenList, HttpStatus.OK);
 		}
-		logger.error("Login failed");
-		return new ResponseEntity<List<Token>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		logger.error("User does not exist. Login failed");
+		return new ResponseEntity<List<Token>>(HttpStatus.FORBIDDEN);
+
 	}
 
 	/**
@@ -176,16 +182,15 @@ public class UserController {
 		}
 		if (user == null) {
 			logger.debug("No such email registered");
-			return new ResponseEntity<String>("No such email registered", HttpStatus.NO_CONTENT);
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
 		// generating user token for forgot password
 		// generator is autowired
 		String tokenType = "forgottoken";
-		Token token = tokenService.generateTokenAndPushIntoRedis(user.getId(), tokenType);
-		userService.sendResetPasswordMail(user, request, token);
+		Token forgotToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), tokenType);
+		userService.sendResetPasswordMail(user, request, forgotToken);
 
-		return new ResponseEntity<String>("reset password link has been sent to " + user.getEmail(),
-				HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>(HttpStatus.ACCEPTED);
 	}
 
 	/**

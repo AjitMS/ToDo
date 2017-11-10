@@ -26,6 +26,10 @@ todo.config(function ($stateProvider, $urlRouterProvider) {
 		url: '/archive',
 		controller: 'homeController',
 		templateUrl: 'templates/archives.html'
+	}).state('resetPassword', {
+		url: '/resetPassword',
+		controller: 'resetPasswordController',
+		templateUrl: 'templates/resetPassword.html'
 	})
 
 	$urlRouterProvider.otherwise('login');
