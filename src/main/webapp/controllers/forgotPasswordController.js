@@ -10,18 +10,20 @@ todo.controller('forgotPasswordController', function($scope,
 
 		httpresult.then(function(response) {
 			console.log('Mail sent successfully');
-			$location.path('/resetPassword');
+			/*$location.path('/resetPassword');*/
+			$scope.success = true; 
+			$scope.error = false;
+			
 		}, function(response) {
 			console.log('Mail not sent');
 			$scope.error = true;
-			function toggleError() {
-				$scope.error === true ? false : true;	
-			}
+			$scope.success = false;
+
 			/*$location.path('/forgotPassword');*/
 		});
 	};
 	
-	$scope.resetPassword = function() {
+/*	$scope.resetPassword = function() {
 		//console.log('got email is: '+$scope.user.email);
 		var httpresult = forgotPasswordService.getToken($scope.user);
 
@@ -34,8 +36,8 @@ todo.controller('forgotPasswordController', function($scope,
 			function toggleError() {
 				$scope.error === true ? false : true;
 			}
-			$location.path('/forgotPassword');
+			$location.path('/resetPassword');
 		});
 	};
-
+*/
 })

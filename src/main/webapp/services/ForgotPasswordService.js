@@ -10,14 +10,14 @@ todo.factory('forgotPasswordService', function($http){
 			data : user
 		});
 	}
-	
-	passwordChain.sendPassword = function(user){
+	return passwordChain;
+	/*passwordChain.sendPassword = function(user){
 		return $http({
 			method : POST,
 			url : resetpassword,
 			data : user
 		});
-	}
+	}*/
 	
-	return passwordChain;
+	
 });

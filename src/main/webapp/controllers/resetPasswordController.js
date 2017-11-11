@@ -1,23 +1,30 @@
 var todo = angular.module('todo');
 todo.controller('resetPasswordController', function($scope,
-		forgotPasswordService, $location) {
+		resetPasswordService, $location, $stateParams) {
+	console.log('into reset password service');
 
-	$scope.email = {};
+	var token = {};
+	token.userId = $stateParams.userId;
+	token.tokenValue = $stateParams.token;
 
-	$scope.forgotPassword = function() {
-		// console.log('got email is: '+$scope.user.email);
-		var httpresult = forgotPasswordService.getToken($scope.user);
+	console.log('token: ' + token.tokenValue + ' userId: ' + token.userId);
+
+	$scope.validateToken = function() {
+		$scope.error = false;
+		token.userId = $stateParams.userId;
+		token.tokenValue = $stateParams.token;
+
+		var tokenvalidation = resetPasswordService.validatetoken(token);
 
 		httpresult.then(function(response) {
-			console.log('Password changed successfully');
-			$location.path('/resetPassword');
+			console.log('Token validated successfully');
+			$scope.error = false;
+
+			/* $location.path('/login'); */
 		}, function(response) {
-			console.log('password change failed');
 			$scope.error = true;
-			function toggleError() {
-				$scope.error === true ? false : true;
-			}
-			$location.path('/forgotPassword');
+			console.log('Token validation failed');
+			/* $location.path('/resetPassword'); */
 		});
 	};
 

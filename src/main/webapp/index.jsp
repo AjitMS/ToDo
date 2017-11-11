@@ -28,6 +28,7 @@
 
 <link rel="stylesheet" type="text/css" href="CSS/signin.css" />
 <link rel="stylesheet" type="text/css" href="CSS/homepage.css" />
+<link rel="stylesheet" type="text/css" href="CSS/resetPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/forgotPassword.css" />
 
 <script
@@ -38,13 +39,11 @@
 
 <script src="services/LoginService.js"></script>
 <script src="services/HomeService.js"></script>
-
 <script src="services/ForgotPasswordService.js"></script>
-<!-- <script src="services/ResetPasswordService.js"></script> -->
+<script src="services/ResetPasswordService.js"></script>
 
 <script src="controllers/loginController.js"></script>
 <script src="controllers/homeController.js"></script>
-
 <script src="controllers/forgotPasswordController.js"></script>
 <script src="controllers/resetPasswordController.js"></script>
 </head>

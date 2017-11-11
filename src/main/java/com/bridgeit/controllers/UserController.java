@@ -62,7 +62,7 @@ public class UserController {
 	 * @throws FileNotFoundException
 	 * @throws ClassNotFoundException
 	 * @throws IOException
-	 *             API required to login and authentiaction of user 2 step
+	 *             API required to login and authentication of user 2 step
 	 *             verification is implemented while login after login success, user
 	 *             is assigned tokens
 	 */
@@ -173,24 +173,28 @@ public class UserController {
 	@PostMapping("/forgotpassword")
 	public ResponseEntity<String> forgotPassword(@RequestBody User user, HttpServletRequest request)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
+
 		try {
 			user = userService.getUserByEmail(user.getEmail(), user);
+			if (user == null) {
+				logger.debug("No such email registered");
+				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			}
 			logger.info("email is: " + user.getEmail());
 			logger.info("user is: " + user);
 		} catch (Exception E) {
-			E.printStackTrace();
-		}
-		if (user == null) {
-			logger.debug("No such email registered");
+			logger.debug("***No such email registered***");
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+
 		}
+
 		// generating user token for forgot password
 		// generator is autowired
 		String tokenType = "forgottoken";
 		Token forgotToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), tokenType);
 		userService.sendResetPasswordMail(user, request, forgotToken);
 
-		return new ResponseEntity<String>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/**
@@ -199,24 +203,33 @@ public class UserController {
 	 * @return if user has proper forgot password token, as in email sent, user will
 	 *         be redirected to another page in which user should enter a new
 	 *         password
+	 * @throws IOException 
 	 * 
 	 */
-	@GetMapping("/resetpasswordtoken/{userId}/{userTokenId}")
-	public ResponseEntity<String> validateResetPasswordToken(@PathVariable("userId") Integer userId,
-			@PathVariable("userTokenId") String userTokenId) {
-		if (tokenService.verifyUserToken(userTokenId).compareTo(userId) == 0)
-			return new ResponseEntity<String>("Redirecting to the password resetting page..", HttpStatus.OK);
-		return new ResponseEntity<String>("Invalid link or incorrect token. password resetting failed. try again",
-				HttpStatus.NO_CONTENT);
+	@GetMapping("/resetpasswordtoken/{uId}/{token}")
+	public ResponseEntity<String> validateResetPasswordToken(@PathVariable("uId") Integer uId,
+			@PathVariable("token") String tokenValue, HttpServletResponse response) throws IOException {
+		logger.info(" userTokenId: " + uId);
+		if (tokenService.verifyUserToken(tokenValue).compareTo(uId) == 0) {
+			response.addIntHeader("userId", uId);
+			
+			response.sendRedirect("#!/resetPassword");
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}
+		logger.info("token validaion failed");
+		return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 	}
 
-	@PostMapping("forgotpassword/resetpassword")
+	@PostMapping("/resetpassword")
 	public ResponseEntity<String> resetPassword(@RequestBody User user) {
+		try {
+			if (user.getPassword().equals(user.getConfirmPassword())) {
+				userService.resetPassword(user.getEmail(), user.getPassword());
+				return new ResponseEntity<String>(HttpStatus.OK);
 
-		if (user.getPassword().equals(user.getConfirmPassword())) {
-			userService.resetPassword(user.getEmail(), user.getPassword());
-			return new ResponseEntity<String>("Success ! proceding to Log In...", HttpStatus.OK);
-
+			}
+		} catch (Exception E) {
+			E.printStackTrace();
 		}
 		return new ResponseEntity<>("passwords do not match", HttpStatus.NO_CONTENT);
 	}
