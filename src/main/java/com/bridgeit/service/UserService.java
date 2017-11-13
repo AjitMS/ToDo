@@ -94,6 +94,6 @@ public interface UserService {
 	 * @param password
 	 *            resets user password in DB with new one
 	 */
-	public void resetPassword(String email, String password);
+	public void resetPassword(User user);
 
 }

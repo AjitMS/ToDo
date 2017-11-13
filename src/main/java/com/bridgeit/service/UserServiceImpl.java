@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
 	public void sendRegistrationVerificationLink(Integer id, String email)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 
-		String link = "http://localhost:8080/ToDo/register/activateuser/" + id;
+		String link = "http://localhost:8080/ToDo/#!/register/activateuser/" + id;
 		logger.info("registration link is: " + link);
 		EmailUtility.sendMail(email, "Confirm Registration", link);
 
@@ -137,8 +137,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void resetPassword(String email, String password) {
-		dao.resetPassword(email, password);
+	public void resetPassword(User user) {
+		dao.resetPassword(user);
 		return;
 	}
 

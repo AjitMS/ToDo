@@ -1,11 +1,11 @@
 var todo = angular.module('todo');
 todo.factory('resetPasswordService', function($http) {
 	var methodChain = {};
-	methodChain.validatetoken = function(token) {
+	methodChain.resetpassword = function(user) {
 		return $http({
 			method : 'POST',
-			data : token,
-			url : 'resetpasswordtoken'
+			data : user,
+			url : 'resetpassword'
 		});
 	};
 	return methodChain;

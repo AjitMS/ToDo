@@ -22,6 +22,10 @@ body {
 	float: left;
 }
 
+.error{
+	color: red;
+	font-size: 14px;
+}
 
 
 #dotted-bound {

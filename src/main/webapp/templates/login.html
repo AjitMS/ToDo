@@ -95,7 +95,7 @@
 							, ng-pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
 							novalidate> <input type="password" class="form-control"
 							id="password" placeholder="Enter password" name="password"
-							ng-model="user.password" minlength="3" novalidate>
+							ng-model="user.password" ng-minlength="3" novalidate>
 						<div role="alert" class="col-12 login-errors">
 							<!-- Span Errors -->
 							<span class="error" ng-show="login.email.$error.pattern">

@@ -30,6 +30,7 @@
 <link rel="stylesheet" type="text/css" href="CSS/homepage.css" />
 <link rel="stylesheet" type="text/css" href="CSS/resetPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/forgotPassword.css" />
+<link rel="stylesheet" type="text/css" href="CSS/register.css" />
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
@@ -41,11 +42,15 @@
 <script src="services/HomeService.js"></script>
 <script src="services/ForgotPasswordService.js"></script>
 <script src="services/ResetPasswordService.js"></script>
+<script src="services/RegistrationService.js"></script>
+<script src="services/ActivateUserService.js"></script>
 
 <script src="controllers/loginController.js"></script>
 <script src="controllers/homeController.js"></script>
 <script src="controllers/forgotPasswordController.js"></script>
 <script src="controllers/resetPasswordController.js"></script>
+<script src="controllers/registrationController.js"></script>
+<script src="controllers/activateUserController.js"></script>
 </head>
 
 <body ng-app="todo">

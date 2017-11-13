@@ -58,7 +58,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	public void activateUser(Integer id) {
-		User user;
+		User user = new User();
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		user = session.get(User.class, id);
@@ -126,24 +126,24 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public void resetPassword(String email, String password) { // new password
-		logger.info("reached here");
+	public void resetPassword(User user) { // new password
+		logger.info("reached here in resetPassword()");
 		Session session = sessionFactory.openSession();
-		password = encryption.encryptPassword(password);
-		// deprecated
-		@SuppressWarnings("deprecation")
-		User user = (User) session.createCriteria(User.class).add(Restrictions.eq("email", email)).uniqueResult();
-		logger.info("user old password: " + user.getPassword());
-		user.setPassword(password);
-		session.update(user);
-		logger.info("user new password: " + user.getPassword());
+		Transaction tx = session.beginTransaction();
+		String newPassword = encryption.encryptPassword(user.getPassword());
+		user = session.get(User.class, user.getId());
+		user.setPassword(newPassword);
+		user.setConfirmPassword(newPassword);
+		session.saveOrUpdate(user);
+		tx.commit();
+		session.close();
 
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public User getUserById(Integer id, User user) {
-		logger.debug("reached in getUserByEmail DAO successfully");
+		logger.debug("reached in getUserById DAO successfully");
 		Session session = sessionFactory.openSession();
 		List<User> userList = new ArrayList<>();
 		// jpa

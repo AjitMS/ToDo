@@ -58,6 +58,6 @@ public interface UserDao {
 	 * @param password
 	 * resets password for particular email
 	 */
-	public void resetPassword(String email, String password);
+	public void resetPassword(User user);
 
 }

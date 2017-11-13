@@ -171,20 +171,20 @@ public class UserController {
 	 *             in it.
 	 */
 	@PostMapping("/forgotpassword")
-	public ResponseEntity<String> forgotPassword(@RequestBody User user, HttpServletRequest request)
+	public ResponseEntity<Token> forgotPassword(@RequestBody User user, HttpServletRequest request)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 
 		try {
 			user = userService.getUserByEmail(user.getEmail(), user);
 			if (user == null) {
 				logger.debug("No such email registered");
-				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<Token>(HttpStatus.BAD_REQUEST);
 			}
 			logger.info("email is: " + user.getEmail());
 			logger.info("user is: " + user);
 		} catch (Exception E) {
 			logger.debug("***No such email registered***");
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Token>(HttpStatus.BAD_REQUEST);
 
 		}
 
@@ -194,7 +194,7 @@ public class UserController {
 		Token forgotToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), tokenType);
 		userService.sendResetPasswordMail(user, request, forgotToken);
 
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<Token>(forgotToken, HttpStatus.OK);
 	}
 
 	/**
@@ -203,16 +203,16 @@ public class UserController {
 	 * @return if user has proper forgot password token, as in email sent, user will
 	 *         be redirected to another page in which user should enter a new
 	 *         password
-	 * @throws IOException 
+	 * @throws IOException
 	 * 
 	 */
-	@GetMapping("/resetpasswordtoken/{uId}/{token}")
+	@GetMapping("/resetpassword/{uId}/{token}")
 	public ResponseEntity<String> validateResetPasswordToken(@PathVariable("uId") Integer uId,
 			@PathVariable("token") String tokenValue, HttpServletResponse response) throws IOException {
 		logger.info(" userTokenId: " + uId);
 		if (tokenService.verifyUserToken(tokenValue).compareTo(uId) == 0) {
 			response.addIntHeader("userId", uId);
-			
+
 			response.sendRedirect("#!/resetPassword");
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}
@@ -223,15 +223,21 @@ public class UserController {
 	@PostMapping("/resetpassword")
 	public ResponseEntity<String> resetPassword(@RequestBody User user) {
 		try {
+			System.out.println("got user id as: " + user.getId());
 			if (user.getPassword().equals(user.getConfirmPassword())) {
-				userService.resetPassword(user.getEmail(), user.getPassword());
+				String newPassword = user.getPassword();
+				user = userService.getUserById(user.getId(), user);
+				user.setPassword(newPassword);
+				user.setConfirmPassword(newPassword);
+				userService.resetPassword(user);
+				System.out.println("setting password: " + user.getPassword() + " for email: " + user.getEmail());
 				return new ResponseEntity<String>(HttpStatus.OK);
 
 			}
 		} catch (Exception E) {
 			E.printStackTrace();
 		}
-		return new ResponseEntity<>("passwords do not match", HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -259,8 +265,7 @@ public class UserController {
 			userService.registerUser(user);
 			logger.info("Register Success");
 		} else {
-			return new ResponseEntity<String>("User Exists, please login. or forgot password ?",
-					HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<String>(HttpStatus.NOT_ACCEPTABLE);
 		}
 
 		// Email verification
@@ -268,8 +273,9 @@ public class UserController {
 
 		String greeting = "Thank you! \n A verification email has been sent to " + user.getEmail()
 				+ ". confirm registration by accessing link in the mail";
+		logger.info(greeting);
 
-		return new ResponseEntity<String>(greeting, HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	/**
@@ -277,11 +283,35 @@ public class UserController {
 	 * @return registered user must be activated by accessing link provided in the
 	 *         email.
 	 */
-	@GetMapping("/register/activateuser/{id}")
-	public ResponseEntity<String> activateUser(@PathVariable("id") Integer id) {
-		userService.activateUser(id);
+	@GetMapping("/register/activateuser")
+	public ResponseEntity<String> activateUser(HttpServletRequest request) {
+		String userId = request.getHeader("userId");
+		System.out.println("ID is : " + userId);
+		Integer uId = Integer.parseInt(userId);
+		// Integer uId = Integer.parseInt(userId);
+		try {
+			userService.activateUser(uId);
+		} catch (Exception E) {
+			logger.info("User with Id: " + uId + " does not exist");
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
 		logger.info("User verified successfully !");
-		return new ResponseEntity<String>("Verified Successfully ! Redirecting to homepage...", HttpStatus.ACCEPTED);
+		return ResponseEntity.ok().body("");
 
 	}
+
+	@PostMapping("/userexists")
+	public ResponseEntity<String> userExists(@RequestBody User user) {
+		try {
+			System.out.println("User email: "+user.getEmail());
+			if (userService.userExists(user))
+				return new ResponseEntity<String>(HttpStatus.OK);
+
+			else
+				return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+		} catch (Exception E) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }

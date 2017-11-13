@@ -93,7 +93,7 @@
 	<!-- turn on declarative caching -->
 	<cache:annotation-driven />
 
-<!-- Jedis Not needed anymore -->
+	<!-- Jedis Not needed anymore -->
 	<!-- Jedis ConnectionFactory -->
 	<bean id="jedisConnectionFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
@@ -112,7 +112,7 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/usernotes/**" />
-			<bean id="loggerInterceptor" class="com.bridgeit.filter.LoginInterceptor" />
+			<bean id="requestInterceptor" class="com.bridgeit.filter.RequestInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
 
