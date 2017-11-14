@@ -49,7 +49,7 @@
 
 		<!-- these are connection pool properties for C3P0 -->
 		<property name="minPoolSize" value="5" />
-		<property name="maxPoolSize" value="20" />
+		<property name="maxPoolSize" value="100" />
 		<property name="maxIdleTime" value="30000" />
 	</bean>
 

@@ -9,16 +9,17 @@ todo.controller('loginController', function($scope, loginService, $location) {
 		/* localStorage.setItem(); */
 		httpLogin.then(function(response) {
 			// success logic
+			localStorage.setItem('accessToken', JSON
+					.stringify(response.data.accessToken));
+			localStorage.setItem('refreshToken', JSON
+					.stringify(response.data.refreshToken));
+			console.log("Tokens are: " + JSON.stringify(response.data));
 			console.log('Login success');
 			alert('login success');
 			$location.path('/home');
 		}, function(response) {
 			// failure logic
-			headers: {
-				status: '200';
-			}
 			console.log('Login failed');
-			// alert('login failed');
 			$scope.custom = true;
 			$scope.toggleCustom = function() {
 				$scope.custom === false ? true : false;

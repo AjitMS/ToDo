@@ -22,19 +22,19 @@
 </head>
 
 <body>
-
+<div class="container-fluid" style="padding:0px;">
     <nav class="navbar navbar-light top-navbar" style="padding:0px; margin:0px;" >
 
         <div class="container-fluid row"  style="height:60px;">
             <div class="col-1">
-                <button class="navbar-toggler" onclick="openNav();" type="button">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler responsive" onclick="openNav();" type="button">
+                    <span class="navbar-toggler-icon" style="margin:0px;"></span>
                 </button>
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
             </div>
 
 
-            <div class="col-2">
+            <div class="w-25 col-2">
                 <a title="Google Keep" class="navbar-text googlefont-hover" href="#">
                     <h4 class="googlefont">
                         <i>
@@ -43,7 +43,7 @@
                     </h4>
                 </a>
             </div>
-            <div class="col-6">
+            <div class="col-6 d-none d-sm-block">
                 <form class="form-inline ">
                     <div title="Search" class="input-group col-12 nav-input-group">
                         <div class="search-icon" style="margin-top:5px;">
@@ -53,7 +53,7 @@
                     </div>
                 </form>
             </div>
-            <div class="col-1">
+            <div class="col-1 d-none d-block">
 
                 <a title="Refresh" href=" #">
                     <i class="material-icons grey-nav-icons">settings_backup_restore</i>
@@ -65,7 +65,7 @@
 
             </div>
 
-            <div class="col-1">
+            <div class="col-1 d-none d-md-block">
 
                 <a title="Google Apps" href="#">
                     <i class="material-icons grey-nav-icons">apps</i>
@@ -85,8 +85,9 @@
                 </a>
 
             </div>
-
+</div>
     </nav>
+    </div>
 <div class="row">
 
         <div id="mySidenav" class="sidenav col-3">

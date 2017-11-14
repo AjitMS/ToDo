@@ -2,8 +2,8 @@ package com.bridgeit.controllers;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,15 +47,6 @@ public class UserController {
 	Encryption encryption;
 
 	/**
-	 * @return welcome screen (default)
-	 */
-	/*
-	 * @GetMapping("/") public ResponseEntity<String> welcomeUser() { String welcome
-	 * =
-	 * "**Welcome to ToDo App**<br> use /login to login, \t<br> use /register to register,<br> \n use /fbconnect to login social<br>"
-	 * ; return new ResponseEntity<String>(welcome, HttpStatus.ACCEPTED); }
-	 */
-	/**
 	 * @param loginPair
 	 * @param request
 	 * @return
@@ -67,13 +58,13 @@ public class UserController {
 	 *             is assigned tokens
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<List<Token>> loginUser(@RequestBody UserLoginPair loginPair, HttpServletRequest request)
-			throws FileNotFoundException, ClassNotFoundException, IOException {
+	public ResponseEntity<Map<String, Token>> loginUser(@RequestBody UserLoginPair loginPair,
+			HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException {
 
 		if (loginPair.getEmail() == null || loginPair.getPassword() == null || loginPair.getEmail() == ""
 				|| loginPair.getPassword() == "") {
 			logger.info("Empty Creds !");
-			return new ResponseEntity<List<Token>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Map<String, Token>>(HttpStatus.BAD_REQUEST);
 		}
 		logger.info("Only an activated user can log in");
 		logger.info("login pair is: " + loginPair);
@@ -84,12 +75,12 @@ public class UserController {
 			user = userService.getUserByEmail(email, user);
 		} catch (Exception E) {
 			logger.info("Invalid User credentials");
-			return new ResponseEntity<List<Token>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Map<String, Token>>(HttpStatus.BAD_REQUEST);
 		}
 		System.out.println("user is valid " + user.getIsValid());
 		if (!user.getIsValid()) {
 			logger.info("Please acivate user");
-			return new ResponseEntity<List<Token>>(HttpStatus.FORBIDDEN);
+			return new ResponseEntity<Map<String, Token>>(HttpStatus.FORBIDDEN);
 		}
 		if (userService.loginUser(email, password)) {
 			System.out.println("login success");
@@ -98,25 +89,24 @@ public class UserController {
 			// TokenGenerator generator = new TokenGenerator();
 
 			// stop making objects. instead use @Autowired
-			// make sure user prototype type of @Autowired instead of singleton
+			// make sure user 'prototype' type of @Autowired instead of singleton
 			// mistakenly @Autowired token and it returned the same token always for both
-			// refresh and access
+			// refresh and access access tokens.
 
 			Token accessToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), "accesstoken");
 			Token refreshToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), "refreshtoken");
-			List<Token> tokenList = new ArrayList<>();
-			tokenList.add(accessToken);
-			tokenList.add(refreshToken);
-
+			Map<String, Token> tokenPair = new HashMap<>();
+			tokenPair.put("accessToken", accessToken);
+			tokenPair.put("refreshToken", refreshToken);
 			// generate token for specific user id and store it in REDIS
 			// send token link to user email
 			// userService.sendLoginVerificationToken(user, accessToken, request);
 
 			logger.info("Email has been sent to  " + user.getEmail() + " .please check");
-			return new ResponseEntity<List<Token>>(tokenList, HttpStatus.OK);
+			return new ResponseEntity<Map<String, Token>>(tokenPair, HttpStatus.OK);
 		}
 		logger.error("User does not exist. Login failed");
-		return new ResponseEntity<List<Token>>(HttpStatus.FORBIDDEN);
+		return new ResponseEntity<Map<String, Token>>(HttpStatus.FORBIDDEN);
 
 	}
 
@@ -127,6 +117,7 @@ public class UserController {
 	 *         API checks if token in mail matches accessToken stored in redis for
 	 *         same user
 	 */
+	// Not needed
 	@GetMapping("#!/login/{userId}/{tokenId}")
 	public ResponseEntity<String> verifyLoginToken(@PathVariable("userId") Integer userId,
 			@PathVariable("tokenId") String userTokenId, HttpServletResponse response) {
@@ -303,7 +294,7 @@ public class UserController {
 	@PostMapping("/userexists")
 	public ResponseEntity<String> userExists(@RequestBody User user) {
 		try {
-			System.out.println("User email: "+user.getEmail());
+			System.out.println("User email: " + user.getEmail());
 			if (userService.userExists(user))
 				return new ResponseEntity<String>(HttpStatus.OK);
 

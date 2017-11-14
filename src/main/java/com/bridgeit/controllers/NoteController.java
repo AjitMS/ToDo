@@ -49,6 +49,10 @@ public class NoteController {
 	public ResponseEntity<List<Note>> showNotes(HttpServletRequest request, HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
+		if (uId == -1) {
+			logger.info("User not found / Token validation failed");
+			return new ResponseEntity<List<Note>>(HttpStatus.BAD_REQUEST);
+		}
 		List<Note> noteList = new ArrayList<>();
 
 		noteList = noteService.getNoteList(uId);
@@ -187,6 +191,13 @@ public class NoteController {
 			return new ResponseEntity<String>("Note does not exists", HttpStatus.OK);
 		}
 		return new ResponseEntity<String>("Note moved to trash", HttpStatus.OK);
+	}
+	
+	@PostMapping(value="/usernotes/collaborate")
+	public ResponseEntity<String> collaborateNote(Integer uId, Integer nId){
+		
+		
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 }
