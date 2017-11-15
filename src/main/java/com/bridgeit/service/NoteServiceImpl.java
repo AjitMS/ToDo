@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bridgeit.dao.NoteDao;
 import com.bridgeit.entity.Note;
+import com.bridgeit.entity.User;
 
 @Service("noteService")
 public class NoteServiceImpl implements NoteService {
@@ -66,6 +67,12 @@ public class NoteServiceImpl implements NoteService {
 			return null;
 		}
 		return trashedNoteList;
+	}
+
+	@Override
+	public void collaborateUser(User cUser, Note cNote) {
+		dao.collaborateUser(cUser, cNote);
+		
 	}
 
 }

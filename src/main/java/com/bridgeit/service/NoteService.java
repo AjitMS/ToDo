@@ -3,6 +3,7 @@ package com.bridgeit.service;
 import java.util.List;
 
 import com.bridgeit.entity.Note;
+import com.bridgeit.entity.User;
 
 /**
  * @author Ajit Shikalgar service layer for UserController which calls UserDao
@@ -16,7 +17,7 @@ public interface NoteService {
 	 * @return gets note by particular note id
 	 */
 	public Note getNoteById(Integer uId, Integer nId);
-
+	
 	/**
 	 * @param updatedNote
 	 * @param nId
@@ -54,5 +55,7 @@ public interface NoteService {
 	 * @return fetches trashed notes from NoteDao
 	 */
 	List<Note> getTrashedNoteList(Integer uId);
+	
+	public void collaborateUser(User cUser, Note cNote);
 
 }

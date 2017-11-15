@@ -10,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -90,7 +90,7 @@ public class User {
 	private boolean isValid = false;
 
 	@JsonIgnore
-	@OneToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER, mappedBy = "user")
+	@ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER, mappedBy = "user")
 	private List<Note> noteList;
 
 	// figured out a way to match both passwords
@@ -188,33 +188,47 @@ public class User {
 		this.phone = phone;
 	}
 
-	public User(Integer id, String firstName, String lastName, String email, String gender, String dob, String phone,
-			String password, String confirmPassword) {
-		this.id = id;
-		this.firstName = firstName;
-		this.gender = gender;
-		this.lastName = lastName;
-		this.email = email;
-		this.dob = dob;
-		this.phone = phone;
-		this.password = password;
-		this.confirmPassword = confirmPassword;
-	}
-
-	public User(String firstName, String lastName, String email, String gender, String dob, String phone,
-			String password, String confirmPassword) {
-		this.firstName = firstName;
-		this.gender = gender;
-		this.lastName = lastName;
-		this.email = email;
-		this.dob = dob;
-		this.phone = phone;
-		this.password = password;
-		this.confirmPassword = confirmPassword;
-	}
-
 	public User() {
 
+	}
+
+	@Override
+	public int hashCode() {
+		return this.id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	public User(Integer id, String firstName, String lastName, String email, String gender, String dob, String phone,
+			String password, String confirmPassword, boolean isValid, List<Note> noteList) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.gender = gender;
+		this.dob = dob;
+		this.phone = phone;
+		this.password = password;
+		this.confirmPassword = confirmPassword;
+		this.isValid = isValid;
+		this.noteList = noteList;
 	}
 
 	@Override
@@ -223,4 +237,5 @@ public class User {
 				+ ", gender=" + gender + ", dob=" + dob + ", phone=" + phone + ", password=" + password
 				+ ", confirmPassword=" + confirmPassword + ", isValid=" + isValid + ", noteList=" + noteList + "]";
 	}
+
 }

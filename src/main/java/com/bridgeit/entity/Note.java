@@ -1,6 +1,8 @@
 package com.bridgeit.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -60,8 +64,21 @@ public class Note {
 	@JoinColumn(name = "userid")
 	private User user = new User();
 
+	@ManyToMany
+	@JsonIgnore
+	@JoinTable(name = "collabUsers", joinColumns = @JoinColumn(name = "noteid"), inverseJoinColumns = @JoinColumn(name = "userid"))
+	private Set<User> collabUsers = new HashSet<>();
+
 	public User getUser() {
 		return user;
+	}
+
+	public Set<User> getCollabUsers() {
+		return collabUsers;
+	}
+
+	public void setCollabUsers(Set<User> collabUsers) {
+		this.collabUsers = collabUsers;
 	}
 
 	public void setUser(User user) {
@@ -143,13 +160,12 @@ public class Note {
 		this.isPinned = isPinned;
 	}
 
-	/*
-	 * @Override public String toString() { return "Note [title=" + title +
-	 * ", noteId=" + noteId + ", createdDate=" + createdDate + ", modifiedDate=" +
-	 * modifiedDate + ", description=" + description + ", isArchived=" + isArchived
-	 * + ", inTrash=" + inTrash + ", isPinned=" + isPinned + ", user=" + user + "]";
-	 * }
-	 */
+	@Override
+	public String toString() {
+		return "Note [title=" + title + ", noteId=" + noteId + ", createdDate=" + createdDate + ", modifiedDate="
+				+ modifiedDate + ", description=" + description + ", isArchived=" + isArchived + ", inTrash=" + inTrash
+				+ ", isPinned=" + isPinned + "]";
+	}
 
 	public Note() {
 

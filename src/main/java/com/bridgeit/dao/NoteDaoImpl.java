@@ -2,7 +2,9 @@ package com.bridgeit.dao;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -29,7 +31,7 @@ public class NoteDaoImpl implements NoteDao {
 		Note note = new Note();
 		// get note from database
 		Session session = sessionFactory.openSession();
-
+		logger.info("Getting Note by Id: " + nId);
 		note = (Note) session.get(Note.class, nId);
 		// to verify note belongs to same user
 		if (note.getUser().getId().compareTo(uId) == 0)
@@ -111,11 +113,20 @@ public class NoteDaoImpl implements NoteDao {
 		// learn a more efficient way to retrieve notes
 		List<Note> noteList = new ArrayList<>();
 
+		// retrieve notes of which user is owner
 		if (entireNoteList.size() != 0)
 			for (Note tempNote : entireNoteList)
 				if (tempNote.getUser().getId().compareTo(uId) == 0 && !tempNote.isInTrash()) {
 					noteList.add(tempNote);
+				} else {
+					if ((tempNote.getCollabUsers() != null))
+						for (User tempUser : tempNote.getCollabUsers()) {
+							if (tempUser.getId().compareTo(uId) == 0) {
+								noteList.add(tempNote);
+							}
+						}
 				}
+		// and the ones collaborated with user
 		return noteList;
 	}
 
@@ -152,6 +163,37 @@ public class NoteDaoImpl implements NoteDao {
 		}
 		logger.info("User is: " + user);
 		session.persist(note);
+		return;
+	}
+
+	@Override
+	public void collaborateUser(User cUser, Note cNote) {
+		Session session = sessionFactory.getCurrentSession();
+		// Transaction tx = session.beginTransaction();
+		boolean isNoteCollab = false;
+		Set<User> collabUsers = cNote.getCollabUsers();
+		if (collabUsers == null) {
+			collabUsers = new HashSet<>();
+		} else {
+			// check if other user already collaborated
+			for (User tempUser : collabUsers) {
+				if (cUser.getId().compareTo(tempUser.getId()) == 0) {
+					isNoteCollab = true;
+					logger.info("User is already collaborated");
+					return;
+				}
+			}
+		}
+		// add other to note collaboration
+		if (!isNoteCollab) {
+			cNote.getCollabUsers().add(cUser);
+		}
+		for (User tempUser : collabUsers) {
+			System.out.println("***********" + tempUser.getFirstName());
+		}
+		session.merge(cNote);
+		// tx.commit();
+		/* session.close(); */
 		return;
 	}
 

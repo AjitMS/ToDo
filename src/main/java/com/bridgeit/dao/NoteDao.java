@@ -3,6 +3,7 @@ package com.bridgeit.dao;
 import java.util.List;
 
 import com.bridgeit.entity.Note;
+import com.bridgeit.entity.User;
 
 /**
  * @author Ajit Shikalgar
@@ -73,5 +74,7 @@ public interface NoteDao {
 	 *            Pinning a note by setting note's isPinned property to true
 	 */
 	void pinNote(Note note);
+
+	void collaborateUser(User cUser, Note cNote);
 
 }

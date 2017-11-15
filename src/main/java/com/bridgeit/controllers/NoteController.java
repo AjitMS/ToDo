@@ -3,7 +3,9 @@ package com.bridgeit.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgeit.entity.Note;
+import com.bridgeit.entity.User;
 import com.bridgeit.service.NoteService;
 import com.bridgeit.service.UserService;
 
@@ -123,14 +126,12 @@ public class NoteController {
 	 */
 	@PutMapping(value = "/usernotes/updatenote/{nId}")
 	public ResponseEntity<Note> updateNote(@RequestBody Note updatedNote, @PathVariable("nId") Integer nId,
-			HttpServletRequest request, HttpServletResponse response) throws IOException {
+			HttpServletRequest request) throws IOException {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
 		Note oldNote = noteService.getNoteById(uId, nId);
 		if (oldNote == null) {
-
-			PrintWriter out = response.getWriter();
-			out.print("Note does not exist. note id is null");
+			logger.info("User does not exist");
 			return new ResponseEntity<Note>(HttpStatus.BAD_REQUEST);
 		}
 		updatedNote.getUser().setId(uId);
@@ -184,19 +185,85 @@ public class NoteController {
 			@PathVariable("nId") Integer nId) throws IOException {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
+		logger.info("noteId in request is: " + nId);
+		User user = new User();
+		user = userService.getUserById(uId, user);
+		if (user == null) {
+			logger.info("Note cannot be deleted. user not found");
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		Note note = new Note();
 		try {
-			noteService.moveToTrash(nId);
+		note = noteService.getNoteById(uId, nId);
+		}
+		catch(Exception E) {
+		logger.info("Note Owner not found");	
+		}
+		System.out.println("Note is: "+note);
+		try {
+			if (uId.compareTo(note.getUser().getId()) == 0) {
+				noteService.moveToTrash(nId);
+				logger.info("Note moved to trash");
+				return new ResponseEntity<String>(HttpStatus.OK);
+			} else {
+				Set<User> collabUsers = new HashSet<>();
+				collabUsers = note.getCollabUsers();
+				if (collabUsers == null) {
+					logger.info("No collaboration for note Id: " + nId);
+					return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+				}
+				for (User tempUser : collabUsers) {
+					if (tempUser.getId().compareTo(uId) == 0) {
+						logger.info("Note will be Un-Collaborated. not deletion.");
+						collabUsers.remove(user);
+						return new ResponseEntity<String>(HttpStatus.OK);
+					} else {
+						return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+					}
+				}
+			}
+
 		} catch (Exception E) {
 			E.printStackTrace();
-			return new ResponseEntity<String>("Note does not exists", HttpStatus.OK);
+			return new ResponseEntity<String>("Note does not exists", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>("Note moved to trash", HttpStatus.OK);
 	}
-	
-	@PostMapping(value="/usernotes/collaborate")
-	public ResponseEntity<String> collaborateNote(Integer uId, Integer nId){
-		
-		
+
+	@PostMapping(value = "/usernotes/collaborate")
+	public ResponseEntity<String> collaborateNote(@RequestBody Note cNote, HttpServletRequest request,
+			HttpServletResponse response) {
+		logger.info("Note Object: " + cNote);
+		if (cNote == null) {
+			logger.info("Note Empty");
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		Integer userId = (Integer) request.getAttribute("userId");
+		logger.info("cUserId: " + request.getHeader("cUserId"));
+		if (request.getHeader("cUserId") == null) {
+			logger.info("*********No cUserId received*********");
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+
+		logger.info("collaborating note with id: " + cNote.getNoteId());
+		cNote = noteService.getNoteById(userId, cNote.getNoteId());
+		if (cNote == null) {
+			logger.info("Note does not exist");
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+		Integer cUserId = Integer.parseInt(request.getHeader("cUserId"));
+		// check if logged in user is editing note.
+		// or collaborated users editing note //
+		if (userId.compareTo(cNote.getUser().getId()) == 0) {
+			User cUser = new User();
+			cUser = userService.getUserById(cUserId, cUser);
+			noteService.collaborateUser(cUser, cNote);
+
+		} else {
+			logger.info("Note Owner Authorization failed");
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 

@@ -1,10 +1,7 @@
 package com.bridgeit.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-@Table(name = "user-note")
-@Entity
+/*@Table(name = "user-note")
+@Entity*/
 public class NoteCollaborator {
 	private User createdBy;
 	private User createdFor;
@@ -23,7 +20,7 @@ public class NoteCollaborator {
 	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
-
+	
 	public User getCreatedFor() {
 		return createdFor;
 	}
