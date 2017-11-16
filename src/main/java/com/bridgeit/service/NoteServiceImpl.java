@@ -12,6 +12,7 @@ import com.bridgeit.entity.Note;
 import com.bridgeit.entity.User;
 
 @Service("noteService")
+@Transactional
 public class NoteServiceImpl implements NoteService {
 	Logger logger = Logger.getLogger(NoteServiceImpl.class);
 	@Autowired
@@ -70,9 +71,21 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
+	@Transactional
 	public void collaborateUser(User cUser, Note cNote) {
 		dao.collaborateUser(cUser, cNote);
-		
+
+	}
+
+	public Note getCompleteNoteById(Integer nId) {
+		return dao.getCompleteNoteById(nId);
+	}
+
+	@Override
+	@Transactional
+	public void unCollaborate(Note cNote, User cUser) {
+		dao.unCollaborate(cNote, cUser);
+
 	}
 
 }

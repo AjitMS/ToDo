@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import org.apache.log4j.Logger;
+import org.springframework.scheduling.annotation.Async;
 
 /**
  * @author Ajit Shikalgar
@@ -57,6 +58,7 @@ public class EmailCredentialSerializer {
 	 * @throws ClassNotFoundException
 	 *             deserializes dat file to provide EmailInfo Object from .dat file
 	 */
+	
 	public static EmailInfo getEmailInfo() throws FileNotFoundException, IOException, ClassNotFoundException {
 
 		try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(credentialFilePath))) {

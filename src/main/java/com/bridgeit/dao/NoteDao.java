@@ -77,4 +77,7 @@ public interface NoteDao {
 
 	void collaborateUser(User cUser, Note cNote);
 
+	Note getCompleteNoteById(Integer nId);
+
+	public void unCollaborate(Note cNote, User cUser);
 }

@@ -54,6 +54,7 @@ public class TokenServiceImpl implements TokenService {
 	}
 
 	public Token generateTokenAndPushIntoRedis(Integer userId, String tokenType) {
+		logger.info("Redis is called");
 		if (userId == null) {
 			logger.info("ERROR: Token cannot be created with User Id: " + userId);
 			return null;
@@ -87,7 +88,7 @@ public class TokenServiceImpl implements TokenService {
 		// no need to push into MySQL DB anymore
 
 		logger.info(tokenType + randomUUID + " Set successfully for user: " + userId);
-
+		logger.info("Redis complete");
 		return token;
 
 	}

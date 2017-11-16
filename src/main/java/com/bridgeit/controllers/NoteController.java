@@ -3,9 +3,7 @@ package com.bridgeit.controllers;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -190,44 +188,36 @@ public class NoteController {
 		user = userService.getUserById(uId, user);
 		if (user == null) {
 			logger.info("Note cannot be deleted. user not found");
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("User not found", HttpStatus.BAD_REQUEST);
 		}
 		Note note = new Note();
 		try {
-		note = noteService.getNoteById(uId, nId);
+			note = noteService.getNoteById(uId, nId);
+		} catch (Exception E) {
+			logger.info("Note Owner not found");
 		}
-		catch(Exception E) {
-		logger.info("Note Owner not found");	
-		}
-		System.out.println("Note is: "+note);
+		System.out.println("Note is: " + note);
+
 		try {
+			if (note == null)
+				note = noteService.getCompleteNoteById(nId);
 			if (uId.compareTo(note.getUser().getId()) == 0) {
 				noteService.moveToTrash(nId);
 				logger.info("Note moved to trash");
 				return new ResponseEntity<String>(HttpStatus.OK);
-			} else {
-				Set<User> collabUsers = new HashSet<>();
-				collabUsers = note.getCollabUsers();
-				if (collabUsers == null) {
-					logger.info("No collaboration for note Id: " + nId);
-					return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			} else
+				try {
+					noteService.unCollaborate(note, user);
+					return new ResponseEntity<String>("Note Uncollaborate",HttpStatus.OK);
+				} catch (Exception E) {
+					logger.info("" + E);
 				}
-				for (User tempUser : collabUsers) {
-					if (tempUser.getId().compareTo(uId) == 0) {
-						logger.info("Note will be Un-Collaborated. not deletion.");
-						collabUsers.remove(user);
-						return new ResponseEntity<String>(HttpStatus.OK);
-					} else {
-						return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-					}
-				}
-			}
 
 		} catch (Exception E) {
 			E.printStackTrace();
 			return new ResponseEntity<String>("Note does not exists", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("Note moved to trash", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/usernotes/collaborate")

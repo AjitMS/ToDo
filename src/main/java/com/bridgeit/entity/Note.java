@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author Ajit Shikalgar Note entity with fields as noteId, title, description,
@@ -59,13 +60,13 @@ public class Note {
 	// if not mentioned, program goes into infinite loop and results into stack
 	// overflow
 
-	@JsonIgnore
-	@ManyToOne
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userid")
 	private User user = new User();
 
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	@ManyToMany
-	@JsonIgnore
 	@JoinTable(name = "collabUsers", joinColumns = @JoinColumn(name = "noteid"), inverseJoinColumns = @JoinColumn(name = "userid"))
 	private Set<User> collabUsers = new HashSet<>();
 

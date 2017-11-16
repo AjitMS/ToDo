@@ -16,6 +16,8 @@ import javax.persistence.Transient;
 
 import com.bridgeit.customAnnotation.FieldMatch;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 /**
  * @author Ajit Shikalgar User entity with fields userId, firstName, lastName,
@@ -78,12 +80,14 @@ public class User {
 	// @NotNull(message = "*Required")
 	// @Size(min = 4, max = 30, message = "Short Entry")
 	@Column(name = "password")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	// @NotBlank(message = "*Required")
 	// @NotNull(message = "*Required")
 	// @Size(min = 4, max = 30, message = "Short Entry")
 	@Transient
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String confirmPassword;
 
 	@Column(name = "isvalid")

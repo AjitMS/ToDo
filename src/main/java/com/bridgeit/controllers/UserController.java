@@ -179,8 +179,6 @@ public class UserController {
 
 		}
 
-		// generating user token for forgot password
-		// generator is autowired
 		String tokenType = "forgottoken";
 		Token forgotToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), tokenType);
 		userService.sendResetPasswordMail(user, request, forgotToken);

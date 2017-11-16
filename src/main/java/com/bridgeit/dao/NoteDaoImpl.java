@@ -40,6 +40,20 @@ public class NoteDaoImpl implements NoteDao {
 	}
 
 	@Override
+	public Note getCompleteNoteById(Integer nId) {
+		logger.info("got id in DAO as: " + nId);
+		Note note = new Note();
+		// get note from database
+		Session session = sessionFactory.openSession();
+		logger.info("Getting Note by Id: " + nId);
+		note = (Note) session.get(Note.class, nId);
+		// to verify note belongs to same user
+		if (note != null)
+			return note;
+		return null;
+	}
+
+	@Override
 	public void updateNote(Note updatedNote, Integer nId) {
 		logger.info("user id is : " + updatedNote.getUser().getId());
 		Session session = sessionFactory.openSession();
@@ -195,6 +209,31 @@ public class NoteDaoImpl implements NoteDao {
 		// tx.commit();
 		/* session.close(); */
 		return;
+	}
+
+	@Override
+	public void unCollaborate(Note cNote, User cUser) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		Set<User> collabUsers = new HashSet<>();
+		collabUsers = cNote.getCollabUsers();
+		if (collabUsers == null)
+			return;
+		boolean collaborated = false;
+		for (User tempUser : collabUsers)
+			if (tempUser.getId().compareTo(cUser.getId()) == 0) {
+				collaborated = true;
+				logger.info("Note will be Un-Collaborated. not deletion.");
+				collabUsers.remove(cUser);
+				session.merge(cNote);
+				tx.commit();
+				session.close();
+				return;
+			}
+		if (!collaborated) {
+			logger.info("User is not even collaborated. deletion failed");
+			return;
+		}
 	}
 
 }

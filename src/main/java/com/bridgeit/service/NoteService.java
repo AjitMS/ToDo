@@ -57,5 +57,9 @@ public interface NoteService {
 	List<Note> getTrashedNoteList(Integer uId);
 	
 	public void collaborateUser(User cUser, Note cNote);
+	
+	public Note getCompleteNoteById(Integer nId);
+
+	public void unCollaborate(Note cNote, User cUser);
 
 }

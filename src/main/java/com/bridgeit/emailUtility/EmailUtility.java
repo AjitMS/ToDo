@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EmailUtility {
-	Logger logger = Logger.getLogger(EmailUtility.class);
+	static Logger logger = Logger.getLogger(EmailUtility.class);
 
 	/**
 	 * @param toMail
@@ -33,9 +33,10 @@ public class EmailUtility {
 	 * @throws IOException
 	 *             static method used to send mail for various purposes used by APIs
 	 */
+	
 	public static void sendMail(String toMail, String subject, String messageBody)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
-
+		logger.info("Email is Called");
 		// add relative path to the java class later we have used hardcoded path
 		EmailInfo emailInfo = EmailCredentialSerializer.getEmailInfo();
 		String fromMail = emailInfo.getEmail();
@@ -65,7 +66,7 @@ public class EmailUtility {
 			message.addHeader("Content-type", "text/HTMl; charset=UTF-8");
 			message.addHeader("format", "flowed");
 			message.addHeader("Content-Transfer-Encoding", "8-bit");
-			message.setFrom(new InternetAddress(fromMail, "NoReply-SAL"));
+			message.setFrom(new InternetAddress(fromMail, "BridgeIT"));
 			message.setReplyTo(InternetAddress.parse(fromMail, false));
 			message.setSubject(subject, "UTF-8");
 			message.setText(messageBody, "UTF-8");
@@ -78,5 +79,6 @@ public class EmailUtility {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		logger.info("Email has been Sent");
 	}
 }
