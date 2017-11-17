@@ -260,7 +260,6 @@
 		</dependency>
 
 		<!-- Servlet -->
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -274,6 +273,8 @@
 			<artifactId>javax.servlet.jsp-api</artifactId>
 			<version>2.3.1</version>
 		</dependency>
+
+
 
 		<!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-core -->
 		<dependency>
@@ -302,6 +303,13 @@
 			<artifactId>activemq-kahadb-store</artifactId>
 			<version>5.14.3</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jms -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+			<version>4.3.10.RELEASE</version>
 		</dependency>
 
 

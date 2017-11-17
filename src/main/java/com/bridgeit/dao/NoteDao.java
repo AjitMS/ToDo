@@ -80,4 +80,10 @@ public interface NoteDao {
 	Note getCompleteNoteById(Integer nId);
 
 	public void unCollaborate(Note cNote, User cUser);
+
+	void restoreFromTrash(Integer nId);
+
+	List<Note> getCompleteTrashedNoteList();
+	
+	public void removeFromTrash(Note note);
 }

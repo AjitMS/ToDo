@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bridgeit.dao.UserDao;
 import com.bridgeit.emailUtility.EmailUtility;
+import com.bridgeit.entity.Email;
 import com.bridgeit.entity.Token;
 import com.bridgeit.entity.User;
 
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserDao dao;
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -97,6 +99,7 @@ public class UserServiceImpl implements UserService {
 		String link = "http://localhost:8080/ToDo/#!/register/activateuser/" + id;
 		logger.info("registration link is: " + link);
 		EmailUtility.sendMail(email, "Confirm Registration", link);
+		Email mail = new Email(email, "", link, "Confirm Registration");
 
 	}
 
@@ -115,7 +118,7 @@ public class UserServiceImpl implements UserService {
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 		String subject = "Bridgelabz Secure Login Link";
 		String link = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath()
-				+ "/#!" +request.getServletPath() + "/" + user.getId() + "/" + accessToken.getTokenValue();
+				+ "/#!" + request.getServletPath() + "/" + user.getId() + "/" + accessToken.getTokenValue();
 		System.out.println("link is: " + link);
 		String msg = "Dear " + user.getFirstName().toUpperCase() + ", Login from below secure link\n" + link + "";
 		EmailUtility.sendMail(user.getEmail(), subject, msg);
@@ -127,9 +130,9 @@ public class UserServiceImpl implements UserService {
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 
 		String subject = "Bridgelabz Secure Login Link";
-		//String link = "http://localhost:8080/ToDo/login";
-		String link = "http://"+request.getServerName() + ":" + request.getServerPort() + request.getContextPath()
-				+"/#!"+ "/resetPassword/" + user.getId() + "/" + token.getTokenValue();
+		// String link = "http://localhost:8080/ToDo/login";
+		String link = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath()
+				+ "/#!" + "/resetPassword/" + user.getId() + "/" + token.getTokenValue();
 		String msg = "Dear " + user.getFirstName() + ", Access below link to reset password\n" + link + "";
 		EmailUtility.sendMail(user.getEmail(), subject, msg);
 

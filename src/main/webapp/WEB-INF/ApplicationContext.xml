@@ -4,8 +4,13 @@
 	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:c="http://www.springframework.org/schema/c"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:amq="http://activemq.apache.org/schema/core"
 	xsi:schemaLocation="
+		http://www.springframework.org/schema/jms
+		http://www.springframework.org/schema/jms/spring-jms.xsd
+		http://activemq.apache.org/schema/core
+		http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -26,6 +31,8 @@
 	<mvc:annotation-driven />
 
 	<task:annotation-driven />
+
+	<jms:annotation-driven />
 
 
 	<mvc:resources location="/node_modules/" mapping="/node_modules/**" />
@@ -79,20 +86,6 @@
 	<!-- Step 4: Enable configuration of transactional behavior based on annotations -->
 	<tx:annotation-driven transaction-manager="myTransactionManager" />
 
-	<!-- Add support for reading web resources: css, images, js, etc ... -->
-	<!-- <mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources> -->
-
-	<!-- Step 5: Add beans to enable Email Verification -->
-	<!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
-		<property name="host" value="smtp.gmail.com" /> <property name="username" 
-		value="ajitshikalgar786@gmail.com" /> <property name="password" value="" 
-		/> <property name="javaMailProperties"> <props> <prop key="mail.smtp.auth">true</prop> 
-		<prop key="mail.smtp.socketFactory.port">465</prop> <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop> 
-		<prop key="mail.smtp.port">465</prop> </props> </property> </bean> -->
-
-	<!-- <bean id="verifyEmail" class="com.bridgeit.emailUtility.EmailVerification"> 
-		<property name="mailSender" ref="mailSender" /> </bean> -->
-
 	<!-- turn on declarative caching -->
 	<cache:annotation-driven />
 
@@ -118,5 +111,31 @@
 			<bean id="requestInterceptor" class="com.bridgeit.filter.RequestInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
+
+	<bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<constructor-arg index="0" value="tcp://localhost:61616"></constructor-arg>
+		<property name="trustAllPackages" value="true" />
+	</bean>
+
+	<bean id="connectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory">
+		<constructor-arg ref="amqConnectionFactory"></constructor-arg>
+	</bean>
+
+	<bean id="defaultDestination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="mail"></constructor-arg>
+	</bean>
+
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="defaultDestination"></property>
+	</bean>
+
+	<bean id="listener" class="com.bridgeit.jms.Consumer" />
+
+	<jms:listener-container container-type="default"
+		connection-factory="connectionFactory" acknowledge="auto">
+		<jms:listener destination="MailQueue" ref="listener" />
+	</jms:listener-container>
 
 </beans>

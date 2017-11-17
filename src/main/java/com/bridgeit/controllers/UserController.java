@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgeit.entity.Token;
 import com.bridgeit.entity.User;
 import com.bridgeit.entity.UserLoginPair;
+import com.bridgeit.jms.Producer;
 import com.bridgeit.service.TokenService;
 import com.bridgeit.service.UserService;
 import com.bridgeit.utilities.Encryption;
@@ -46,6 +47,8 @@ public class UserController {
 	@Autowired
 	Encryption encryption;
 
+	@Autowired
+	Producer producer;
 	/**
 	 * @param loginPair
 	 * @param request
@@ -60,6 +63,7 @@ public class UserController {
 	@PostMapping("/login")
 	public ResponseEntity<Map<String, Token>> loginUser(@RequestBody UserLoginPair loginPair,
 			HttpServletRequest request) throws FileNotFoundException, ClassNotFoundException, IOException {
+		logger.info("Calling sender...");
 
 		if (loginPair.getEmail() == null || loginPair.getPassword() == null || loginPair.getEmail() == ""
 				|| loginPair.getPassword() == "") {

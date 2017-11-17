@@ -88,4 +88,14 @@ public class NoteServiceImpl implements NoteService {
 
 	}
 
+	@Override
+	public List<Note> getCompleteTrashedNoteList() {
+		return dao.getCompleteTrashedNoteList();
+	}
+
+	@Override
+	public void removeFromTrash(Note note) {
+		dao.removeFromTrash(note);
+	}
+
 }

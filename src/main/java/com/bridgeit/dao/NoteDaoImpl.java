@@ -70,7 +70,19 @@ public class NoteDaoImpl implements NoteDao {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		Note note = session.get(Note.class, nId);
+		note.setModifiedDate(LocalDateTime.now());
 		note.setInTrash(true);
+		tx.commit();
+		return;
+	}
+
+	@Override
+	public void restoreFromTrash(Integer nId) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		Note note = session.get(Note.class, nId);
+		note.setModifiedDate(LocalDateTime.now());
+		note.setInTrash(false);
 		tx.commit();
 		return;
 	}
@@ -113,9 +125,7 @@ public class NoteDaoImpl implements NoteDao {
 		// bring entire note list from database
 		logger.info("Into getNoteList()");
 		Session session = sessionFactory.openSession();
-
 		// since session.createCriteria() is deprecated
-
 		// Create CriteriaBuilder
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 
@@ -154,6 +164,22 @@ public class NoteDaoImpl implements NoteDao {
 		List<Note> noteList = new ArrayList<>();
 		for (Note tempNote : entireNoteList)
 			if (tempNote.getUser().getId().compareTo(uId) == 0 && tempNote.isInTrash()) {
+				System.out.println("Tempnote: " + tempNote);
+				noteList.add(tempNote);
+			}
+		return noteList;
+	}
+
+	@Override
+	public List<Note> getCompleteTrashedNoteList() {
+		Session session = sessionFactory.openSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Note> criteria = builder.createQuery(Note.class);
+		criteria.from(Note.class);
+		List<Note> entireNoteList = session.createQuery(criteria).getResultList();
+		List<Note> noteList = new ArrayList<>();
+		for (Note tempNote : entireNoteList)
+			if (tempNote.isInTrash()) {
 				System.out.println("Tempnote: " + tempNote);
 				noteList.add(tempNote);
 			}
@@ -234,6 +260,14 @@ public class NoteDaoImpl implements NoteDao {
 			logger.info("User is not even collaborated. deletion failed");
 			return;
 		}
+	}
+
+	public void removeFromTrash(Note note) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		session.delete(note);
+		tx.commit();
+		session.close();
 	}
 
 }

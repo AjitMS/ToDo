@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgeit.entity.Note;
 import com.bridgeit.entity.User;
+import com.bridgeit.scheduler.DeleteNote;
 import com.bridgeit.service.NoteService;
 import com.bridgeit.service.UserService;
 
@@ -40,6 +41,9 @@ public class NoteController {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	DeleteNote deleteNote;
 
 	/**
 	 * @param request
@@ -62,6 +66,7 @@ public class NoteController {
 			System.out.println("No notes found for user ID: " + uId);
 			return new ResponseEntity<List<Note>>(HttpStatus.NOT_FOUND);
 		}
+		Runtime.getRuntime().freeMemory();
 		return new ResponseEntity<List<Note>>(noteList, HttpStatus.OK);
 
 	}
@@ -201,14 +206,20 @@ public class NoteController {
 		try {
 			if (note == null)
 				note = noteService.getCompleteNoteById(nId);
+			if (note == null) {
+				logger.info("No note found");
+				return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			}
 			if (uId.compareTo(note.getUser().getId()) == 0) {
+
 				noteService.moveToTrash(nId);
+				// call scheduler with uId and nId to delete in every 7 days
 				logger.info("Note moved to trash");
 				return new ResponseEntity<String>(HttpStatus.OK);
 			} else
 				try {
 					noteService.unCollaborate(note, user);
-					return new ResponseEntity<String>("Note Uncollaborate",HttpStatus.OK);
+					return new ResponseEntity<String>("Note Uncollaborate", HttpStatus.OK);
 				} catch (Exception E) {
 					logger.info("" + E);
 				}

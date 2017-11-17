@@ -54,12 +54,16 @@ public interface NoteService {
 	 * @param uId
 	 * @return fetches trashed notes from NoteDao
 	 */
-	List<Note> getTrashedNoteList(Integer uId);
+ 	public List<Note> getTrashedNoteList(Integer uId);
 	
 	public void collaborateUser(User cUser, Note cNote);
 	
 	public Note getCompleteNoteById(Integer nId);
 
 	public void unCollaborate(Note cNote, User cUser);
+	
+	public List<Note> getCompleteTrashedNoteList();
+	
+	public void removeFromTrash(Note note);
 
 }
