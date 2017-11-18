@@ -31,6 +31,7 @@
 <link rel="stylesheet" type="text/css" href="CSS/resetPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/forgotPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/register.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
@@ -51,8 +52,14 @@
 <script src="controllers/resetPasswordController.js"></script>
 <script src="controllers/registrationController.js"></script>
 <script src="controllers/activateUserController.js"></script>
-</head>
 
+</head>
+<style>
+body{
+overflow : hidden;
+margin : 0px;
+}
+</style>
 <body ng-app="todo">
 
 	<div ui-view></div>

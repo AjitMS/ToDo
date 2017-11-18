@@ -1,123 +1,128 @@
-<html>
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>ToDo Homepage</title>
+<div class="container-fluid" style="padding: 0px;">
+	<nav class="navbar navbar-light top-navbar"
+		style="padding: 0px; margin: 0px;">
 
-    <!-- Bootstrap References -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
-        crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
-        crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" type="text/css" href="CSS/homepage.css" />
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-</head>
-
-<body>
-<div class="container-fluid" style="padding:0px;">
-    <nav class="navbar navbar-light top-navbar" style="padding:0px; margin:0px;" >
-
-        <div class="container-fluid row"  style="height:60px;">
-            <div class="col-1">
-                <button class="navbar-toggler responsive" onclick="openNav();" type="button">
-                    <span class="navbar-toggler-icon" style="margin:0px;"></span>
-                </button>
-                <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
-            </div>
+		<div class="container-fluid row" style="height: 60px;">
+			<div class="col-1">
+				<button class="navbar-toggler responsive" onclick="openNav();"
+					type="button">
+					<span class="navbar-toggler-icon" style="margin: 0px;"></span>
+				</button>
+				<!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
+			</div>
 
 
-            <div class="w-25 col-2">
-                <a title="Google Keep" class="navbar-text googlefont-hover" href="#">
-                    <h4 class="googlefont">
-                        <i>
-                            <b>Google</b>
-                        </i> Keep
-                    </h4>
-                </a>
-            </div>
-            <div class="col-6 d-none d-sm-block">
-                <form class="form-inline ">
-                    <div title="Search" class="input-group col-12 nav-input-group">
-                        <div class="search-icon" style="margin-top:5px;">
-                            <i class="material-icons ">search</i>
-                        </div>
-                        <input class="form-control nav-search"   type="search" placeholder="Search" aria-label="Search ">
-                    </div>
-                </form>
-            </div>
-            <div class="col-1 d-none d-block">
+			<div class="w-25 col-2">
+				<a title="Google Keep" class="navbar-text googlefont-hover" href="#">
+					<h4 class="googlefont">
+						<i> <b>Google</b>
+						</i> Keep
+					</h4>
+				</a>
+			</div>
+			<div class="col-6 d-none d-sm-block">
+				<form class="form-inline ">
+					<div title="Search" class="input-group col-12 nav-input-group">
+						<div class="search-icon" style="margin-top: 5px;">
+							<i class="material-icons ">search</i>
+						</div>
+						<input class="form-control nav-search" type="search"
+							placeholder="Search" aria-label="Search ">
+					</div>
+				</form>
+			</div>
+			<div class="col-1 d-none d-block">
 
-                <a title="Refresh" href=" #">
-                    <i class="material-icons grey-nav-icons">settings_backup_restore</i>
-                </a>
+				<a title="Refresh" href=" #"> <i
+					class="material-icons grey-nav-icons">settings_backup_restore</i>
+				</a> <a title="Grid View" href="#"> <i
+					class="material-icons grey-nav-icons">view_quilt</i>
+				</a>
 
-                <a title="Grid View" href="#">
-                    <i class="material-icons grey-nav-icons">view_quilt</i>
-                </a>
+			</div>
 
-            </div>
+			<div class="col-1 d-none d-md-block">
 
-            <div class="col-1 d-none d-md-block">
+				<a title="Google Apps" href="#"> <i
+					class="material-icons grey-nav-icons">apps</i>
+				</a> <a title="Notifications" href="#"> <i
+					class="material-icons grey-nav-icons">notifications</i>
+				</a>
 
-                <a title="Google Apps" href="#">
-                    <i class="material-icons grey-nav-icons">apps</i>
-                </a>
-
-                <a title="Notifications" href="#">
-                    <i class="material-icons grey-nav-icons">notifications</i>
-                </a>
-
-            </div>
+			</div>
 
 
-            <div class="col-1">
+			<div class="col-1">
 
-                <a title="Profile" href="#">
-                    <i class="material-icons grey-nav-icons">account_circle</i>
-                </a>
+				<a title="Profile" href="#"> <i
+					class="material-icons grey-nav-icons">account_circle</i>
+				</a>
 
-            </div>
+			</div>
+		</div>
+	</nav>
 </div>
-    </nav>
-    </div>
 <div class="row">
 
-        <div id="mySidenav" class="sidenav col-3">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="#">About</a>
-                <a href="#">Services</a>
-                <a href="#">Clients</a>
-                <a href="#">Contact</a>
-              </div>
-              
-              <!-- Use any element to open the sidenav -->
-              
-              <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+	<div id="mySidenav" class="sidenav col-3">
+		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<a href="#">About</a> <a href="#">Services</a> <a href="#">Clients</a>
+		<a href="#">Contact</a>
+	</div>
 </div>
 
-<div id="main" class="col-9">
-        Notes here
-      </div>
-</body>
+
+<!-- Search bar -->
+
+<div class="container-fluid col-6" id="bothForms">
+
+	<div>
+		<form action="" class="form-group form-control" id="takenote"
+			onclick="hideForm()">
+			<div>
+				<input type="text" class="form-control hide-border" id="title"
+					ng-model="note.title" placeholder="Title" /> <br />
+			</div>
+			<div style="visibility: hidden;">
+				<input type="text"
+					class="form-control hide-border" id="description"
+					ng-model="note.description" placeholder="Take a note..." />
+			</div>
+		</form>
+	</div>
+</div>
+<!-- Notes -->
+
+<div class="row">
+	<div id="main"
+		class="note-container col-xs-10 col-xl-4 col-sm-10 col-md-8 col-lg-6"
+		ng-repeat="note in notes track by $index">
+
+
+
+		<div class="card note col-11">
+			<div class="card-body">
+				<h4 class="card-title">{{note.title}}</h4>
+				<p class="card-text">{{note.description}}</p>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script>
+	function hideForm() {
+		document.getElementById("description").style.visibility = "visible";
+	}
 
-function openNav() {
-    document.getElementById("main").style.marginLeft = "250px";
-    document.getElementById("mySidenav").style.width = "250px";
+	function openNav() {
+		document.getElementById("main").style.marginLeft = "250px";
+		document.getElementById("mySidenav").style.width = "250px";
 
-}
+	}
 
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft= "250";
-}
+	function closeNav() {
+		document.getElementById("mySidenav").style.width = "0px";
+		document.getElementById("main").style.marginLeft = "0px";
+	}
 </script>
-</html>

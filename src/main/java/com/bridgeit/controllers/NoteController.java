@@ -31,7 +31,7 @@ import com.bridgeit.service.UserService;
  *         trashing, pinning etc.
  *
  */
-@RestController("/usernotes")
+@RestController
 public class NoteController {
 
 	Logger logger = Logger.getLogger(NoteController.class);

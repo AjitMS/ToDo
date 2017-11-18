@@ -1,6 +1,5 @@
 var todo = angular.module('todo');
 todo.controller('loginController', function($scope, loginService, $location) {
-	console.log('In controller');
 	$scope.user = {};
 
 	// for logging user
