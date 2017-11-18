@@ -1,6 +1,12 @@
 package com.bridgeit.entity;
 
-public class Email {
+import java.io.Serializable;
+
+public class Email implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2741073966157846392L;
 	private String to;
 	private String from;
 	private String message;
@@ -44,6 +50,9 @@ public class Email {
 		this.from = from;
 		this.message = message;
 		this.subject = subject;
+	}
+
+	public Email() {
 	}
 
 	@Override

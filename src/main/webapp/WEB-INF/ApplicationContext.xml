@@ -135,7 +135,7 @@
 
 	<jms:listener-container container-type="default"
 		connection-factory="connectionFactory" acknowledge="auto">
-		<jms:listener destination="MailQueue" ref="listener" />
+		<jms:listener destination="mail" ref="listener" />
 	</jms:listener-container>
 
 </beans>

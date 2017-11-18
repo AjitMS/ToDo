@@ -15,6 +15,7 @@ import com.bridgeit.emailUtility.EmailUtility;
 import com.bridgeit.entity.Email;
 import com.bridgeit.entity.Token;
 import com.bridgeit.entity.User;
+import com.bridgeit.jms.Producer;
 
 /**
  * @author Ajit Shikalgar
@@ -26,7 +27,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserDao dao;
 
-	
+	@Autowired
+	Producer producer;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -93,14 +96,15 @@ public class UserServiceImpl implements UserService {
 	 * mandatory step to verify mail of user attempting to register
 	 */
 	@Override
-	public void sendRegistrationVerificationLink(Integer id, String email)
+	public void sendRegistrationVerificationLink(Integer id, String userEmail)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
 
 		String link = "http://localhost:8080/ToDo/#!/register/activateuser/" + id;
 		logger.info("registration link is: " + link);
-		EmailUtility.sendMail(email, "Confirm Registration", link);
-		Email mail = new Email(email, "", link, "Confirm Registration");
-
+		// EmailUtility.sendMail(email, "Confirm Registration", link);
+		Email email = new Email(userEmail, "", link, "Confirm Registration");
+		producer.sender(email);
+		return;
 	}
 
 	/*

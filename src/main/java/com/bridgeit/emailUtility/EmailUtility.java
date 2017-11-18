@@ -36,7 +36,6 @@ public class EmailUtility {
 	
 	public static void sendMail(String toMail, String subject, String messageBody)
 			throws FileNotFoundException, ClassNotFoundException, IOException {
-		logger.info("Email is Called");
 		// add relative path to the java class later we have used hardcoded path
 		EmailInfo emailInfo = EmailCredentialSerializer.getEmailInfo();
 		String fromMail = emailInfo.getEmail();

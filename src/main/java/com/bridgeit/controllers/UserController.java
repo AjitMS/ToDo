@@ -49,6 +49,7 @@ public class UserController {
 
 	@Autowired
 	Producer producer;
+
 	/**
 	 * @param loginPair
 	 * @param request
@@ -256,13 +257,13 @@ public class UserController {
 		// saving user if not exists
 		if (!userService.userExists(user)) {
 			userService.registerUser(user);
+			userService.sendRegistrationVerificationLink(user.getId(), user.getEmail());
 			logger.info("Register Success");
 		} else {
 			return new ResponseEntity<String>(HttpStatus.NOT_ACCEPTABLE);
 		}
 
 		// Email verification
-		userService.sendRegistrationVerificationLink(user.getId(), user.getEmail());
 
 		String greeting = "Thank you! \n A verification email has been sent to " + user.getEmail()
 				+ ". confirm registration by accessing link in the mail";
