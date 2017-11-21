@@ -42,6 +42,7 @@
 	<mvc:resources location="/controllers/" mapping="/controllers/**" />
 	<mvc:resources location="/services/" mapping="/services/**" />
 	<mvc:resources location="/img/" mapping="/img/**" />
+	<mvc:resources location="/icons/" mapping="/icons/**" />
 
 
 	<!-- Define Spring MVC view resolver -->

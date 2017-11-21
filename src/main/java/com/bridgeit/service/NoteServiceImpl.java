@@ -39,17 +39,17 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	@Override
-	public List<Note> getNoteList(Integer uId) {
+	public List<Note> getNoteList(Integer uId, String noteCategory) {
 		List<Note> noteList;
-		noteList = dao.getNoteList(uId);
+		noteList = dao.getNoteList(uId, noteCategory);
 		return noteList;
 	}
 
+	
 	@Override
 	@Transactional
-	public void createNote(Integer uId, Note note) {
-		dao.createNote(uId, note);
-		return;
+	public Note createNote(Integer uId, Note note) {
+		return dao.createNote(uId, note);
 
 	}
 

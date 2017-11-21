@@ -5,6 +5,10 @@
 
 		<div class="container-fluid row" style="height: 60px;">
 			<div class="col-1">
+				<!-- <button class="navbar-toggler responsive" onclick="openNav();"
+					type="button">
+					<span class="navbar-toggler-icon" style="margin: 0px;"></span>
+				</button> -->
 
 				<a class=" responsive grey-nav-icons" onclick="openNav();"
 					title="Menu" href=""> <i class="material-icons">menu</i></a>
@@ -32,21 +36,19 @@
 			</div>
 			<div class="col-1 d-none d-block">
 
-				<a title="Refresh" href=""> <i
+				<a title="Refresh" href=" #"> <i
 					class="material-icons grey-nav-icons">settings_backup_restore</i>
-				</a> <a ng-show="grid" ng-click="toggleView()" title="Grid View" href="">
-					<i class="material-icons grey-nav-icons">view_quilt</i>
-				</a> <a ng-show="list" ng-click="toggleView()" title="List View" href="">
-					<i class="material-icons grey-nav-icons">view_list</i>
+				</a> <a title="Grid View" href="#"> <i
+					class="material-icons grey-nav-icons">view_quilt</i>
 				</a>
 
 			</div>
 
 			<div class="col-1 d-none d-md-block">
 
-				<a title="Google Apps" href=""> <i
+				<a title="Google Apps" href="#"> <i
 					class="material-icons grey-nav-icons">apps</i>
-				</a> <a title="Notifications" href=""> <i
+				</a> <a title="Notifications" href="#"> <i
 					class="material-icons grey-nav-icons">notifications</i>
 				</a>
 
@@ -55,7 +57,7 @@
 
 			<div class="col-1">
 
-				<a title="Profile" href=""> <i
+				<a title="Profile" href="#"> <i
 					class="material-icons grey-nav-icons">account_circle</i>
 				</a>
 
@@ -127,7 +129,8 @@
 
 <div id="main" class="row">
 	<div class="col-lg-8 col-xl-8 col-md-8 col-xs-12 container-fluid">
-		<div id="{{note.noteId}}" ng-class="view"
+		<div id="{{::note.noteId}}"
+			class="card note col-xl-4 col-lg-4 col-md-8 col-sm-8 col-xs-12 "
 			ng-repeat="note in notes track by $index" ng-click="showNote(note)">
 			<div class="card-title">
 				<h4 class="card-title">{{note.title}}</h4>
@@ -137,53 +140,21 @@
 			</div>
 
 			<div class="row">
+				<div class="col-2"><i class="material-icons note-menu-icons">touch_app</i></div>
+				<div class="col-2"><i class="material-icons note-menu-icons">person_add</i></div>
+				<div class="col-2"><i class="material-icons note-menu-icons">color_lens</i></div>
+				<div class="col-2"><i class="material-icons note-menu-icons">photo</i></div>
+				<div class="col-2"><i class="material-icons note-menu-icons">archive</i></div>
 				<div class="col-2">
-
-					<a title="Reminder" href=""> <i
-						class="material-icons note-menu-icons">touch_app</i>
-					</a>
-
-
-				</div>
-				<div class="col-2">
-					<a title="Collaborator" href=""> <i
-						class="material-icons note-menu-icons">person_add</i>
-					</a>
-
-				</div>
-				<div class="col-2">
-					<a title="change color" href=""> <i
-						class="material-icons note-menu-icons">color_lens</i>
-					</a>
-
-				</div>
-				<div class="col-2">
-					<a title="Add picture" href=""> <i
-						class="material-icons note-menu-icons">photo</i>
-					</a>
-
-				</div>
-				<div class="col-2">
-					<a title="Archive" href=""> <i
-						class="material-icons note-menu-icons">archive</i>
-					</a>
-
-				</div>
-				<div class="col-2">
-					<div class="dropdown show" role="button" id="dropdownMenuLink"
+					<div class="dropdown show 3dot" role="button" id="dropdownMenuLink"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<a title="More" href=""> <i
-							class="material-icons note-menu-icons">more_vert</i>
-						</a>
+						<img
+							src="https://png.icons8.com/menu-vertical-filled/ios7/16/666666">
 
-						<div class="dropdown-menu custom-menu"
-							aria-labelledby="dropdownMenuLink" data-toggle="dropdown">
-							<a class="dropdown-item menu custom-menu-item"
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+							<a class="dropdown-item menu"
 								ng-click="moveToTrash(note); $event.stopPropagation()" href="">Delete
-								Note</a> 
-								<a class="dropdown-item menu custom-menu-item"
-								ng-click="copyNote(note); $event.stopPropagation()" href="">Make
-								a copy</a>
+								Note</a>
 						</div>
 					</div>
 				</div>
@@ -205,7 +176,7 @@
 
 	function closeNav() {
 		document.getElementById("mySidenav").style.width = "0px";
-		document.getElementById("main").style.marginLeft = "250px";
-		document.getElementById("main").style.marginRight = "212px";
+		document.getElementById("main").style.marginLeft = "232px";
+		document.getElementById("main").style.marginRight = "232px";
 	}
 </script>

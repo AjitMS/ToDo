@@ -29,8 +29,6 @@ public class DeleteNote {
 			
 			for (Note tempNote : noteService.getCompleteTrashedNoteList())
 				if (tempNote.isInTrash() && (LocalDateTime.now().minusMinutes(1) == tempNote.getModifiedDate())) {
-					logger.info("duration is: " + tempNote.getModifiedDate().toString() + " and "
-							+ (LocalDateTime.now().minusWeeks(1) == tempNote.getModifiedDate()));
 					noteService.removeFromTrash(tempNote);
 				}
 		} catch (Exception e) {

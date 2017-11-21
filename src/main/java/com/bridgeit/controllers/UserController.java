@@ -257,7 +257,7 @@ public class UserController {
 		// saving user if not exists
 		if (!userService.userExists(user)) {
 			userService.registerUser(user);
-			userService.sendRegistrationVerificationLink(user.getId(), user.getEmail());
+			//userService.sendRegistrationVerificationLink(user.getId(), user.getEmail());
 			logger.info("Register Success");
 		} else {
 			return new ResponseEntity<String>(HttpStatus.NOT_ACCEPTABLE);

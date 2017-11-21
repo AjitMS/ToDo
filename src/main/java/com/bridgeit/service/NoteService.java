@@ -30,13 +30,13 @@ public interface NoteService {
 	 * @param note
 	 *            service layer operation that performs creation of note
 	 */
-	public void createNote(Integer uId, Note note);
+	public Note createNote(Integer uId, Note note);
 
 	/**
 	 * @param uId
 	 * @return fetches noteList from NoteDao for particular user Id
 	 */
-	List<Note> getNoteList(Integer uId);
+	List<Note> getNoteList(Integer uId, String noteCategory);
 
 	/**
 	 * @param uId

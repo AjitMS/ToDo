@@ -84,7 +84,7 @@
 	font-size: 25px;
 	color: #818181;
 	display: block;
-	transition: 0.3s;
+	transition: 0.2s;
 }
 
 .sidenav a:hover {
@@ -99,8 +99,9 @@
 }
 
 #main {
-	transition: margin-left .2s;
-	padding: 16px;
+	transition: margin-left .3s;
+	/* margin-left: 290px;
+	margin-right: 290px; */
 }
 
 @media screen and (max-height: 450px) {
@@ -119,12 +120,13 @@
 }
 
 .note {
+	border-radius: 0px 0px 0px 0px;
+	float: left;
 	background-color: white;
-	max-height: 100px !important;
 	box-shadow: 2px 2px 2px 2px lightgrey;
 }
 
-#description{
+#description {
 	visibility: none !important;
 }
 
@@ -134,9 +136,37 @@
 }
 
 #takenote {
-	padding : 0px;
+	padding: 0px;
 	visibility: none;
 	box-shadow: 2px 2px 2px 2px lightgrey;
 	padding: 0px;
 }
 
+.create-note-form {
+	margin-top: 25px;
+	width: 16px !important;
+	height: 16px !important;
+}
+
+.custom-modal {
+	border-radius: 0px 0px 0px 0px !important;
+	box-shadow: 2px 2px 2px 2px lightgrey !important transition: 1s;
+}
+
+.note-menu-icons {
+	font-size: : 15px !important;
+	color: grey;
+}
+
+.note-menu-icons:hover {
+	color: black;
+}
+
+.custom-menu {
+	padding: 0px;
+	border-radius: 0px 0px 0px 0px;
+}
+
+.custom-menu-item:hover {
+	background-color: lightgrey;
+}

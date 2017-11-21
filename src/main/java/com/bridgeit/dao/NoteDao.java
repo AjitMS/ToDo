@@ -17,7 +17,7 @@ public interface NoteDao {
 	 *            method needed to add note for particular user into DB.
 	 * 
 	 */
-	public void createNote(Integer uId, Note note);
+	public Note createNote(Integer uId, Note note);
 
 	/**
 	 * @param uId
@@ -48,7 +48,7 @@ public interface NoteDao {
 	 * @return this method looks up DB to find and retrieve notes for particular
 	 *         user Id and not trashed
 	 */
-	public List<Note> getNoteList(Integer uId);
+	public List<Note> getNoteList(Integer uId, String noteCategory);
 
 	/**
 	 * @param note

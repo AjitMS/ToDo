@@ -62,7 +62,6 @@ public class NoteDaoImpl implements NoteDao {
 		updatedNote.setModifiedDate(LocalDateTime.now());
 		session.update(updatedNote);
 		tx.commit();
-
 	}
 
 	@Override
@@ -121,7 +120,7 @@ public class NoteDaoImpl implements NoteDao {
 	}
 
 	@Override
-	public List<Note> getNoteList(Integer uId) {
+	public List<Note> getNoteList(Integer uId, String noteCategory) {
 		// bring entire note list from database
 		logger.info("Into getNoteList()");
 		Session session = sessionFactory.openSession();
@@ -139,19 +138,55 @@ public class NoteDaoImpl implements NoteDao {
 
 		// retrieve notes of which user is owner
 		if (entireNoteList.size() != 0)
-			for (Note tempNote : entireNoteList)
-				if (tempNote.getUser().getId().compareTo(uId) == 0 && !tempNote.isInTrash()) {
-					noteList.add(tempNote);
-				} else {
-					if ((tempNote.getCollabUsers() != null))
-						for (User tempUser : tempNote.getCollabUsers()) {
-							if (tempUser.getId().compareTo(uId) == 0) {
-								noteList.add(tempNote);
+			switch (noteCategory) {
+
+			case "trashed":
+				for (Note tempNote : entireNoteList)
+					if (tempNote.getUser().getId().compareTo(uId) == 0 && tempNote.isInTrash() == true) {
+						noteList.add(tempNote);
+					} else {
+						if ((tempNote.getCollabUsers() != null))
+							for (User tempUser : tempNote.getCollabUsers()) {
+								if (tempUser.getId().compareTo(uId) == 0) {
+									noteList.add(tempNote);
+								}
 							}
-						}
-				}
-		// and the ones collaborated with user
-		return noteList;
+					}
+				// and the ones collaborated with user
+				return noteList;
+
+			case "archived":
+				for (Note tempNote : entireNoteList)
+					if (tempNote.getUser().getId().compareTo(uId) == 0 && tempNote.isArchived() == true) {
+						noteList.add(tempNote);
+					} 
+				// and the ones collaborated with user
+				return noteList;
+
+			case "pinned":
+				for (Note tempNote : entireNoteList)
+					if (tempNote.getUser().getId().compareTo(uId) == 0 && tempNote.isPinned() == true) {
+						noteList.add(tempNote);
+					} 
+				// and the ones collaborated with user
+				return noteList;
+			default:
+				for (Note tempNote : entireNoteList)
+					if (tempNote.getUser().getId().compareTo(uId) == 0 && tempNote.isInTrash() == false
+							&& tempNote.isPinned() == false && tempNote.isArchived() == false) {
+						noteList.add(tempNote);
+					} else {
+						if ((tempNote.getCollabUsers() != null))
+							for (User tempUser : tempNote.getCollabUsers()) {
+								if (tempUser.getId().compareTo(uId) == 0) {
+									noteList.add(tempNote);
+								}
+							}
+					}
+				// and the ones collaborated with user
+				return noteList;
+			}
+		return null;
 	}
 
 	@Override
@@ -187,7 +222,7 @@ public class NoteDaoImpl implements NoteDao {
 	}
 
 	@Override
-	public void createNote(Integer uId, Note note) {
+	public Note createNote(Integer uId, Note note) {
 		logger.info("saving notes with user id :" + uId);
 		Session session = sessionFactory.getCurrentSession();
 		User user = new User();
@@ -196,14 +231,14 @@ public class NoteDaoImpl implements NoteDao {
 			user = session.get(User.class, uId);
 			note.setUser(user);
 			note.setCreatedDate(LocalDateTime.now());
-
+			session.persist(note);
 		} catch (Exception E) {
 			logger.info("User Id " + uId + " does not exist");
-			return;
+			return null;
 		}
 		logger.info("User is: " + user);
-		session.persist(note);
-		return;
+
+		return note;
 	}
 
 	@Override

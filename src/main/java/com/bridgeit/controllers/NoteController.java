@@ -51,16 +51,17 @@ public class NoteController {
 	 * @return a function that returns list of notes for particular user.
 	 */
 	@GetMapping("/usernotes") // userId
-	public ResponseEntity<List<Note>> showNotes(HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<List<Note>> showNotes(@RequestBody String noteCategory, HttpServletRequest request, HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
+		logger.info("note category: "+noteCategory);
 		if (uId == -1) {
 			logger.info("User not found / Token validation failed");
 			return new ResponseEntity<List<Note>>(HttpStatus.BAD_REQUEST);
 		}
 		List<Note> noteList = new ArrayList<>();
 
-		noteList = noteService.getNoteList(uId);
+		noteList = noteService.getNoteList(uId, noteCategory);
 
 		if (noteList == null) {
 			System.out.println("No notes found for user ID: " + uId);
@@ -78,18 +79,20 @@ public class NoteController {
 	 * @return API that manages the creation of notes
 	 */
 	@PostMapping(value = "usernotes/createnote")
-	public ResponseEntity<String> createNote(@RequestBody Note note, HttpServletRequest request,
+	public ResponseEntity<Note> createNote(@RequestBody Note note, HttpServletRequest request,
 			HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
 
 		logger.info("Id is: " + uId);
 		try {
-			noteService.createNote(uId, note);
-			return new ResponseEntity<String>("Note Added.", HttpStatus.OK);
+			Note createdNote = noteService.createNote(uId, note);
+			logger.info("***Note Created***");
+			return new ResponseEntity<Note>(createdNote, HttpStatus.OK);
 		} catch (Exception E) {
 			E.printStackTrace();
-			return new ResponseEntity<String>("User does not exist", HttpStatus.BAD_REQUEST);
+			logger.info("***Note caanot be Created***");
+			return new ResponseEntity<Note>(HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -127,18 +130,26 @@ public class NoteController {
 	 * @throws IOException
 	 *             API needed to manage updating of notes
 	 */
-	@PutMapping(value = "/usernotes/updatenote/{nId}")
-	public ResponseEntity<Note> updateNote(@RequestBody Note updatedNote, @PathVariable("nId") Integer nId,
-			HttpServletRequest request) throws IOException {
+	@PutMapping(value = "/usernotes/updatenote")
+	public ResponseEntity<Note> updateNote(@RequestBody Note updatedNote, HttpServletRequest request)
+			throws IOException {
 		Integer uId = (Integer) request.getAttribute("userId");
+		Integer nId = updatedNote.getNoteId();
 		logger.info("userId in request is: " + uId);
 		Note oldNote = noteService.getNoteById(uId, nId);
 		if (oldNote == null) {
-			logger.info("User does not exist");
-			return new ResponseEntity<Note>(HttpStatus.BAD_REQUEST);
+			oldNote = noteService.getCompleteNoteById(nId);
+			if (oldNote == null) {
+				logger.info("User does not exist");
+				return new ResponseEntity<Note>(HttpStatus.BAD_REQUEST);
+			}
+			for (User tempUser : oldNote.getCollabUsers())
+				if (tempUser.getId().compareTo(nId) == 0)
+					noteService.updateNote(updatedNote, nId);
+			logger.info("user updated a collaborated note");
+			return new ResponseEntity<Note>(updatedNote, HttpStatus.OK);
 		}
-		updatedNote.getUser().setId(uId);
-		updatedNote.setCreatedDate(oldNote.getCreatedDate());
+		/* updatedNote.getUser().setId(uId); */
 		noteService.updateNote(updatedNote, nId);
 		return new ResponseEntity<Note>(updatedNote, HttpStatus.OK);
 	}
@@ -149,8 +160,8 @@ public class NoteController {
 	 * @param response
 	 * @return in order to delete notes permanently, use deleteNode API
 	 */
-	@DeleteMapping(value = "usernotes/deletenote/{nId}")
-	public ResponseEntity<String> deleteNode(@PathVariable("nId") Integer nId, HttpServletRequest request,
+	@DeleteMapping(value = "usernotes/deletenote")
+	public ResponseEntity<String> deleteNode(@RequestBody Integer nId, HttpServletRequest request,
 			HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
@@ -183,12 +194,15 @@ public class NoteController {
 		}
 	}
 
-	@PutMapping(value = "/usernotes/movetotrash/{nId}")
-	public ResponseEntity<String> moveToTrash(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable("nId") Integer nId) throws IOException {
+	@PutMapping(value = "/usernotes/movetotrash")
+	public ResponseEntity<String> moveToTrash(@RequestBody String noteId, HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
-		logger.info("noteId in request is: " + nId);
+
+		/* logger.info("noteId in request is: " + nId); */
+		Integer nId = Integer.parseInt(noteId);
 		User user = new User();
 		user = userService.getUserById(uId, user);
 		if (user == null) {
