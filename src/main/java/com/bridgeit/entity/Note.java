@@ -70,6 +70,17 @@ public class Note {
 	@JoinTable(name = "collabUsers", joinColumns = @JoinColumn(name = "noteid"), inverseJoinColumns = @JoinColumn(name = "userid"))
 	private Set<User> collabUsers = new HashSet<>();
 
+	@Column(name = "color")
+	private String color = "#ffffff";
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -84,6 +95,22 @@ public class Note {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Note(String title, Integer noteId, LocalDateTime createdDate, LocalDateTime modifiedDate, String description,
+			boolean isArchived, boolean inTrash, boolean isPinned, User user, Set<User> collabUsers, String color) {
+		super();
+		this.title = title;
+		this.noteId = noteId;
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
+		this.description = description;
+		this.isArchived = isArchived;
+		this.inTrash = inTrash;
+		this.isPinned = isPinned;
+		this.user = user;
+		this.collabUsers = collabUsers;
+		this.color = color;
 	}
 
 	public String getTitle() {
@@ -114,16 +141,7 @@ public class Note {
 		return modifiedDate;
 	}
 
-	public Note(String title, LocalDateTime createdDate, LocalDateTime modifiedDate, String description,
-			boolean isArchived, boolean inTrash, boolean isPinned) {
-		this.title = title;
-		this.createdDate = createdDate;
-		this.modifiedDate = modifiedDate;
-		this.description = description;
-		this.isArchived = isArchived;
-		this.inTrash = inTrash;
-		this.isPinned = isPinned;
-	}
+
 
 	public void setModifiedDate(LocalDateTime modifiedDate) {
 		this.modifiedDate = modifiedDate;
@@ -165,7 +183,8 @@ public class Note {
 	public String toString() {
 		return "Note [title=" + title + ", noteId=" + noteId + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + ", description=" + description + ", isArchived=" + isArchived + ", inTrash=" + inTrash
-				+ ", isPinned=" + isPinned + "]";
+				+ ", isPinned=" + isPinned + ", collabUsers=" + collabUsers + ", color=" + color
+				+ "]";
 	}
 
 	public Note() {

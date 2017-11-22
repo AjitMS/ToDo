@@ -62,6 +62,7 @@ public class NoteDaoImpl implements NoteDao {
 		updatedNote.setModifiedDate(LocalDateTime.now());
 		session.update(updatedNote);
 		tx.commit();
+		session.close();
 	}
 
 	@Override
@@ -159,7 +160,7 @@ public class NoteDaoImpl implements NoteDao {
 				for (Note tempNote : entireNoteList)
 					if (tempNote.getUser().getId().compareTo(uId) == 0 && tempNote.isArchived() == true) {
 						noteList.add(tempNote);
-					} 
+					}
 				// and the ones collaborated with user
 				return noteList;
 
@@ -167,7 +168,7 @@ public class NoteDaoImpl implements NoteDao {
 				for (Note tempNote : entireNoteList)
 					if (tempNote.getUser().getId().compareTo(uId) == 0 && tempNote.isPinned() == true) {
 						noteList.add(tempNote);
-					} 
+					}
 				// and the ones collaborated with user
 				return noteList;
 			default:
@@ -187,6 +188,42 @@ public class NoteDaoImpl implements NoteDao {
 				return noteList;
 			}
 		return null;
+	}
+
+	@Override
+	public List<Note> getAllNoteList(Integer uId) {
+		// bring entire note list from database
+		logger.info("Into getNoteList()");
+		Session session = sessionFactory.openSession();
+		// since session.createCriteria() is deprecated
+		// Create CriteriaBuilder
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+
+		// Create CriteriaQuery
+		CriteriaQuery<Note> criteria = builder.createQuery(Note.class);
+
+		criteria.from(Note.class);
+		List<Note> entireNoteList = session.createQuery(criteria).getResultList();
+		// learn a more efficient way to retrieve notes
+		List<Note> noteList = new ArrayList<>();
+
+		// retrieve notes of which user is owner
+		if (entireNoteList.size() != 0)
+
+			for (Note tempNote : entireNoteList)
+				if (tempNote.getUser().getId().compareTo(uId) == 0) {
+					noteList.add(tempNote);
+				} else {
+					if ((tempNote.getCollabUsers() != null))
+						for (User tempUser : tempNote.getCollabUsers()) {
+							if (tempUser.getId().compareTo(uId) == 0) {
+								noteList.add(tempNote);
+							}
+						}
+				}
+		// and the ones collaborated with user
+		return noteList;
+
 	}
 
 	@Override
@@ -231,8 +268,10 @@ public class NoteDaoImpl implements NoteDao {
 			user = session.get(User.class, uId);
 			note.setUser(user);
 			note.setCreatedDate(LocalDateTime.now());
-			session.persist(note);
+			note.setNoteId(null);
+			session.save(note);
 		} catch (Exception E) {
+			E.printStackTrace();
 			logger.info("User Id " + uId + " does not exist");
 			return null;
 		}

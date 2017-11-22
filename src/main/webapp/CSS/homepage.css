@@ -120,11 +120,14 @@
 }
 
 .note {
-	border-radius: 0px 0px 0px 0px;
+	border-radius: 1px 1px 1px 1px;
 	float: left;
-	background-color: white;
-	box-shadow: 2px 2px 2px 2px lightgrey;
+	/* background-color: white; */
+	box-shadow: 2px 2px 1px 1px lightgrey;
+	padding: 12px;
+	margin: 7px;
 }
+
 
 #description {
 	visibility: none !important;
@@ -139,7 +142,6 @@
 	padding: 0px;
 	visibility: none;
 	box-shadow: 2px 2px 2px 2px lightgrey;
-	padding: 0px;
 }
 
 .create-note-form {
@@ -169,4 +171,8 @@
 
 .custom-menu-item:hover {
 	background-color: lightgrey;
+}
+
+.pinned{
+	color : #3385EF;
 }

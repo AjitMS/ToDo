@@ -1,19 +1,6 @@
 var todo = angular.module('todo');
 todo.factory('homeService', function($http) {
 	var methodChain = {};
-	methodChain.getnotes = function(accessToken, refreshToken) {
-		return $http({
-			method : 'GET',
-			data : {
-				noteCategory : null
-			},
-			headers : {
-				'accessToken' : accessToken,
-				'refreshToken' : refreshToken
-			},
-			url : 'usernotes'
-		});
-	}
 
 	methodChain.createnote = function(note, accessToken, refreshToken) {
 		return $http({
@@ -71,7 +58,7 @@ todo.factory('homeService', function($http) {
 				'accessToken' : accessToken,
 				'refreshToken' : refreshToken
 			},
-			url : 'usernotes/update'
+			url : 'usernotes/updatenote'
 		});
 	}
 
@@ -86,14 +73,24 @@ todo.factory('homeService', function($http) {
 			url : 'usernotes/updatenote'
 		});
 	}
+	
+	methodChain.color = function(note, accessToken, refreshToken) {
+		return $http({
+			method : 'PUT',
+			data : note,
+			headers : {
+				'accessToken' : accessToken,
+				'refreshToken' : refreshToken
+			},
+			url : 'usernotes/updatenote'
+		});
+	}
 
-	methodChain.getpinnednotes = function(accessToken, refreshToken) {
+/*	methodChain.getpinnednotes = function(accessToken, refreshToken) {
 		return $http({
 			method : 'GET',
-			data : {
-				noteCategory = 'pinned'
-			},
 			headers : {
+				'noteCategory' : 'pinned',
 				'accessToken' : accessToken,
 				'refreshToken' : refreshToken
 			},
@@ -104,10 +101,8 @@ todo.factory('homeService', function($http) {
 	methodChain.getarchivednotes = function(accessToken, refreshToken) {
 		return $http({
 			method : 'GET',
-			data : {
-				noteCategory = 'archived'
-			},
 			headers : {
+				'noteCategory' : 'archived',
 				'accessToken' : accessToken,
 				'refreshToken' : refreshToken
 			},
@@ -118,16 +113,26 @@ todo.factory('homeService', function($http) {
 	methodChain.gettrashednotes = function(note, accessToken, refreshToken) {
 		return $http({
 			method : 'GET',
-			data : {
-				noteCategory = 'trashed'
-			},
 			headers : {
+				'noteCategory' : 'trashed',
 				'accessToken' : accessToken,
 				'refreshToken' : refreshToken
 			},
 			url : 'usernotes'
 		});
 	}
-
+*/
+	methodChain.getnotes = function(accessToken, refreshToken) {
+		return $http({
+			method : 'GET',
+			headers : {
+				'noteCategory' : null,
+				'accessToken' : accessToken,
+				'refreshToken' : refreshToken
+			},
+			url : 'usernotes'
+		});
+	}
+	
 	return methodChain;
 })

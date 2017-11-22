@@ -38,6 +38,7 @@ public interface NoteService {
 	 */
 	List<Note> getNoteList(Integer uId, String noteCategory);
 
+	List<Note> getAllNoteList(Integer uId);
 	/**
 	 * @param uId
 	 * @param nId

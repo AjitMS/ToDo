@@ -45,6 +45,12 @@ public class NoteServiceImpl implements NoteService {
 		return noteList;
 	}
 
+	@Override
+	public List<Note> getAllNoteList(Integer uId) {
+		List<Note> noteList;
+		noteList = dao.getAllNoteList(uId);
+		return noteList;
+	}
 	
 	@Override
 	@Transactional
@@ -53,6 +59,8 @@ public class NoteServiceImpl implements NoteService {
 
 	}
 
+	
+	
 	@Override
 	@Transactional
 	public void moveToTrash(Integer nId) {

@@ -31,7 +31,7 @@
 <link rel="stylesheet" type="text/css" href="CSS/resetPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/forgotPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/register.css" />
- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 
 
@@ -57,10 +57,7 @@
 
 </head>
 <style>
-body{
-overflow : hidden;
-margin : 0px;
-}
+
 </style>
 <body ng-app="todo">
 

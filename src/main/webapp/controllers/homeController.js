@@ -3,7 +3,7 @@ todo
 		.controller(
 				'homeController',
 				function($state, $location, $scope, homeService) {
-					$scope.gridView = "card note col-xl-4 col-lg-4 col-md-8 col-sm-8 col-xs-12";
+					$scope.gridView = "card note col-xl-3 col-lg-4 col-md-8 col-sm-8 col-xs-12";
 					$scope.listView = "card note col-xs-12 col-lg-12";
 					$scope.view = $scope.gridView;
 					$scope.grid = false;
@@ -13,10 +13,24 @@ todo
 					var refreshToken = JSON.parse(localStorage
 							.getItem('refreshToken')).tokenValue;
 					$scope.notes = [];
-					$scope.trashedNotes = [];
-					$scope.pinnedNotes = [];
-					$scope.archivedNotes = [];
 
+					$scope.colors = {
+						color1 : "#FFFFFF",
+						color2 : "#FF8981",
+						color3 : "#FFD086",
+						color4 : "#FFFF95",
+						color5 : "#C9FF97",
+						color6 : "#9EFFEB",
+						color7 : "#74D7FD",
+						color8 : "#7AB0FB",
+						color9 : "#B188FA",
+						color10 : "#FBBACE",
+						color11 : "#D7CBC7",
+						color12 : "#CDD7DB"
+					};
+
+					
+					
 					$scope.toggleView = function() {
 						$scope.grid = !$scope.grid;
 						$scope.list = !$scope.list;
@@ -108,10 +122,24 @@ todo
 						var httpresponse = homeService.trashnote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
+							note.inTrash = true;
 							var index = $scope.notes.indexOf(note);
-							$scope.notes.splice(index, 1);
-							$scope.trashedNote.push(note);
+							if (note.isPinned) {
+								var index = $scope.pinnedNotes.indexOf(note);
+								$scope.pinnedNotes.splice(index, 1);
+								note.isPinned = false;
+
+								$scope.trashedNotes.push(note);
+							} else {
+								$scope.trashedNote = [];
+								console.log($scope.trashedNotes);
+								var index = $scope.notes.indexOf(note);
+								$scope.notes.splice(index, 1);
+
+							}
+
 							console.log('note deleted');
+							note.inTrash = true;
 							return;
 						}, function(response) {
 							console.log('note cannot be deleted');
@@ -121,54 +149,55 @@ todo
 
 					$scope.copyNote = function(note) {
 						console.log('copying note...' + note);
+						note.isPinned = false;
 						var httpresponse = homeService.createnote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
-							$scope.notes.push(note);
+							$scope.notes.push(response.data);
 							console.log('note copied');
 							return;
 						}, function(response) {
-							console.log('note cannot be deleted');
+							console.log('note cannot be copied');
 							return;
 						});
 					}
 
 					$scope.archiveNote = function(note) {
 						console.log('archiving note...' + note);
-						var httpresponse = homeService.movetoarchive(note,
+						note.isPinned = !note.isPinned;
+						note.archived = !note.archived;
+						var httpresponse = homeService.archivenote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
-							var index = $scope.notes.indexOf(note);
-							$scope.notes.splice(index, 1);
-							$scope.archivedNotes.push(note);
 							console.log('note archived');
 							/* $state.reload(); */
 							return;
 						}, function(response) {
-							console.log('note cannot be deleted');
+							note.isPinned = !note.isPinned;
+							note.archived = !note.archived;
+							console.log('note cannot be archived');
 							return;
 						});
 					}
 
 					$scope.pinNote = function(note) {
 						console.log('pinning note...' + note);
-						note.isPinned = true;
-						var httpresponse = homeService.movetoarchive(note,
+						note.pinned = !note.pinned;
+						var httpresponse = homeService.pinnote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
-							var index = $scope.notes.indexOf(note);
-							$scope.notes.splice(index, 1);
-							$scope.pinnedNotes.push(note);
-							console.log('note archived');
+
+							console.log('note pinned');
 							return;
 						}, function(response) {
-							console.log('note cannot be deleted');
+							note.pinned = !note.pinned;
+							console.log('note cannot be pinned');
 							return;
 						});
 					}
 
-					var getNotes = homeService.getnotes($scope.user,
-							accessToken, refreshToken);
+					var getNotes = homeService.getnotes(accessToken,
+							refreshToken);
 					getNotes.then(function(response) {
 						console.log('notes loaded');
 						console.log(response.data);
@@ -177,30 +206,20 @@ todo
 						console.log('error loading notes');
 					});
 
-					var getTrashedNotes = homeService.gettrashednotes(
-							$scope.user, accessToken, refreshToken);
-					getTrashedNotes.then(function(response) {
-						console.log('notes loaded');
-						console.log(response.data);
-						$scope.trashedNotes = (response.data);
-					}, function(response) {
-						console.log('error loading trashed notes');
-					});
+					$scope.colorNote = function(note, color) {
+						var temp = color;
+						note.color = color;
+						console.log('coloring note: ' + note);
+						var httpresponse = homeService.color(note, accessToken,
+								refreshToken);
+						httpresponse.then(function(response) {
+							var id = note.noteId;
 
-					var getPinnedNotes = homeService.getpinnednotes(
-							$scope.user, accessToken, refreshToken);
-					getPinnedNotes.then(function(response) {
-						$scope.pinnedNotes = (response.data);
-					}, function(response) {
-						console.log('error loading pinned notes');
-					});
+							console.log('note colored with: ' + color);
+						}, function(response) {
+							console.log('note cannot be colored');
+							note.color = temp;
+						})
 
-					var getArchivedNotes = homeService.getarchivednotes(
-							$scope.user, accessToken, refreshToken);
-					getArchivedNotes.then(function(response) {
-						$scope.archivedNotes = (response.data);
-					}, function(response) {
-						console.log('error archived loading notes');
-					});
-
+					}
 				});

@@ -50,6 +50,7 @@ public interface NoteDao {
 	 */
 	public List<Note> getNoteList(Integer uId, String noteCategory);
 
+	public List<Note> getAllNoteList(Integer uId);
 	/**
 	 * @param note
 	 *            in order to delete a note temporarily, moveToTrash method is

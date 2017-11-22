@@ -50,10 +50,11 @@ public class NoteController {
 	 * @param response
 	 * @return a function that returns list of notes for particular user.
 	 */
-	@GetMapping("/usernotes") // userId
-	public ResponseEntity<List<Note>> showNotes(@RequestBody String noteCategory, HttpServletRequest request, HttpServletResponse response) {
+	@GetMapping("/userallnotes") // userId
+	public ResponseEntity<List<Note>> showNotes(HttpServletRequest request, HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
+		String noteCategory = request.getHeader("noteCategory");
 		logger.info("note category: "+noteCategory);
 		if (uId == -1) {
 			logger.info("User not found / Token validation failed");
@@ -72,6 +73,27 @@ public class NoteController {
 
 	}
 
+	@GetMapping("/usernotes") // userId
+	public ResponseEntity<List<Note>> showAllNotes(HttpServletRequest request, HttpServletResponse response) {
+		Integer uId = (Integer) request.getAttribute("userId");
+		logger.info("userId in request is: " + uId);
+		if (uId == -1) {
+			logger.info("User not found / Token validation failed");
+			return new ResponseEntity<List<Note>>(HttpStatus.BAD_REQUEST);
+		}
+		List<Note> noteList = new ArrayList<>();
+
+		noteList = noteService.getAllNoteList(uId);
+
+		if (noteList == null) {
+			System.out.println("No notes found for user ID: " + uId);
+			return new ResponseEntity<List<Note>>(HttpStatus.NOT_FOUND);
+		}
+		Runtime.getRuntime().freeMemory();
+		return new ResponseEntity<List<Note>>(noteList, HttpStatus.OK);
+
+	}
+	
 	/**
 	 * @param note
 	 * @param request
@@ -195,21 +217,20 @@ public class NoteController {
 	}
 
 	@PutMapping(value = "/usernotes/movetotrash")
-	public ResponseEntity<String> moveToTrash(@RequestBody String noteId, HttpServletRequest request,
+	public ResponseEntity<String> moveToTrash(@RequestBody Note note, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
 
 		/* logger.info("noteId in request is: " + nId); */
-		Integer nId = Integer.parseInt(noteId);
+		Integer nId = note.getNoteId();
 		User user = new User();
 		user = userService.getUserById(uId, user);
 		if (user == null) {
 			logger.info("Note cannot be deleted. user not found");
 			return new ResponseEntity<String>("User not found", HttpStatus.BAD_REQUEST);
 		}
-		Note note = new Note();
 		try {
 			note = noteService.getNoteById(uId, nId);
 		} catch (Exception E) {
