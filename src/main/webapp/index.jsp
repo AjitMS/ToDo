@@ -47,6 +47,7 @@
 <script src="services/ResetPasswordService.js"></script>
 <script src="services/RegistrationService.js"></script>
 <script src="services/ActivateUserService.js"></script>
+<script src="services/DummyService.js"></script>
 
 <script src="controllers/loginController.js"></script>
 <script src="controllers/homeController.js"></script>
@@ -54,6 +55,7 @@
 <script src="controllers/resetPasswordController.js"></script>
 <script src="controllers/registrationController.js"></script>
 <script src="controllers/activateUserController.js"></script>
+<script src="controllers/dummyController.js"></script>
 
 </head>
 <style>

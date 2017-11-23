@@ -111,4 +111,18 @@ public class TokenServiceImpl implements TokenService {
 		return -1;
 
 	}
+
+	@Override
+	public void destroyUserToken(Token accessToken, Token refreshToken) {
+		logger.info("User to be logged out: " + accessToken.getUserId());
+		if (tokenMap.containsKey(accessToken.getTokenValue()) && tokenMap.containsKey(refreshToken.getTokenValue())) {
+			tokenMap.remove("accessToken", accessToken);
+			tokenMap.remove("refreshToken", refreshToken);
+			return;
+		} else {
+			logger.info("Tokens does not exist");
+			return;
+		}
+
+	}
 }

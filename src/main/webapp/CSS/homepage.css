@@ -164,6 +164,12 @@
 	color: black;
 }
 
+
+#profile{
+	right : 0;
+	left : auto;
+}
+
 .custom-menu {
 	padding: 0px;
 	border-radius: 0px 0px 0px 0px;

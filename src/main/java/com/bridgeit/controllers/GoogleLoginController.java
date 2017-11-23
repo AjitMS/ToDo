@@ -1,8 +1,11 @@
 package com.bridgeit.controllers;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Base64;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,14 +14,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bridgeit.entity.Token;
 import com.bridgeit.entity.User;
 import com.bridgeit.service.TokenService;
 import com.bridgeit.service.UserService;
@@ -76,8 +76,8 @@ public class GoogleLoginController {
 	 *             saving object with appropriate tokens and setters.
 	 */
 	@RequestMapping(value = "/glogin", method = RequestMethod.GET)
-	public ResponseEntity<String> googleLogin(HttpServletRequest request, HttpServletResponse response,
-			HttpSession session) throws ServletException {
+	public void googleLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+			throws ServletException {
 		if (request.getParameter("error") != null) {
 			String error = request.getParameter("error");
 			logger.info("Error in Google Connection are: " + error);
@@ -91,17 +91,29 @@ public class GoogleLoginController {
 			ObjectMapper objectMapper = new ObjectMapper();
 			Integer userId = null;
 			try {
+
+				System.out.println("GOT DATA FROM GOOGLE: " + objectMapper.readTree(profileData));
 				String email = objectMapper.readTree(profileData).get("email").asText();
 				User user = new User();
 				logger.info("profile from google: " + profileData);
 				user = userService.getUserByEmail(email, user);
 				System.out.println("User from getEmail(): " + user);
+				String pic = objectMapper.readTree(profileData).get("picture").asText();
+				URL url = new URL(pic);
 				if (user.getId() == null) {
+					InputStream in = new BufferedInputStream(url.openStream());
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+					byte[] image = new byte[1024];
+					int n = 0;
+					while (-1 != (n = in.read(image))) {
+						out.write(image, 0, n);
+					}
 
 					logger.info("new User is logged in by Google. Let's Register first");
 					// if user is null, user is not registered in database
 					user = new User();
-
+					user.setImage("data:image/png;base64," + new String(Base64.getEncoder().encode(out.toByteArray())));
 					user.setEmail(email);
 
 					String firstName = objectMapper.readTree(profileData).get("given_name").asText();
@@ -116,26 +128,16 @@ public class GoogleLoginController {
 					System.out.println("User ID generated: " + userId);
 					if (userId.compareTo(-1) == 0) {
 						logger.info("User cannot be registered");
-						return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+						return;
 					} else
 						logger.info("User registered");
-					return new ResponseEntity<String>(HttpStatus.OK);
+
+					response.sendRedirect("http://localhost:8080/ToDo/#!/dummy/" + user.getId());
 
 				} else {
 
 					logger.info("existing user is logging thru' google. let's allocate tokens to user");
-					Token accessToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), "accesstoken");
-					Token refreshToken = tokenService.generateTokenAndPushIntoRedis(user.getId(), "refreshtoken");
-					List<Token> tokenList = new ArrayList<>();
-					tokenList.add(accessToken);
-					tokenList.add(refreshToken);
-					return new ResponseEntity<String>(HttpStatus.OK);
-					/*
-					 * RequestDispatcher dispatcher =
-					 * request.getRequestDispatcher("templates/googlesuccess.jsp");
-					 * request.setAttribute("user", user); request.setAttribute("token", tokenList);
-					 * dispatcher.forward(request, response);
-					 */
+					response.sendRedirect("http://localhost:8080/ToDo/#!/dummy/" + user.getId());
 				}
 
 			} catch (IOException e) {
@@ -143,7 +145,7 @@ public class GoogleLoginController {
 
 			}
 		}
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return;
 
 	}
 }

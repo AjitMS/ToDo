@@ -29,8 +29,14 @@ todo
 						color12 : "#CDD7DB"
 					};
 
-					
-					
+					var getUserById = homeService.getuserbyid(accessToken, refreshToken);
+						getUserById.then(function(response) {
+							console.log('logged in user is: ' +JSON.stringify(response.data));
+							$scope.loggedUser = response.data;
+						}, function(response) {
+							console.log('Error getting user');
+						});
+
 					$scope.toggleView = function() {
 						$scope.grid = !$scope.grid;
 						$scope.list = !$scope.list;

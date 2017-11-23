@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -97,8 +98,37 @@ public class User {
 	@ManyToMany(cascade = { CascadeType.PERSIST }, fetch = FetchType.EAGER, mappedBy = "user")
 	private List<Note> noteList;
 
+	@Lob
+	@Column(name = "image", columnDefinition = "mediumblob")
+	private String image;
+
 	// figured out a way to match both passwords
 	// in annotations using Class level Validator
+
+	public User(Integer id, String firstName, String lastName, String email, String gender, String dob, String phone,
+			String password, String confirmPassword, boolean isValid, List<Note> noteList, String image) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.gender = gender;
+		this.dob = dob;
+		this.phone = phone;
+		this.password = password;
+		this.confirmPassword = confirmPassword;
+		this.isValid = isValid;
+		this.noteList = noteList;
+		this.image = image;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 	public Collection<Note> getNoteList() {
 		return noteList;

@@ -24,4 +24,6 @@ public interface TokenService {
 	 *         else -1
 	 */
 	public Integer verifyUserToken(String userTokenId);
+	
+	public void destroyUserToken(Token accessToken, Token refreshToken);
 }

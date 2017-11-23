@@ -3,6 +3,7 @@ package com.bridgeit.controllers;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -257,7 +258,7 @@ public class UserController {
 		// saving user if not exists
 		if (!userService.userExists(user)) {
 			userService.registerUser(user);
-			//userService.sendRegistrationVerificationLink(user.getId(), user.getEmail());
+			// userService.sendRegistrationVerificationLink(user.getId(), user.getEmail());
 			logger.info("Register Success");
 		} else {
 			return new ResponseEntity<String>(HttpStatus.NOT_ACCEPTABLE);
@@ -306,6 +307,13 @@ public class UserController {
 		} catch (Exception E) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<String> logoutUser(@RequestBody List<Token> tokenList) {
+		
+		tokenService.destroyUserToken(tokenList.get(0), tokenList.get(1));
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 }

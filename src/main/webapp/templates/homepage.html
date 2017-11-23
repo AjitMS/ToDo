@@ -49,21 +49,43 @@
 				</a> <a title="Notifications" href=""> <i
 					class="material-icons grey-nav-icons">notifications</i>
 				</a>
-
 			</div>
-
-
 			<div class="col-1">
+				<div class="dropdown-toggle show" role="button" id="profileDropDown"
+					data-toggle="dropdown" aria-labelledby="profileDropDown"
+					aria-haspopup="true" aria-expanded="false">
+					<a title="{{loggedUser.email}}" href=""> <i
+						class="material-icons grey-nav-icons">account_circle</i>
+					</a>
 
-				<a title="Profile" href=""> <i
-					class="material-icons grey-nav-icons">account_circle</i>
-				</a>
+					<div style="padding: 0px" id="profile" class="dropdown-menu">
+						<div style="padding: 5px" class="row card">
+							<div class="col-12 container-fluid justify-content-center">
+								<img ng-src="{{loggedUser.image}}" class="rounded-circle"
+									width="50px" height="50px" />
+							</div>
+							<div class="col-12">
+								<div class="row container-fluid">
+									<small> {{loggedUser.email}}</small>
+								</div>
+								<div class="col-12 container-fluid">
+									<strong>{{loggedUser.firstName}}_{{loggedUser.lastName}}
+									</strong>
+								</div>
+							</div>
+							<div class="row container-fluid">
+								<div class="col-12">
+									<button class="btn btn-danger btn-block btn-sm">Logout</button>
+								</div>
+							</div>
+						</div>
 
+					</div>
+				</div>
 			</div>
 		</div>
 	</nav>
-</div>
-<div class="row ">
+	<div class="row "></div>
 	<div class="col-3">
 		<div id="mySidenav" class="sidenav">
 			<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
@@ -72,7 +94,6 @@
 		</div>
 	</div>
 </div>
-
 
 <!-- Add Note Form -->
 <div class="row">
@@ -194,6 +215,8 @@
 	</div>
 </div>
 
+<!-- Show Notes -->
+
 <div id="main" class="row">
 	<div class="col-lg-8 col-xl-8 col-md-8 col-xs-12 container-fluid">
 		<h4>Other Notes</h4>
@@ -245,8 +268,7 @@
 							<div ng-repeat="color in colors"
 								class="dropdown-item menu custom-menu-item"
 								ng-style="{'background-color':color}"
-								ng-click="colorNote(note, color); $event.stopPropagation()"
-								href=""></div>
+								ng-click="colorNote(note, color);" href=""></div>
 						</div>
 					</div>
 				</div>
@@ -298,7 +320,7 @@
 					<strong class="card-title">{{note.title}}</strong>
 					<div class="float-right">
 						<a title="Unpin note"
-							ng-click="pinNote(note); $event.stopPropagation()" href=""> <i
+							ng-click="pinNote(note); $event.stopPropagation" href=""> <i
 							class="material-icons note-menu-icons">offline_pin</i>
 						</a>
 					</div>
@@ -337,8 +359,7 @@
 							<div ng-repeat="color in colors"
 								class="dropdown-item menu custom-menu-item"
 								ng-style="{'background-color':color}"
-								ng-click="colorNote(note, color); $event.stopPropagation()"
-								href=""></div>
+								ng-click="colorNote(note, color)" href=""></div>
 						</div>
 					</div>
 				</div>
@@ -348,8 +369,7 @@
 					</a>
 				</div>
 				<div class="col-2">
-					<a title="Archive" href=""
-						ng-click="archiveNote(note); $event.stopPropagation()"> <i
+					<a title="Archive" href="" ng-click="archiveNote(note)"> <i
 						class="material-icons note-menu-icons">archive</i>
 					</a>
 
@@ -365,10 +385,9 @@
 						<div class="dropdown-menu custom-menu"
 							aria-labelledby="dropdownMenuLink" data-toggle="dropdown">
 							<a class="dropdown-item menu custom-menu-item"
-								ng-click="trashNote(note); $event.stopPropagation()" href="">Delete
-								Note</a> <a class="dropdown-item menu custom-menu-item"
-								ng-click="copyNote(note); $event.stopPropagation()" href="">Make
-								a copy</a>
+								ng-click="trashNote(note)" href="">Delete Note</a> <a
+								class="dropdown-item menu custom-menu-item"
+								ng-click="copyNote(note)" href="">Make a copy</a>
 						</div>
 					</div>
 				</div>
@@ -376,6 +395,7 @@
 		</div>
 	</div>
 </div>
+
 <script>
 	function hideForm() {
 		document.getElementById("description").style.visibility = "visible";

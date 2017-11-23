@@ -55,7 +55,7 @@ public class NoteController {
 		Integer uId = (Integer) request.getAttribute("userId");
 		logger.info("userId in request is: " + uId);
 		String noteCategory = request.getHeader("noteCategory");
-		logger.info("note category: "+noteCategory);
+		logger.info("note category: " + noteCategory);
 		if (uId == -1) {
 			logger.info("User not found / Token validation failed");
 			return new ResponseEntity<List<Note>>(HttpStatus.BAD_REQUEST);
@@ -93,7 +93,7 @@ public class NoteController {
 		return new ResponseEntity<List<Note>>(noteList, HttpStatus.OK);
 
 	}
-	
+
 	/**
 	 * @param note
 	 * @param request
@@ -301,6 +301,16 @@ public class NoteController {
 		}
 
 		return new ResponseEntity<String>(HttpStatus.OK);
+	}
+
+	@GetMapping("/usernotes/getuserbyid")
+	public ResponseEntity<User> getUserById(HttpServletRequest request, HttpServletResponse response) {
+		Integer uId = (Integer) request.getAttribute("userId");
+		logger.info("Got Id in request is: "+uId);
+		User user = new User();
+		user = userService.getUserById(uId, user);
+		logger.info("User sent is: "+user);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 
 }

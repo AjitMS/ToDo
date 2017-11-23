@@ -33,6 +33,10 @@ todo.config(function($stateProvider, $urlRouterProvider) {
 		url : '/register/activateuser/:userId',
 		controller : 'activateUserController',
 		templateUrl : 'templates/registration.html'
+	}).state('dummy', {
+		url : '/dummy/:id',
+		controller : 'dummyController',
+		templateUrl : 'templates/dummy.html'
 	})
 
 	$urlRouterProvider.otherwise('login');

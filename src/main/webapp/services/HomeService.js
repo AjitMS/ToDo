@@ -73,7 +73,7 @@ todo.factory('homeService', function($http) {
 			url : 'usernotes/updatenote'
 		});
 	}
-	
+
 	methodChain.color = function(note, accessToken, refreshToken) {
 		return $http({
 			method : 'PUT',
@@ -86,53 +86,43 @@ todo.factory('homeService', function($http) {
 		});
 	}
 
-/*	methodChain.getpinnednotes = function(accessToken, refreshToken) {
-		return $http({
-			method : 'GET',
-			headers : {
-				'noteCategory' : 'pinned',
-				'accessToken' : accessToken,
-				'refreshToken' : refreshToken
-			},
-			url : 'usernotes'
-		});
-	}
-
-	methodChain.getarchivednotes = function(accessToken, refreshToken) {
-		return $http({
-			method : 'GET',
-			headers : {
-				'noteCategory' : 'archived',
-				'accessToken' : accessToken,
-				'refreshToken' : refreshToken
-			},
-			url : 'usernotes'
-		});
-	}
-
-	methodChain.gettrashednotes = function(note, accessToken, refreshToken) {
-		return $http({
-			method : 'GET',
-			headers : {
-				'noteCategory' : 'trashed',
-				'accessToken' : accessToken,
-				'refreshToken' : refreshToken
-			},
-			url : 'usernotes'
-		});
-	}
-*/
+	/*
+	 * methodChain.getpinnednotes = function(accessToken, refreshToken) { return
+	 * $http({ method : 'GET', headers : { 'noteCategory' : 'pinned',
+	 * 'accessToken' : accessToken, 'refreshToken' : refreshToken }, url :
+	 * 'usernotes' }); }
+	 * 
+	 * methodChain.getarchivednotes = function(accessToken, refreshToken) {
+	 * return $http({ method : 'GET', headers : { 'noteCategory' : 'archived',
+	 * 'accessToken' : accessToken, 'refreshToken' : refreshToken }, url :
+	 * 'usernotes' }); }
+	 * 
+	 * methodChain.gettrashednotes = function(note, accessToken, refreshToken) {
+	 * return $http({ method : 'GET', headers : { 'noteCategory' : 'trashed',
+	 * 'accessToken' : accessToken, 'refreshToken' : refreshToken }, url :
+	 * 'usernotes' }); }
+	 */
 	methodChain.getnotes = function(accessToken, refreshToken) {
 		return $http({
 			method : 'GET',
 			headers : {
-				'noteCategory' : null,
 				'accessToken' : accessToken,
 				'refreshToken' : refreshToken
 			},
 			url : 'usernotes'
 		});
 	}
-	
+
+	methodChain.getuserbyid = function(accessToken, refreshToken) {
+		return $http({
+			method : 'GET',
+			headers : {
+				'accessToken' : accessToken,
+				'refreshToken' : refreshToken
+			},
+			url : 'usernotes/getuserbyid'
+		});
+	}
+
 	return methodChain;
 })
