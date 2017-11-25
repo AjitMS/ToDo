@@ -183,9 +183,11 @@ public class NoteController {
 	 * @return in order to delete notes permanently, use deleteNode API
 	 */
 	@DeleteMapping(value = "usernotes/deletenote")
-	public ResponseEntity<String> deleteNode(@RequestBody Integer nId, HttpServletRequest request,
+	public ResponseEntity<String> deleteNode(@RequestBody String noteId, HttpServletRequest request,
 			HttpServletResponse response) {
+
 		Integer uId = (Integer) request.getAttribute("userId");
+		Integer nId = Integer.parseInt(noteId);
 		logger.info("userId in request is: " + uId);
 
 		noteService.deleteNote(uId, nId);
@@ -306,10 +308,10 @@ public class NoteController {
 	@GetMapping("/usernotes/getuserbyid")
 	public ResponseEntity<User> getUserById(HttpServletRequest request, HttpServletResponse response) {
 		Integer uId = (Integer) request.getAttribute("userId");
-		logger.info("Got Id in request is: "+uId);
+		logger.info("Got Id in request is: " + uId);
 		User user = new User();
 		user = userService.getUserById(uId, user);
-		logger.info("User sent is: "+user);
+		logger.info("User sent is: " + user);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 

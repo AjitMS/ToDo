@@ -24,7 +24,7 @@ todo.config(function($stateProvider, $urlRouterProvider) {
 	}).state('archive', {
 		url : '/archive',
 		controller : 'homeController',
-		templateUrl : 'templates/archives.html'
+		templateUrl : 'templates/archive.html'
 	}).state('resetPassword', {
 		url : '/resetPassword/:userId/:token',
 		controller : 'resetPasswordController',
@@ -37,6 +37,10 @@ todo.config(function($stateProvider, $urlRouterProvider) {
 		url : '/dummy/:id',
 		controller : 'dummyController',
 		templateUrl : 'templates/dummy.html'
+	}).state('reminder', {
+		url : '/reminder',
+		controller : 'homeController',
+		templateUrl : 'templates/reminder.html'
 	})
 
 	$urlRouterProvider.otherwise('login');

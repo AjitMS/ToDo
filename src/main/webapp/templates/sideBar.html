@@ -1,16 +1,17 @@
 <div id="mySidenav" class="sidenav">
 
-	<div class="row container-fluid sidebar-menu">
-		<a href="">Archive</a>
+
+	<div ng-click="redirectToHome()" class="row container-fluid sidebar-menu">
+		<a >Notes</a>
 	</div>
-	<div class="row container-fluid sidebar-menu">
-		<a href="">Trash</a>
+	<div ng-click="redirectToArchive()" class="row container-fluid sidebar-menu">
+		<a >Archive</a>
 	</div>
-	<div class="row container-fluid sidebar-menu">
-		<a href="">Reminder</a>
+	<div ng-click="redirectToTrash()" class="row container-fluid sidebar-menu">
+		<a >Trash</a>
 	</div>
-	<div class="row container-fluid sidebar-menu">
-		<a href="">Reminder</a>
+	<div ng-click="redirectToReminder()" class="row container-fluid sidebar-menu">
+		<a >Reminder</a>
 	</div>
 	<div class="row container-fluid sidebar-menu">
 		<a href="">Contact</a>

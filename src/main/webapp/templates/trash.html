@@ -1,0 +1,52 @@
+<nav-bar></nav-bar>
+
+<side-bar></side-bar>
+
+<div id="main">
+	<div class="row container-flex">
+		<div class="col-md-9 col-xs-12 container-fluid">
+
+			<div id="justify-center"
+				class="d-flex flex-wrap col-12 container-flex">
+				<div class="row container-fluid">
+					<div class="col-10 container-fluid">
+						<h4>Trashed Notes</h4>
+					</div>
+				</div>
+				<div id="{{note.noteId}}" ng-class="view"
+					ng-style="{'background-color' : note.color, 'border' : note.color}"
+					ng-repeat="note in notes | filter: {inTrash : true} | filter: {pinned : false} | filter: {archived : false} track by $index ">
+					<div style="margin: 0px; padding: 0px" ng-click="showNote(note)">
+						<div class="card-title">
+							<strong class="card-title">{{note.title}}</strong>
+
+						</div>
+						<div class="card-body">
+							<p class="card-text">{{note.description}}</p>
+						</div>
+					</div>
+					<div class="row">
+
+						<div class="col-2">
+							<div class="dropdown show" role="button" id="dropdownMenuLink"
+								data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<a title="More" href=""> <i
+									class="material-icons note-menu-icons">more_vert</i>
+								</a>
+
+								<div class="dropdown-menu custom-menu"
+									aria-labelledby="dropdownMenuLink" data-toggle="dropdown">
+									<a class="dropdown-item menu custom-menu-item"
+										ng-click="deleteNote(note)" href="">Delete forever</a>
+									<a class="dropdown-item menu custom-menu-item"
+										ng-click="trashNote(note); " href="">Restore</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

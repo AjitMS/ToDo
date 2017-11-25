@@ -46,7 +46,7 @@ todo.factory('homeService', function($http) {
 				'accessToken' : accessToken,
 				'refreshToken' : refreshToken
 			},
-			url : 'usernotes/movetotrash'
+			url : 'usernotes/updatenote'
 		});
 	}
 

@@ -58,6 +58,11 @@
 <script src="controllers/dummyController.js"></script>
 
 <script type="text/javascript" src="directives/navbar.js"></script>
+<script type="text/javascript" src="directives/addNote.js"></script>
+<script type="text/javascript" src="directives/sidebar.js"></script>
+<script type="text/javascript" src="directives/pinnedNotes.js"></script>
+<script type="text/javascript" src="directives/otherNotes.js"></script>
+
 
 </head>
 <style>

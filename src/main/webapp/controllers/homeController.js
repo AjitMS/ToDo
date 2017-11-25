@@ -79,6 +79,18 @@ todo
 							$scope.view = $scope.gridView;
 					}
 
+					$scope.redirectToTrash = function() {
+						$location.path('/trash');
+					}
+
+					$scope.redirectToArchive = function() {
+						$location.path('/archive');
+					}
+
+					$scope.redirectToHome = function() {
+						$location.path('/home');
+					}
+
 					$scope.createNote = function(newNote) {
 						document.getElementById("takenote").reset();
 						console.log('creating note...');
@@ -126,62 +138,48 @@ todo
 												}
 
 											console.log('note updated');
-											document.getElementById("takenote")
-													.reset();
 											/* $state.reload(); */
 											return;
 										},
 										function(response) {
 											console
 													.log('note cannot be updated');
-											document.getElementById("takenote")
-													.reset();
+
 											return;
 										});
 					}
 
-					$scope.deleteNote = function(noteId) {
-						console.log('deleting note...' + noteId);
-						var httpresponse = homeService.deletenote(noteId,
+					$scope.deleteNote = function(note) {
+						console.log('deleting note...' + note.noteId);
+						var httpresponse = homeService.deletenote(note.noteId,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
+							console.log('note cannot be deleted');
+							return;
+						}, function(response) {
 							var index = $scope.notes.indexOf(note);
 							$scope.notes.splice(index, 1);
 							console.log('note deleted');
 							return;
-						}, function(response) {
-							console.log('note cannot be deleted');
-							return;
+
 						});
 					}
 
 					$scope.trashNote = function(note) {
-						console.log('deleting note...' + note);
+						console.log('trashing note...' + note);
 
-						var httpresponse = homeService.trashnote(note,
+						note.inTrash = !note.inTrash;
+						if (note.pinned) {
+							note.pinned = false;
+						}
+						var httpresponse = homeService.updatenote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
-							note.inTrash = true;
-							var index = $scope.notes.indexOf(note);
-							if (note.isPinned) {
-								var index = $scope.pinnedNotes.indexOf(note);
-								$scope.pinnedNotes.splice(index, 1);
-								note.isPinned = false;
 
-								$scope.trashedNotes.push(note);
-							} else {
-								$scope.trashedNote = [];
-								console.log($scope.trashedNotes);
-								var index = $scope.notes.indexOf(note);
-								$scope.notes.splice(index, 1);
-
-							}
-
-							console.log('note deleted');
-							note.inTrash = true;
+							console.log('note trashed');
 							return;
 						}, function(response) {
-							console.log('note cannot be deleted');
+							console.log('note cannot be trashed');
 							return;
 						});
 					}
@@ -203,17 +201,15 @@ todo
 
 					$scope.archiveNote = function(note) {
 						console.log('archiving note...' + note);
-						note.isPinned = !note.isPinned;
 						note.archived = !note.archived;
+						if (note.pinned == true)
+							note.pinned = false;
 						var httpresponse = homeService.archivenote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
 							console.log('note archived');
-							/* $state.reload(); */
 							return;
 						}, function(response) {
-							note.isPinned = !note.isPinned;
-							note.archived = !note.archived;
 							console.log('note cannot be archived');
 							return;
 						});
@@ -222,6 +218,8 @@ todo
 					$scope.pinNote = function(note) {
 						console.log('pinning note...' + note);
 						note.pinned = !note.pinned;
+						if (note.archived == true)
+							note.archived = false;
 						var httpresponse = homeService.pinnote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
@@ -265,8 +263,8 @@ todo
 						console
 								.log('logging out user: '
 										+ $scope.loggedUser.id);
-						var httpresponse = homeService.logout(accessTokenObject,
-								refreshTokenObject);
+						var httpresponse = homeService.logout(
+								accessTokenObject, refreshTokenObject);
 						httpresponse.then(function(response) {
 							console.log('user logged out successfully');
 							$location.path('/login');
