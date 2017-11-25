@@ -86,22 +86,6 @@ todo.factory('homeService', function($http) {
 		});
 	}
 
-	/*
-	 * methodChain.getpinnednotes = function(accessToken, refreshToken) { return
-	 * $http({ method : 'GET', headers : { 'noteCategory' : 'pinned',
-	 * 'accessToken' : accessToken, 'refreshToken' : refreshToken }, url :
-	 * 'usernotes' }); }
-	 * 
-	 * methodChain.getarchivednotes = function(accessToken, refreshToken) {
-	 * return $http({ method : 'GET', headers : { 'noteCategory' : 'archived',
-	 * 'accessToken' : accessToken, 'refreshToken' : refreshToken }, url :
-	 * 'usernotes' }); }
-	 * 
-	 * methodChain.gettrashednotes = function(note, accessToken, refreshToken) {
-	 * return $http({ method : 'GET', headers : { 'noteCategory' : 'trashed',
-	 * 'accessToken' : accessToken, 'refreshToken' : refreshToken }, url :
-	 * 'usernotes' }); }
-	 */
 	methodChain.getnotes = function(accessToken, refreshToken) {
 		return $http({
 			method : 'GET',
@@ -121,6 +105,20 @@ todo.factory('homeService', function($http) {
 				'refreshToken' : refreshToken
 			},
 			url : 'usernotes/getuserbyid'
+		});
+	}
+
+	methodChain.logout = function(accessTokenObject, refreshTokenObject) {
+		var accessString = JSON.stringify(accessTokenObject);
+		var refreshString = JSON.stringify(refreshTokenObject);
+		console.log('tokens are: '+accessString+'and :'+refreshString);
+		return $http({
+			method : 'POST',
+			headers : {
+				'accessTokenString' : accessString,
+				'refreshTokenString' : refreshString
+			},
+			url : 'logout'
 		});
 	}
 

@@ -3,15 +3,19 @@ todo
 		.controller(
 				'homeController',
 				function($state, $location, $scope, homeService) {
-					$scope.gridView = "card note col-xl-3 col-lg-4 col-md-8 col-sm-8 col-xs-12";
-					$scope.listView = "card note col-xs-12 col-lg-12";
+					$scope.gridView = "card note col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3";
+					$scope.listView = "card note col-xs-8 col-lg-8";
 					$scope.view = $scope.gridView;
 					$scope.grid = false;
 					$scope.list = true;
 					var accessToken = JSON.parse(localStorage
 							.getItem('accessToken')).tokenValue;
+					var accessTokenObject = JSON.parse(localStorage
+							.getItem('accessToken'));
 					var refreshToken = JSON.parse(localStorage
 							.getItem('refreshToken')).tokenValue;
+					var refreshTokenObject = JSON.parse(localStorage
+							.getItem('refreshToken'));
 					$scope.notes = [];
 
 					$scope.colors = {
@@ -29,13 +33,42 @@ todo
 						color12 : "#CDD7DB"
 					};
 
-					var getUserById = homeService.getuserbyid(accessToken, refreshToken);
-						getUserById.then(function(response) {
-							console.log('logged in user is: ' +JSON.stringify(response.data));
-							$scope.loggedUser = response.data;
-						}, function(response) {
-							console.log('Error getting user');
-						});
+					$scope.sidebarOpened = true;
+
+					$scope.refresh = function() {
+						$state.reload();
+					}
+
+					var getUserById = homeService.getuserbyid(accessToken,
+							refreshToken);
+					getUserById.then(function(response) {
+						console.log('logged in user');
+						$scope.loggedUser = response.data;
+						if ($scope.loggedUser.image == null)
+							$scope.userPicExists = false;
+						else
+							$scope.userPicExists = true;
+					}, function(response) {
+						console.log('Error getting user');
+					});
+
+					$scope.toggleSidebar = function() {
+						if ($scope.sidebarOpened)
+							openNav();
+						else
+							closeNav();
+					}
+
+					var openNav = function() {
+						document.getElementById("main").style.marginLeft = "10px";
+						document.getElementById("mySidenav").style.width = "250px";
+
+					}
+
+					var closeNav = function() {
+						document.getElementById("mySidenav").style.width = "0px";
+						document.getElementById("main").style.marginLeft = "0px";
+					}
 
 					$scope.toggleView = function() {
 						$scope.grid = !$scope.grid;
@@ -226,6 +259,22 @@ todo
 							console.log('note cannot be colored');
 							note.color = temp;
 						})
-
 					}
+
+					$scope.logout = function() {
+						console
+								.log('logging out user: '
+										+ $scope.loggedUser.id);
+						var httpresponse = homeService.logout(accessTokenObject,
+								refreshTokenObject);
+						httpresponse.then(function(response) {
+							console.log('user logged out successfully');
+							$location.path('/login');
+							localStorage.clear();
+						}, function(response) {
+							console.log('user cannot be logged out');
+							$location.path('/login');
+						})
+					}
+
 				});

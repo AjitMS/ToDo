@@ -1,0 +1,26 @@
+<div class="modal custom-modal" id="showNote" tabindex="-1"
+	role="dialog" aria-labelledby="showNote" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content"
+			ng-style="{'background-color' : updatedNote.color, 'border' : updatedNote.color}">
+
+			<input type="text" class="form-control hide-border modal-title"
+				ng-style="{'background-color' : updatedNote.color, 'border' : updatedNote.color}"
+				ng-model="updatedNote.title" id="note-title" />
+
+			<div class="modal-body">
+				<textarea
+					ng-style="{'background-color' : updatedNote.color, 'border' : updatedNote.color}"
+					class="form-control hide-border" ng-model="updatedNote.description"
+					name="note-description" id="note-description" rows="3">
+       </textarea>
+				<!-- <input type="hidden" class="form-control hide-border modal-title"
+					ng-model="updatedNote.noteId" id="note-id" /> -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white"
+					ng-click="updateNote(updatedNote)" data-dismiss="modal">Save</button>
+			</div>
+		</div>
+	</div>
+</div>

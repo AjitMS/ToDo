@@ -1,0 +1,91 @@
+<div class="row">
+	<div class="container-fluid col-md-6 col-xs-12 " id="bothForms">
+		<div>
+			<form action="" class="form-group form-control" id="takenote">
+				<div ng-style="{'background-color': newNote.color}"
+					ng-show="clicked">
+					<input type="text" class="form-control hide-border"
+						ng-style="{'background-color': newNote.color}" id="title"
+						ng-model="newNote.title" placeholder="Title" /> <br />
+				</div>
+				<div ng-click="clicked = true"
+					ng-style="{'background-color': newNote.color}">
+					<textarea class="form-control hide-border"
+						ng-style="{'background-color': newNote.color}" id="description"
+						ng-model="newNote.description" placeholder="Take a note..."
+						rows="2"></textarea>
+				</div>
+				<div ng-show="clicked" class="row"
+					ng-style="{'background-color': newNote.color}">
+					<div class="col-2">
+						<button type="submit" class="btn btn-light align-right"
+							ng-click="createNote(newNote)" style="border: none">create</button>
+					</div>
+
+
+					<div class="col-1">
+
+						<a title="Reminder" href=""> <i
+							class="material-icons note-menu-icons">touch_app</i>
+						</a>
+
+
+					</div>
+					<div class="col-1">
+						<a title="Collaborator" href=""> <i
+							class="material-icons note-menu-icons">person_add</i>
+						</a>
+
+					</div>
+					<div class="col-1">
+
+						<div class="dropdown show color-pallete" role="button"
+							id="color-menu" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false">
+							<a title="change color" href=""> <i
+								class="material-icons note-menu-icons">color_lens</i>
+							</a>
+
+							<div class="dropdown-menu custom-menu"
+								aria-labelledby="color-menu" data-toggle="dropdown">
+
+								<div ng-repeat="color in colors"
+									class="dropdown-item menu custom-menu-item"
+									ng-style="{'background-color':color}" ng-model="newNote.color"
+									ng-click="newNote.color = color" href=""></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-1">
+						<a title="Add picture" href=""> <i
+							class="material-icons note-menu-icons">photo</i>
+						</a>
+
+					</div>
+					<div class="col-1">
+						<a title="Archive" href="" ng-click="archiveNote(newNote)"> <i
+							class="material-icons note-menu-icons">archive</i>
+						</a>
+
+					</div>
+					<div class="col-1">
+						<div class="dropdown show" role="button" id="dropdownMenuLink"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<a title="More" href=""> <i
+								class="material-icons note-menu-icons">more_vert</i>
+							</a>
+
+							<div class="dropdown-menu custom-menu"
+								aria-labelledby="dropdownMenuLink" data-toggle="dropdown">
+								<a class="dropdown-item menu custom-menu-item"
+									ng-click="$event.stopPropagation()" href="">Add Label </a> <a
+									class="dropdown-item menu custom-menu-item"
+									ng-click="$event.stopPropagation()" href="">show checkboxes</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

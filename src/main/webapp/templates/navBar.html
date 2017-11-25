@@ -1,0 +1,91 @@
+
+<div class="container-fluid" style="padding: 0px;">
+	<nav class="navbar fixed-top navbar-light top-navbar"
+		style="padding: 0px; margin: 0px;">
+
+		<div class="container-fluid row" style="height: 60px">
+			<div class="col-1">
+
+				<a class=" responsive grey-nav-icons"
+					ng-click="sidebarOpened = !sidebarOpened; toggleSidebar()"
+					title="Menu" href=""> <i class="material-icons">menu</i></a>
+			</div>
+
+
+			<div class="w-25 col-2" style="padding: 0px;">
+				<a title="Google Keep" class="navbar-text googlefont-hover" href="#">
+					<h4 class="googlefont">
+						<i> <b>Google</b>
+						</i> Keep
+					</h4>
+				</a>
+			</div>
+			<div class="col-6 d-none d-sm-block">
+				<form class="form-inline ">
+					<div title="Search" class="input-group col-12 nav-input-group">
+						<div class="search-icon" style="margin-top: 5px;">
+							<i class="material-icons ">search</i>
+						</div>
+						<input class="form-control nav-search" type="search"
+							placeholder="Search" aria-label="Search ">
+					</div>
+				</form>
+			</div>
+			<div class="col-1 d-none d-block">
+
+				<a title="Refresh" ng-click="refresh()" href=""> <i
+					class="material-icons grey-nav-icons">settings_backup_restore</i>
+				</a> <a ng-show="grid" ng-click="toggleView()" title="Grid View" href="">
+					<i class="material-icons grey-nav-icons">view_quilt</i>
+				</a> <a ng-show="list" ng-click="toggleView()" title="List View" href="">
+					<i class="material-icons grey-nav-icons">view_list</i>
+				</a>
+
+			</div>
+
+			<div class="col-1 d-none d-md-block">
+
+				<a title="Google Apps" href=""> <i
+					class="material-icons grey-nav-icons">apps</i>
+				</a> <a title="Notifications" href=""> <i
+					class="material-icons grey-nav-icons">notifications</i>
+				</a>
+			</div>
+			<div class="col-1">
+				<div class="dropdown-toggle show" role="button" id="profileDropDown"
+					data-toggle="dropdown" aria-labelledby="profileDropDown"
+					aria-haspopup="true" aria-expanded="false">
+					<a title="{{loggedUser.email}}" href=""> <i
+						ng-hide="userPicExists" class="material-icons grey-nav-icons">account_circle</i>
+						<img ng-show="userPicExists" ng-src="{{loggedUser.image}}"
+						class="rounded-circle" width="35px" height="35px" />
+					</a>
+
+					<div style="padding: 0px" id="profile" class="dropdown-menu">
+						<div class="custom-image row card">
+							<div class="card-title col-12 container-fluid"
+								style="padding: 0px;">
+								<img ng-src="{{loggedUser.image}}" class="" width="188px" />
+							</div>
+							<div class="col-12">
+								<div class="row container-fluid">
+									<small> {{loggedUser.email}}</small>
+								</div>
+								<div class="col-12 container-fluid">
+									<strong>{{loggedUser.firstName}}_{{loggedUser.lastName}}
+									</strong>
+								</div>
+							</div>
+							<div class="row container-fluid">
+								<div class="col-12" style="padding: 0px;">
+									<button ng-click="logout()" class="btn btn-danger btn-block">Logout</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+</div>

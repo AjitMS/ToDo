@@ -1,0 +1,91 @@
+		<div class="row container-flex">
+			<div class="d-flex justify-content-center flex-wrap col-12">
+				<div class="row container-fluid">
+					<div class="col-10 container-fluid">
+						<h4>Pinned Notes</h4>
+					</div>
+				</div>
+				<div id="{{note.noteId}}" ng-class="view"
+					ng-style="{'background-color' : note.color, 'border' : note.color}"
+					ng-repeat="note in notes | filter: {pinned : true} | filter: {archived : false} | filter: {inTrash : false} track by $index ">
+					<div ng-click="showNote(note)">
+						<div class="card-title">
+							<strong class="card-title">{{note.title}}</strong>
+							<div class="float-right">
+								<a title="Unpin note"
+									ng-click="pinNote(note); $event.stopPropagation()" href="">
+									<i class="material-icons note-menu-icons">offline_pin</i>
+								</a>
+							</div>
+						</div>
+						<div class="card-body">
+							<p class="card-text">{{note.description}}</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+
+							<a title="Reminder" href=""> <i
+								class="material-icons note-menu-icons">touch_app</i>
+							</a>
+
+						</div>
+						<div class="col-2">
+
+							<a title="Collaborator" href=""> <i
+								class="material-icons note-menu-icons">person_add</i>
+							</a>
+
+						</div>
+						<div class="col-2">
+
+							<div class="dropdown show color-pallete" role="button"
+								id="color-menu" data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<a title="change color" href=""> <i
+									class="material-icons note-menu-icons">color_lens</i>
+								</a>
+
+								<div class="dropdown-menu custom-menu"
+									aria-labelledby="color-menu" data-toggle="dropdown">
+
+									<div ng-repeat="color in colors"
+										class="dropdown-item menu custom-menu-item"
+										ng-style="{'background-color':color}"
+										ng-click="colorNote(note, color)" href=""></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-2">
+							<a title="Add picture" href=""> <i
+								class="material-icons note-menu-icons">photo</i>
+							</a>
+						</div>
+						<div class="col-2">
+							<a title="Archive" href="" ng-click="archiveNote(note)"> <i
+								class="material-icons note-menu-icons">archive</i>
+							</a>
+
+						</div>
+
+						<div class="col-2">
+							<div class="dropdown show" role="button" id="dropdownMenuLink"
+								data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false">
+								<a title="More" href=""> <i
+									class="material-icons note-menu-icons">more_vert</i>
+								</a>
+
+								<div class="dropdown-menu custom-menu"
+									aria-labelledby="dropdownMenuLink" data-toggle="dropdown">
+									<a class="dropdown-item menu custom-menu-item"
+										ng-click="trashNote(note)" href="">Delete Note</a> <a
+										class="dropdown-item menu custom-menu-item"
+										ng-click="copyNote(note)" href="">Make a copy</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>

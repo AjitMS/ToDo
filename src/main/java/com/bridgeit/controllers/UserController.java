@@ -3,7 +3,6 @@ package com.bridgeit.controllers;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +27,9 @@ import com.bridgeit.jms.Producer;
 import com.bridgeit.service.TokenService;
 import com.bridgeit.service.UserService;
 import com.bridgeit.utilities.Encryption;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Ajit Shikalgar
@@ -310,9 +312,13 @@ public class UserController {
 	}
 
 	@PostMapping("/logout")
-	public ResponseEntity<String> logoutUser(@RequestBody List<Token> tokenList) {
-		
-		tokenService.destroyUserToken(tokenList.get(0), tokenList.get(1));
+	public ResponseEntity<String> logoutUser(HttpServletRequest request)
+			throws JsonParseException, JsonMappingException, IOException {
+		String accessTokenString = request.getHeader("accessTokenString");
+		String refreshTokenString = request.getHeader("refreshTokenString");
+		Token accessToken = new ObjectMapper().readValue(accessTokenString, Token.class);
+		Token refreshToken = new ObjectMapper().readValue(refreshTokenString, Token.class);
+		tokenService.destroyUserToken(accessToken, refreshToken);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 

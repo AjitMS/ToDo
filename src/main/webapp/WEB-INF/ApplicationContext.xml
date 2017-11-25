@@ -43,6 +43,7 @@
 	<mvc:resources location="/services/" mapping="/services/**" />
 	<mvc:resources location="/img/" mapping="/img/**" />
 	<mvc:resources location="/icons/" mapping="/icons/**" />
+	<mvc:resources location="/directives/" mapping="/directives/**" />
 
 
 	<!-- Define Spring MVC view resolver -->
@@ -61,7 +62,7 @@
 		<!-- these are connection pool properties for C3P0 -->
 		<property name="minPoolSize" value="5" />
 		<property name="maxPoolSize" value="100" />
-		<property name="maxIdleTime" value="30000" />
+		<property name="maxIdleTime" value="3000" />
 	</bean>
 
 	<!-- Step 2: Setup Hibernate session factory -->

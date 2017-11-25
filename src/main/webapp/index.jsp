@@ -57,9 +57,13 @@
 <script src="controllers/activateUserController.js"></script>
 <script src="controllers/dummyController.js"></script>
 
+<script type="text/javascript" src="directives/navbar.js"></script>
+
 </head>
 <style>
-
+body{
+padding-top : 70px;
+}
 </style>
 <body ng-app="todo">
 
