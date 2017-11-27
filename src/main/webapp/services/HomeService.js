@@ -136,5 +136,25 @@ todo.factory('homeService', function($http) {
 		});
 	}
 
+	methodChain.uncollaborateuser = function(note, accessToken, refreshToken) {
+		return $http({
+			method : 'PUT',
+			data : note,
+			headers : {
+				'accessToken' : accessToken,
+				'refreshToken' : refreshToken
+			},
+			url : 'usernotes/updatenote'
+		});
+	}
+
+	methodChain.userexists = function(note) {
+		return $http({
+			method : POST,
+			data : note,
+			url : 'userexists'
+		});
+	}
+
 	return methodChain;
 })

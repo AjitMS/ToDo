@@ -3,7 +3,9 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 
-			<div class="modal-title"><h4> Collaborators</h4></div>
+			<div class="modal-title">
+				<h4>Collaborators</h4>
+			</div>
 			<div class="modal-body">
 				<div class="row container-fluid"
 					style="border-bottom: 1px ridge lightgrey">
@@ -35,7 +37,7 @@
 					</div>
 					<div class="float-right">
 						<a href="" class="unCollaborate"
-							ng-click="unCollaborate(user, collabNote)">&times;</a>
+							ng-click="unCollaborateUser(user, collabNote)">&times;</a>
 					</div>
 				</div>
 
@@ -44,7 +46,8 @@
 						class="form-control hide-border"
 						placeholder="Email to share with..." />
 				</div>
-
+				<span ng-show="noSuchEmail" class="error" ng-init="noSuchEmail = false">*Email does not exist
+					in our Registry</span>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-white" ng-click=""

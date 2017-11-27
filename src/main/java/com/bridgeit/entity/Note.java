@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -72,6 +73,36 @@ public class Note {
 
 	@Column(name = "color")
 	private String color = "#ffffff";
+
+	@Lob
+	@Column(name = "image", columnDefinition = "mediumblob")
+	private String image;
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public Note(String title, Integer noteId, LocalDateTime createdDate, LocalDateTime modifiedDate, String description,
+			boolean isArchived, boolean inTrash, boolean isPinned, User user, Set<User> collabUsers, String color,
+			String image) {
+		super();
+		this.title = title;
+		this.noteId = noteId;
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
+		this.description = description;
+		this.isArchived = isArchived;
+		this.inTrash = inTrash;
+		this.isPinned = isPinned;
+		this.user = user;
+		this.collabUsers = collabUsers;
+		this.color = color;
+		this.image = image;
+	}
 
 	public String getColor() {
 		return color;
@@ -141,8 +172,6 @@ public class Note {
 		return modifiedDate;
 	}
 
-
-
 	public void setModifiedDate(LocalDateTime modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
@@ -183,8 +212,7 @@ public class Note {
 	public String toString() {
 		return "Note [title=" + title + ", noteId=" + noteId + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + ", description=" + description + ", isArchived=" + isArchived + ", inTrash=" + inTrash
-				+ ", isPinned=" + isPinned + ", collabUsers=" + collabUsers + ", color=" + color
-				+ "]";
+				+ ", isPinned=" + isPinned + ", collabUsers=" + collabUsers + ", color=" + color + "]";
 	}
 
 	public Note() {

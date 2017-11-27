@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -31,7 +30,8 @@
 <link rel="stylesheet" type="text/css" href="CSS/resetPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/forgotPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/register.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 
 
@@ -49,6 +49,10 @@
 <script src="services/ActivateUserService.js"></script>
 <script src="services/DummyService.js"></script>
 
+<script type="text/javascript"
+	src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+
+
 <script src="controllers/loginController.js"></script>
 <script src="controllers/homeController.js"></script>
 <script src="controllers/forgotPasswordController.js"></script>
@@ -64,12 +68,13 @@
 <script type="text/javascript" src="directives/otherNotes.js"></script>
 <script type="text/javascript" src="directives/collaborateModal.js"></script>
 <script type="text/javascript" src="directives/showNoteModal.js"></script>
+<script type="text/javascript" src="directives/ngFiles.js"></script>
 
 
 </head>
 <style>
-body{
-padding-top : 70px;
+body {
+	padding-top: 70px;
 }
 </style>
 <body ng-app="todo">
@@ -77,3 +82,4 @@ padding-top : 70px;
 	<div ui-view></div>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-var todo = angular.module('todo', [ 'ui.router' ]);
+var todo = angular.module('todo', [ 'ui.router', 'ngFileUpload']);
 
 todo.config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider.state('registration', {

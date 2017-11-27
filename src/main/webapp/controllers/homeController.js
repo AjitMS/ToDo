@@ -19,6 +19,7 @@ todo
 					$scope.notes = [];
 					$scope.collabNote = {};
 					$scope.collabUsers = {};
+					$scope.uploadingImageTo = {};
 
 					$scope.colors = {
 						color1 : "#FFFFFF",
@@ -297,6 +298,8 @@ todo
 							for (var i = 0; i < $scope.notes.length; i++)
 								if ($scope.notes[i] == note.noteId)
 									notes[i].collabUsers.push(response.data);
+							$scope.collabUsers.push(response.data);
+
 							return;
 							console.log('collaborated user successfully');
 						}, function(response) {
@@ -307,17 +310,57 @@ todo
 					$scope.unCollaborateUser = function(user, note) {
 						console.log('un-collaborating note: ' + note.noteId
 								+ ' with user: ' + user.id);
-						var httpresponse = homeService
-								.uncollaborate(user, note);
+						for (var i = 0; i < note.collabUsers.length; i++)
+							if (note.collabUsers[i].id == user.id)
+								var index = note.collabUsers.indexOf(user);
+							else
+								return;
+						note.collabUsers.splice(index, 1);
+
+						var httpresponse = homeService.uncollaborateuser(note,
+								accessToken, refreshToken);
 						httpresponse.then(function(response) {
 							console.log('uncollaborated success!');
-							for (var i = 0; i < $scope.notes.length; i++)
-								if ($scope.notes[i] == note.noteId)
-									notes[i].collabUsers.push(response.data);
+							var index = $scope.notes.indexOf(note);
+							$scope.notes.splice(index, 1);
 						}, function(response) {
+							// $scope.noSuchEmail = true;
+							window.alert('Email is not Registered with us');
 							console.log('uncollaborated failed');
 						});
-
 					}
+
+					$scope.openFileUpload = function(note) {
+						$scope.uploadingImageTo = note;
+						$('input[type=file').click();
+					}
+
+					var formdata = new FormData();
+					$scope.getTheFiles = function($files) {
+						angular.forEach($files, function(value, key) {
+							formdata.append(key, value);
+						});
+
+					};
+					$scope.temp = {};
+					$scope.upload = function(file) {
+						var base64data;
+						console.log('uploading image: ');
+						var reader = new window.FileReader();
+						reader.readAsDataURL(file);
+						reader.onloadend = function() {
+							base64data = reader.result;
+						}
+						var newNote = $scope.uploadingImageTo;
+						newNote.image = base64data;
+						console.log('newNOte: ' + JSON.stringify(newNote));
+						var httpresponse = homeService.updatenote(newNote,
+								accessToken, refreshToken);
+						httpresponse.then(function(response) {
+							console.log('Image upload success');
+						}, function(response) {
+							console.log('Image upload failure');
+						});
+					};
 
 				});

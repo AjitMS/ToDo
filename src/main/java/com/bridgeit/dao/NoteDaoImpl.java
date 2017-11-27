@@ -55,7 +55,7 @@ public class NoteDaoImpl implements NoteDao {
 
 	@Override
 	public void updateNote(Note updatedNote, Integer nId) {
-		logger.info("user id is : " + updatedNote.getUser().getId());
+		logger.info("user id in updated note is : " + updatedNote.getUser().getId());
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		updatedNote.setNoteId(nId);

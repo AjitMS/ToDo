@@ -155,25 +155,28 @@ public class NoteController {
 	@PutMapping(value = "/usernotes/updatenote")
 	public ResponseEntity<Note> updateNote(@RequestBody Note updatedNote, HttpServletRequest request)
 			throws IOException {
+		System.out.println("updatedNOte.image: " + updatedNote.getImage());
 		Integer uId = (Integer) request.getAttribute("userId");
 		Integer nId = updatedNote.getNoteId();
+		System.out.println("imafge : " + updatedNote.getImage());
 		logger.info("userId in request is: " + uId);
 		Note oldNote = noteService.getNoteById(uId, nId);
-		System.out.println("Is oldnote NULL: "+oldNote);
 		if (oldNote == null) {
 			oldNote = noteService.getCompleteNoteById(nId);
 			if (oldNote == null) {
 				logger.info("User does not exist");
 				return new ResponseEntity<Note>(HttpStatus.BAD_REQUEST);
 			}
-			for (User tempUser : oldNote.getCollabUsers())
-				if (tempUser.getId().compareTo(nId) == 0)
-					noteService.updateNote(updatedNote, nId);
-			logger.info("user updated a collaborated note");
-			return new ResponseEntity<Note>(updatedNote, HttpStatus.OK);
+			System.out.println("****Oldnote: " + oldNote);
+			/*
+			 * for (User tempUser : oldNote.getCollabUsers()) if
+			 * (tempUser.getId().compareTo(nId) == 0) { }
+			 * logger.info("user updated a collaborated note"); return new
+			 * ResponseEntity<Note>(updatedNote, HttpStatus.OK);
+			 */
 		}
-		/* updatedNote.getUser().setId(uId); */
 		noteService.updateNote(updatedNote, nId);
+		System.out.println("***updatedNote: " + updatedNote);
 		return new ResponseEntity<Note>(updatedNote, HttpStatus.OK);
 	}
 
@@ -281,6 +284,10 @@ public class NoteController {
 		String email = request.getHeader("userEmail");
 		User tempUser = new User();
 		tempUser = userService.getUserByEmail(email, tempUser);
+		if (!userService.userExists(tempUser)) {
+			logger.info("Invalid Email in collaborator");
+			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		}
 		Integer userId = (Integer) request.getAttribute("userId");
 		if (request.getHeader("userEmail") == null) {
 			logger.info("*********No email received*********");
@@ -290,7 +297,7 @@ public class NoteController {
 		logger.info("collaborating note with id: " + cNote.getNoteId());
 
 		cNote = noteService.getNoteById(cNote.getUser().getId(), cNote.getNoteId());
-		System.out.println("cNOte: "+cNote);
+		System.out.println("cNOte: " + cNote);
 		if (cNote == null) {
 			logger.info("Note does not exist");
 			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
