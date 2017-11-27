@@ -75,18 +75,18 @@
 	overflow-x: hidden;
 	transition: 0.2s;
 	border-color: #E8E8E8;
-	 width: 250px; 
+	width: 250px;
 }
 
-.sidebar-menu{
-	padding : 8px;
+.sidebar-menu {
+	padding: 8px;
 }
 
-.sidebar-menu:hover{
-	background-color : #CCCCCC;
+.sidebar-menu:hover {
+	background-color: #CCCCCC;
 }
 
-.relative{
+.relative {
 	position: relative;
 }
 
@@ -132,9 +132,7 @@
 	box-shadow: 2px 2px 1px 1px lightgrey;
 	padding: 12px;
 	margin: 7px;
-	
 }
-
 
 #description {
 	visibility: none !important;
@@ -145,9 +143,9 @@
 	margin: 0px;
 }
 
-#justify-center{
-	  display: flex;
-    justify-content: center ;
+#justify-center {
+	display: flex;
+	justify-content: center;
 }
 
 #takenote {
@@ -176,10 +174,9 @@
 	color: black;
 }
 
-
-#profile{
-	right : 0;
-	left : auto;
+#profile {
+	right: 0;
+	left: auto;
 }
 
 .custom-menu {
@@ -191,11 +188,16 @@
 	background-color: lightgrey;
 }
 
-.pinned{
-	color : #3385EF;
+.pinned {
+	color: #3385EF;
 }
 
-.custom-image{
+.unCollaborate {
+	position: absolute;
+	font-size: 36px;
+}
+
+.custom-image {
 	padding: 5px;
 	box-shadow: 1px 1px 1px 1px grey;
 }

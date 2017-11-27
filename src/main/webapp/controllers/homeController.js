@@ -17,6 +17,8 @@ todo
 					var refreshTokenObject = JSON.parse(localStorage
 							.getItem('refreshToken'));
 					$scope.notes = [];
+					$scope.collabNote = {};
+					$scope.collabUsers = {};
 
 					$scope.colors = {
 						color1 : "#FFFFFF",
@@ -172,7 +174,7 @@ todo
 						if (note.pinned) {
 							note.pinned = false;
 						}
-						var httpresponse = homeService.updatenote(note,
+						var httpresponse = homeService.trashnote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
 
@@ -273,6 +275,49 @@ todo
 							console.log('user cannot be logged out');
 							$location.path('/login');
 						})
+					}
+
+					$scope.collaborateModal = function(note) {
+						console.log('collaborating note: ' + note.noteId);
+						$scope.collabNote = note;
+						$scope.collabUsers = note.collabUsers;
+						console.log('setting collabNote');
+						$('#collaborate-modal').modal('show');
+					}
+
+					$scope.collaborateUser = function(user) {
+						if (user == null)
+							return;
+						console.log('collaborating note: '
+								+ $scope.collabNote.noteId);
+						var note = $scope.collabNote;
+						var httpresponse = homeService.collaborateuser(
+								accessToken, refreshToken, user, note);
+						httpresponse.then(function(response) {
+							for (var i = 0; i < $scope.notes.length; i++)
+								if ($scope.notes[i] == note.noteId)
+									notes[i].collabUsers.push(response.data);
+							return;
+							console.log('collaborated user successfully');
+						}, function(response) {
+							console.log('collaborated user failed');
+						});
+					}
+
+					$scope.unCollaborateUser = function(user, note) {
+						console.log('un-collaborating note: ' + note.noteId
+								+ ' with user: ' + user.id);
+						var httpresponse = homeService
+								.uncollaborate(user, note);
+						httpresponse.then(function(response) {
+							console.log('uncollaborated success!');
+							for (var i = 0; i < $scope.notes.length; i++)
+								if ($scope.notes[i] == note.noteId)
+									notes[i].collabUsers.push(response.data);
+						}, function(response) {
+							console.log('uncollaborated failed');
+						});
+
 					}
 
 				});

@@ -46,7 +46,7 @@ todo.factory('homeService', function($http) {
 				'accessToken' : accessToken,
 				'refreshToken' : refreshToken
 			},
-			url : 'usernotes/updatenote'
+			url : 'usernotes/movetotrash'
 		});
 	}
 
@@ -111,7 +111,7 @@ todo.factory('homeService', function($http) {
 	methodChain.logout = function(accessTokenObject, refreshTokenObject) {
 		var accessString = JSON.stringify(accessTokenObject);
 		var refreshString = JSON.stringify(refreshTokenObject);
-		console.log('tokens are: '+accessString+'and :'+refreshString);
+		console.log('tokens are: ' + accessString + 'and :' + refreshString);
 		return $http({
 			method : 'POST',
 			headers : {
@@ -119,6 +119,20 @@ todo.factory('homeService', function($http) {
 				'refreshTokenString' : refreshString
 			},
 			url : 'logout'
+		});
+	}
+
+	methodChain.collaborateuser = function(accessToken, refreshToken, user,
+			note) {
+		return $http({
+			method : 'POST',
+			headers : {
+				'accessToken' : accessToken,
+				'refreshToken' : refreshToken,
+				'userEmail' : user.email
+			},
+			data : note,
+			url : 'usernotes/collaborate'
 		});
 	}
 

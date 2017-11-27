@@ -62,6 +62,8 @@
 <script type="text/javascript" src="directives/sidebar.js"></script>
 <script type="text/javascript" src="directives/pinnedNotes.js"></script>
 <script type="text/javascript" src="directives/otherNotes.js"></script>
+<script type="text/javascript" src="directives/collaborateModal.js"></script>
+<script type="text/javascript" src="directives/showNoteModal.js"></script>
 
 
 </head>

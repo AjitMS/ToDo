@@ -269,7 +269,7 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", gender=" + gender + ", dob=" + dob + ", phone=" + phone + ", password=" + password
-				+ ", confirmPassword=" + confirmPassword + ", isValid=" + isValid + ", noteList=" + noteList + "]";
+				+ ", confirmPassword=" + confirmPassword + ", isValid=" + isValid + "]";
 	}
 
 }

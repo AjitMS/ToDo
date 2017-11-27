@@ -159,6 +159,7 @@ public class NoteController {
 		Integer nId = updatedNote.getNoteId();
 		logger.info("userId in request is: " + uId);
 		Note oldNote = noteService.getNoteById(uId, nId);
+		System.out.println("Is oldnote NULL: "+oldNote);
 		if (oldNote == null) {
 			oldNote = noteService.getCompleteNoteById(nId);
 			if (oldNote == null) {
@@ -269,40 +270,45 @@ public class NoteController {
 	}
 
 	@PostMapping(value = "/usernotes/collaborate")
-	public ResponseEntity<String> collaborateNote(@RequestBody Note cNote, HttpServletRequest request,
+	public ResponseEntity<User> collaborateNote(@RequestBody Note cNote, HttpServletRequest request,
 			HttpServletResponse response) {
+		User cUser = new User();
 		logger.info("Note Object: " + cNote);
 		if (cNote == null) {
 			logger.info("Note Empty");
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
+		String email = request.getHeader("userEmail");
+		User tempUser = new User();
+		tempUser = userService.getUserByEmail(email, tempUser);
 		Integer userId = (Integer) request.getAttribute("userId");
-		logger.info("cUserId: " + request.getHeader("cUserId"));
-		if (request.getHeader("cUserId") == null) {
-			logger.info("*********No cUserId received*********");
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		if (request.getHeader("userEmail") == null) {
+			logger.info("*********No email received*********");
+			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
 
 		logger.info("collaborating note with id: " + cNote.getNoteId());
-		cNote = noteService.getNoteById(userId, cNote.getNoteId());
+
+		cNote = noteService.getNoteById(cNote.getUser().getId(), cNote.getNoteId());
+		System.out.println("cNOte: "+cNote);
 		if (cNote == null) {
 			logger.info("Note does not exist");
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
-		Integer cUserId = Integer.parseInt(request.getHeader("cUserId"));
+		Integer cUserId = tempUser.getId();
 		// check if logged in user is editing note.
 		// or collaborated users editing note //
+
 		if (userId.compareTo(cNote.getUser().getId()) == 0) {
-			User cUser = new User();
 			cUser = userService.getUserById(cUserId, cUser);
 			noteService.collaborateUser(cUser, cNote);
 
 		} else {
 			logger.info("Note Owner Authorization failed");
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<User>(cUser, HttpStatus.BAD_REQUEST);
 		}
 
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<User>(cUser, HttpStatus.OK);
 	}
 
 	@GetMapping("/usernotes/getuserbyid")
