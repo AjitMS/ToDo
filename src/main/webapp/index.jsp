@@ -29,10 +29,15 @@
 <link rel="stylesheet" type="text/css" href="CSS/homepage.css" />
 <link rel="stylesheet" type="text/css" href="CSS/resetPassword.css" />
 <link rel="stylesheet" type="text/css" href="CSS/forgotPassword.css" />
+<link rel="stylesheet" type="text/css"
+	href="bower_components/colorpicker-master/dist/colorPickerStyle.css" />
 <link rel="stylesheet" type="text/css" href="CSS/register.css" />
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
+<link rel="stylesheet" type="text/css"
+	href="bower_components/angularjs-datepicker/dist/angular-datepicker.css" />
+<link rel="stylesheet"
+	href="node_modules/angular-bootstrap-datetimepicker/src/css/datetimepicker.css" />
 
 
 <script
@@ -40,6 +45,11 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.min.js"></script>
 <script src="script/app.js"></script>
+
+<script type="text/javascript"
+	src="node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+<script type="text/javascript"
+	src="node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
 
 <script src="services/LoginService.js"></script>
 <script src="services/HomeService.js"></script>
@@ -51,6 +61,26 @@
 
 <script type="text/javascript"
 	src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+
+<script type="text/javascript"
+	src="bower_components/angular-material/angular-material.js"></script>
+
+<script type="text/javascript"
+	src="bower_components/isotope/dist/isotope.pkgd.js"></script>
+
+<script type="text/javascript"
+	src="bower_components/colorpicker-master/dist/colorPicker.js"></script>
+
+<script type="text/javascript"
+	src="bower_components/angularjs-datepicker/dist/angular-datepicker.js"></script>
+
+<script type="text/javascript" src="bower_components/moment/moment.js"></script>
+
+<script type="text/javascript"
+	src="node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+<script type="text/javascript"
+	src="node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
+
 
 <!-- FOR FACEBOOK SHARE -->
 <script src="https://connect.facebook.net/enUS/all.js"></script>

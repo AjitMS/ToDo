@@ -46,7 +46,7 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row note-menu">
 				<div class="col-2">
 
 					<a title="Reminder" href=""> <i
@@ -63,21 +63,10 @@
 				</div>
 				<div class="col-2">
 
-					<div class="dropdown show color-pallete" role="button"
-						id="color-menu" data-toggle="dropdown" aria-haspopup="true"
-						aria-expanded="false">
-						<a title="change color" href=""> <i
-							class="material-icons note-menu-icons">color_lens</i>
-						</a>
+					<div id="color-menu" title="change color">
 
-						<div class="dropdown-menu custom-menu"
-							aria-labelledby="color-menu" data-toggle="dropdown">
-
-							<div ng-repeat="color in colors"
-								class="dropdown-item menu custom-menu-item"
-								ng-style="{'background-color':color}"
-								ng-click="colorNote(note, color);" href=""></div>
-						</div>
+						<color-picker color="newColor" options="colors"
+							on-color-changed="colorNote(note, newColor)"> </color-picker>
 					</div>
 				</div>
 

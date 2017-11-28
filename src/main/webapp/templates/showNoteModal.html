@@ -41,6 +41,8 @@
 							class="material-icons note-menu-icons">touch_app</i>
 						</a>
 
+						
+
 
 					</div>
 					<div class="col-1">
@@ -50,22 +52,11 @@
 
 					</div>
 					<div class="col-1">
+						<div id="color-menu" title="change color">
 
-						<div class="dropdown show color-pallete" role="button"
-							id="color-menu" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="false">
-							<a title="change color" href=""> <i
-								class="material-icons note-menu-icons">color_lens</i>
-							</a>
-
-							<div class="dropdown-menu custom-menu"
-								aria-labelledby="color-menu" data-toggle="dropdown">
-
-								<div ng-repeat="color in colors"
-									class="dropdown-item menu custom-menu-item"
-									ng-style="{'background-color':color}"
-									ng-click="colorNote(updatedNote, color);" href=""></div>
-							</div>
+							<color-picker color="newColor" options="colors"
+								on-color-changed="colorNote(updatedNote, newColor)">
+							</color-picker>
 						</div>
 					</div>
 

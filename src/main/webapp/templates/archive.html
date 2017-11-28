@@ -39,8 +39,8 @@
 
 						</div>
 						<div class="col-2">
-							<a title="Collaborator" href=""> <i
-								class="material-icons note-menu-icons">person_add</i>
+							<a title="Collaborator" ng-click="collaborateModal(note)" href="">
+								<i class="material-icons note-menu-icons">person_add</i>
 							</a>
 
 						</div>
@@ -63,9 +63,10 @@
 								</div>
 							</div>
 						</div>
+
 						<div class="col-2">
-							<a title="Add picture" href=""> <i
-								class="material-icons note-menu-icons">photo</i>
+							<a title="Add picture" ng-click="openFileUpload(note)" href="">
+								<i class="material-icons note-menu-icons">photo</i>
 							</a>
 
 						</div>
@@ -87,9 +88,16 @@
 								<div class="dropdown-menu custom-menu"
 									aria-labelledby="dropdownMenuLink" data-toggle="dropdown">
 									<a class="dropdown-item menu custom-menu-item"
-										ng-click="trashNote(note)" href="">Delete Note</a> <a
+										ng-click="trashNote(note)"
+										ng-show="note.user.id == loggedUser.id" href="">Delete
+										Note</a> <a class="dropdown-item menu custom-menu-item"
+										ng-click="trashNote(note)"
+										ng-hide="note.user.id == loggedUser.id" href="">Remove
+										myself</a> <a class="dropdown-item menu custom-menu-item"
+										ng-click="copyNote(note); " href="">Make a copy</a> <a
 										class="dropdown-item menu custom-menu-item"
-										ng-click="copyNote(note); " href="">Make a copy</a>
+										ng-click="fbAsyncSocialShare(note); " href="">Share with
+										facebook</a>
 								</div>
 							</div>
 						</div>
@@ -99,3 +107,7 @@
 		</div>
 	</div>
 </div>
+
+
+
+

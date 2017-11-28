@@ -1,4 +1,5 @@
-var todo = angular.module('todo', [ 'ui.router', 'ngFileUpload']);
+var todo = angular.module('todo', [ 'ui.router', 'ngFileUpload',
+		'tb-color-picker', '720kb.datepicker', 'ui.bootstrap.datetimepicker' ]);
 
 todo.config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider.state('registration', {

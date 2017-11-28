@@ -76,7 +76,18 @@ public class Note {
 
 	@Lob
 	@Column(name = "image", columnDefinition = "mediumblob")
-	private String image = null;
+	private String image;
+
+	@Column(name = "reminder")
+	private LocalDateTime reminder;
+
+	public LocalDateTime getReminder() {
+		return reminder;
+	}
+
+	public void setReminder(LocalDateTime reminder) {
+		this.reminder = reminder;
+	}
 
 	public String getImage() {
 		return image;
@@ -213,7 +224,7 @@ public class Note {
 		return "Note [title=" + title + ", noteId=" + noteId + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + ", description=" + description + ", isArchived=" + isArchived + ", inTrash=" + inTrash
 				+ ", isPinned=" + isPinned + ", user=" + user + ", collabUsers=" + collabUsers + ", color=" + color
-				+ ", image=" + image + "]";
+				+ ", image=" + image + ", reminder=" + reminder + "]";
 	}
 
 	public Note() {

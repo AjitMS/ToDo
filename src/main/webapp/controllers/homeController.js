@@ -36,6 +36,16 @@ todo
 						color12 : "#CDD7DB"
 					};
 
+					$('.grid').isotope({
+						itemSelector : '.note',
+						percentPosition : true,
+						layoutMode : 'masonry',
+						masonry : {
+							// use outer width of grid-sizer for columnWidth
+							columnWidth : '.grid-sizer'
+						}
+					});
+
 					$scope.sidebarOpened = true;
 
 					$scope.refresh = function() {
@@ -414,5 +424,30 @@ todo
 							}
 						});
 					};
+
+					$scope.setReminder = function(note) {
+						console.log('setting reminder for: ' + note.noteId);
+						var httpresponse = homeService.updatenote(note,
+								accessToken, refreshToken);
+						httpresponse.then(function(response) {
+							console.log('Image removal success');
+						}, function(response) {
+							console.log('Image removal failure');
+							$state.reload();
+						});
+					}
+
+					$scope.removeReminder = function(note) {
+						console.log('removing reminder for: ' + note.noteId);
+						var httpresponse = homeService.updatenote(note,
+								accessToken, refreshToken);
+						note.reminder = null;
+						httpresponse.then(function(response) {
+							console.log('reminder removal success');
+						}, function(response) {
+							console.log('reminder removal failure');
+							$state.reload();
+						});
+					}
 
 				});
