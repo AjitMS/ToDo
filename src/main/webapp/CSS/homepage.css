@@ -132,6 +132,7 @@
 	box-shadow: 2px 2px 1px 1px lightgrey;
 	padding: 12px;
 	margin: 7px;
+	height: fit-content;
 }
 
 #description {
@@ -201,3 +202,8 @@
 	padding: 5px;
 	box-shadow: 1px 1px 1px 1px grey;
 }
+
+.show-modal-image {
+	width: 100%;
+}
+

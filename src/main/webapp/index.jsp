@@ -52,6 +52,8 @@
 <script type="text/javascript"
 	src="bower_components/ng-file-upload/ng-file-upload.js"></script>
 
+<!-- FOR FACEBOOK SHARE -->
+<script src="https://connect.facebook.net/enUS/all.js"></script>
 
 <script src="controllers/loginController.js"></script>
 <script src="controllers/homeController.js"></script>

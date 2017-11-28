@@ -1,6 +1,4 @@
 
-<input type="file" ngf-select="upload($file)" style="visibility: hidden" />
-
 <div class="row container-flex">
 
 	<div id="justify-center" class="d-flex flex-wrap col-12 container-flex">
@@ -13,6 +11,13 @@
 			ng-style="{'background-color' : note.color, 'border' : note.color}"
 			ng-repeat="note in notes | filter: {inTrash : false} | filter: {pinned : false} | filter: {archived : false} track by $index ">
 			<div style="margin: 0px; padding: 0px" ng-click="showNote(note)">
+
+				<div>
+					<img ng-src="{{note.image}}"
+						class="img-fluid img-thumbnail show-modal-image"
+						ng-show="note.image" />
+				</div>
+
 				<div class="card-title">
 					<strong class="card-title">{{note.title}}</strong>
 					<div class="float-right">
@@ -21,7 +26,6 @@
 							class="material-icons note-menu-icons">offline_pin</i>
 						</a>
 					</div>
-
 				</div>
 				<div class="card-body">
 					<p class="card-text">{{note.description}}</p>
@@ -78,8 +82,8 @@
 				</div>
 
 				<div class="col-2">
-					<a type="button" title="Add picture" ng-click="openFileUpload(note)"
-						href=""> <i class="material-icons note-menu-icons">photo</i>
+					<a title="Add picture" ng-click="openFileUpload(note)" href="">
+						<i class="material-icons note-menu-icons">photo</i>
 					</a>
 
 				</div>
@@ -106,7 +110,10 @@
 								ng-click="trashNote(note)"
 								ng-hide="note.user.id == loggedUser.id" href="">Remove
 								myself</a> <a class="dropdown-item menu custom-menu-item"
-								ng-click="copyNote(note); " href="">Make a copy</a>
+								ng-click="copyNote(note); " href="">Make a copy</a> <a
+								class="dropdown-item menu custom-menu-item"
+								ng-click="fbAsyncSocialShare(note); " href="">Share with
+								facebook</a>
 						</div>
 					</div>
 				</div>

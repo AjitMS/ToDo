@@ -2,7 +2,7 @@ var todo = angular.module('todo');
 todo
 		.controller(
 				'homeController',
-				function($state, $location, $scope, homeService) {
+				function($state, $location, $scope, homeService, uploadService) {
 					$scope.gridView = "card note col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3";
 					$scope.listView = "card note col-xs-8 col-lg-8";
 					$scope.view = $scope.gridView;
@@ -335,31 +335,83 @@ todo
 						$('input[type=file').click();
 					}
 
-					var formdata = new FormData();
-					$scope.getTheFiles = function($files) {
-						angular.forEach($files, function(value, key) {
-							formdata.append(key, value);
-						});
-
-					};
 					$scope.temp = {};
 					$scope.upload = function(file) {
-						var base64data;
+						var base64image;
 						console.log('uploading image: ');
+						console.log(file);
 						var reader = new window.FileReader();
 						reader.readAsDataURL(file);
 						reader.onloadend = function() {
-							base64data = reader.result;
+							base64image = reader.result;
 						}
+						console.log(base64image);
 						var newNote = $scope.uploadingImageTo;
-						newNote.image = base64data;
-						console.log('newNOte: ' + JSON.stringify(newNote));
+						newNote.image = base64image;
+						console.log(newNote.image instanceof String);
+						console.log(newNote.image);
 						var httpresponse = homeService.updatenote(newNote,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
 							console.log('Image upload success');
 						}, function(response) {
 							console.log('Image upload failure');
+						});
+					};
+
+					$scope.$watch('file', function(newfile, oldfile) {
+						var newImage = $scope.filepreview;
+						$scope.uploadingImageTo.image = newImage;
+						var newNote = $scope.uploadingImageTo;
+						console.log(newNote);
+						var httpresponse = homeService.updatenote(newNote,
+								accessToken, refreshToken);
+						httpresponse.then(function(response) {
+							console.log('Image upload success');
+						}, function(response) {
+							console.log('Image upload failure');
+						});
+					});
+
+					$scope.removeImage = function(Note) {
+						console.log('removing image');
+						Note.image = null;
+						var httpresponse = homeService.updatenote(Note,
+								accessToken, refreshToken);
+						httpresponse.then(function(response) {
+							console.log('Image removal success');
+						}, function(response) {
+							console.log('Image removal failure');
+							$state.reload();
+						});
+					}
+
+					$scope.fbAsyncSocialShare = function(note) {
+						console.log(note.title);
+						console.log('inside fbAsyncInit');
+						FB.init({
+							appId : '303734456782451',
+							status : true,
+							cookie : true,
+							xfbml : true,
+							version : 'v2.4'
+						});
+
+						FB.ui({
+							method : 'share_open_graph',
+							action_type : 'og.likes',
+							action_properties : JSON.stringify({
+								object : {
+									'og:title' : note.title,
+									'og:description' : note.description,
+								}
+							})
+						}, function(response) {
+							if (response && !response.error_message) {
+								console.log('Posting completed.');
+							} else {
+								console.log('Error while posting');
+							}
 						});
 					};
 

@@ -76,7 +76,7 @@ public class Note {
 
 	@Lob
 	@Column(name = "image", columnDefinition = "mediumblob")
-	private String image;
+	private String image = null;
 
 	public String getImage() {
 		return image;
@@ -212,7 +212,8 @@ public class Note {
 	public String toString() {
 		return "Note [title=" + title + ", noteId=" + noteId + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + ", description=" + description + ", isArchived=" + isArchived + ", inTrash=" + inTrash
-				+ ", isPinned=" + isPinned + ", collabUsers=" + collabUsers + ", color=" + color + "]";
+				+ ", isPinned=" + isPinned + ", user=" + user + ", collabUsers=" + collabUsers + ", color=" + color
+				+ ", image=" + image + "]";
 	}
 
 	public Note() {

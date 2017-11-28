@@ -4,6 +4,14 @@
 		<div class="modal-content"
 			ng-style="{'background-color' : updatedNote.color, 'border' : updatedNote.color}">
 
+			<div ng-show="updatedNote.image" class="noteImage">
+				<a title="remove image" href="" class="unCollaborate"
+					ng-click="removeImage(updatedNote)">&times;</a> <img
+					ng-src="{{updatedNote.image}}" class="show-modal-image"
+					style="width: 100%" alt="{{updatedNote.title}}" />
+
+			</div>
+
 			<input type="text" class="form-control hide-border modal-title"
 				ng-style="{'background-color' : updatedNote.color, 'border' : updatedNote.color}"
 				ng-model="updatedNote.title" id="note-title" />
@@ -17,6 +25,87 @@
 				<!-- <input type="hidden" class="form-control hide-border modal-title"
 					ng-model="updatedNote.noteId" id="note-id" /> -->
 			</div>
+
+			<div class="modal-footer">
+				<div class="row">
+					<!-- <div class="col-4">
+				
+				</div> -->
+					<div class="col-4">
+						<i>{{updatedNote.modifiedDate}} </i>
+					</div>
+
+					<div class="col-1">
+
+						<a title="Reminder" href=""> <i
+							class="material-icons note-menu-icons">touch_app</i>
+						</a>
+
+
+					</div>
+					<div class="col-1">
+						<a title="Collaborator" ng-click="collaborateModal(updatedNote)"
+							href=""> <i class="material-icons note-menu-icons">person_add</i>
+						</a>
+
+					</div>
+					<div class="col-1">
+
+						<div class="dropdown show color-pallete" role="button"
+							id="color-menu" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false">
+							<a title="change color" href=""> <i
+								class="material-icons note-menu-icons">color_lens</i>
+							</a>
+
+							<div class="dropdown-menu custom-menu"
+								aria-labelledby="color-menu" data-toggle="dropdown">
+
+								<div ng-repeat="color in colors"
+									class="dropdown-item menu custom-menu-item"
+									ng-style="{'background-color':color}"
+									ng-click="colorNote(updatedNote, color);" href=""></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-1">
+						<a type="button" title="Add picture"
+							ng-click="openFileUpload(updatedNote)" href=""> <i
+							class="material-icons note-menu-icons">photo</i>
+						</a>
+
+					</div>
+					<div class="col-1">
+						<a title="Archive" href=""
+							ng-click="archiveNote(updatedNote); $event.stopPropagation()">
+							<i class="material-icons note-menu-icons">archive</i>
+						</a>
+
+					</div>
+					<div class="col-1">
+						<div class="dropdown show" role="button" id="dropdownMenuLink"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<a title="More" href=""> <i
+								class="material-icons note-menu-icons">more_vert</i>
+							</a>
+
+							<div class="dropdown-menu custom-menu"
+								aria-labelledby="dropdownMenuLink" data-toggle="dropdown">
+								<a class="dropdown-item menu custom-menu-item"
+									ng-click="trashNote(updatedNote)"
+									ng-show="updatedNote.user.id == loggedUser.id" href="">Delete
+									Note</a> <a class="dropdown-item menu custom-menu-item"
+									ng-click="trashNote(updatedNote)"
+									ng-hide="updatedNote.user.id == loggedUser.id" href="">Remove
+									myself</a> <a class="dropdown-item menu custom-menu-item"
+									ng-click="copyNote(updatedNote); " href="">Make a copy</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="modal-footer">
 				<button type="button" class="btn btn-white"
 					ng-click="updateNote(updatedNote)" data-dismiss="modal">Save</button>
