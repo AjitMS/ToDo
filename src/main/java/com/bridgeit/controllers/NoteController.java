@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgeit.entity.Label;
 import com.bridgeit.entity.Note;
 import com.bridgeit.entity.User;
 import com.bridgeit.scheduler.DeleteNote;
@@ -326,6 +327,28 @@ public class NoteController {
 		user = userService.getUserById(uId, user);
 		logger.info("User sent is: " + user);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+
+	@PostMapping("/usernotes/createlabel")
+	public ResponseEntity<User> createLabel(@RequestBody Label label, HttpServletRequest request,
+			HttpServletResponse response) {
+		System.out.println("Label is: " + label);
+		Integer uId = (Integer) request.getAttribute("userId");
+		logger.info("Got Id in request is: " + uId);
+		User user = new User();
+		user = userService.getUserById(uId, user);
+		noteService.createLabel(user, label);
+		return new ResponseEntity<User>(HttpStatus.OK);
+	}
+
+	@GetMapping("/usernotes/getlabels")
+	public ResponseEntity<List<Label>> getLabels(HttpServletRequest request, HttpServletResponse response) {
+		Integer uId = (Integer) request.getAttribute("userId");
+		logger.info("Got Id in request is: " + uId);
+		User user = new User();
+		user = userService.getUserById(uId, user);
+		List<Label> labelList = noteService.getLabels(user);
+		return new ResponseEntity<List<Label>>(labelList, HttpStatus.OK);
 	}
 
 }

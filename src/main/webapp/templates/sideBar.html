@@ -1,17 +1,33 @@
 <div id="mySidenav" class="sidenav">
 
 
-	<div ng-click="redirectToHome()" class="row container-fluid sidebar-menu">
-		<a >Notes</a>
+	<div ng-click="redirectToHome()"
+		class="row container-fluid sidebar-menu">
+		<a>Notes</a>
 	</div>
-	<div ng-click="redirectToArchive()" class="row container-fluid sidebar-menu">
-		<a >Archive</a>
+	<div ng-click="redirectToArchive()"
+		class="row container-fluid sidebar-menu">
+		<a>Archive</a>
 	</div>
-	<div ng-click="redirectToTrash()" class="row container-fluid sidebar-menu">
-		<a >Trash</a>
+	<hr />
+
+	<div class="row container-fluid sidebar-menu"
+		ng-repeat="label in labels">
+		<a>{{label.name}}</a>
 	</div>
-	<div ng-click="redirectToReminder()" class="row container-fluid sidebar-menu">
-		<a >Reminder</a>
+
+	<div class="row container-fluid sidebar-menu">
+		<input type="text" ng-model="label.name" class="form-control" />
+		<button class="btn btn-danger btn-block" ng-click="createLabel(label)">+</button>
+	</div>
+	<hr />
+	<div ng-click="redirectToTrash()"
+		class="row container-fluid sidebar-menu">
+		<a>Trash</a>
+	</div>
+	<div ng-click="redirectToReminder()"
+		class="row container-fluid sidebar-menu">
+		<a>Reminder</a>
 	</div>
 	<div class="row container-fluid sidebar-menu">
 		<a href="">Contact</a>

@@ -1,7 +1,9 @@
 package com.bridgeit.entity;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -100,7 +103,11 @@ public class User {
 
 	@Lob
 	@Column(name = "image", columnDefinition = "mediumblob")
-	private String image;
+	private String image;	
+
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private Set<Label> labels = new HashSet<Label>();
 
 	// figured out a way to match both passwords
 	// in annotations using Class level Validator

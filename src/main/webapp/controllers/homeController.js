@@ -2,7 +2,8 @@ var todo = angular.module('todo');
 todo
 		.controller(
 				'homeController',
-				function($state, $location, $scope, homeService, uploadService) {
+				function($state, $location, $scope, $timeout, homeService,
+						uploadService, toastr) {
 					$scope.gridView = "card note col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3";
 					$scope.listView = "card note col-xs-8 col-lg-8";
 					$scope.view = $scope.gridView;
@@ -17,6 +18,7 @@ todo
 					var refreshTokenObject = JSON.parse(localStorage
 							.getItem('refreshToken'));
 					$scope.notes = [];
+					$scope.labels = [];
 					$scope.collabNote = {};
 					$scope.collabUsers = {};
 					$scope.uploadingImageTo = {};
@@ -112,12 +114,14 @@ todo
 						httpresponse.then(function(response) {
 							$scope.notes.push(response.data);
 							console.log('note created');
+							toastr.success('Note created', 'Success');
 							return;
 
 						}, function(response) {
 							console.log('note cannot be created');
 							$scope.notes.push($scope.note);
 							document.getElementById("takenote").reset();
+							toastr.error('Note could not be created', 'Error');
 							return;
 						});
 
@@ -139,7 +143,7 @@ todo
 
 					$scope.updateNote = function(updatedNote) {
 						console.log('updating note...'
-								+ JSON.stringify(updatedNote));
+								+ JSON.stringify(updatedNote.noteId));
 						var httpresponse = homeService.updatenote(updatedNote,
 								accessToken, refreshToken);
 						httpresponse
@@ -151,13 +155,17 @@ todo
 												}
 
 											console.log('note updated');
+											toastr.success('Note updated',
+													'Success');
 											/* $state.reload(); */
 											return;
 										},
 										function(response) {
 											console
 													.log('note cannot be updated');
-
+											toastr.error(
+													'note cannot be updated',
+													'error');
 											return;
 										});
 					}
@@ -168,11 +176,13 @@ todo
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
 							console.log('note cannot be deleted');
+							toastr.error('note cannot be deleted', 'Failure');
 							return;
 						}, function(response) {
 							var index = $scope.notes.indexOf(note);
 							$scope.notes.splice(index, 1);
 							console.log('note deleted');
+							toastr.success('Note deleted forever', 'Success');
 							return;
 
 						});
@@ -188,10 +198,11 @@ todo
 						var httpresponse = homeService.trashnote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
-
+							toastr.success('Note moved to trash', 'Success');
 							console.log('note trashed');
 							return;
 						}, function(response) {
+							toastr.error('note cannot be trashed', 'Failure');
 							console.log('note cannot be trashed');
 							return;
 						});
@@ -204,9 +215,11 @@ todo
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
 							$scope.notes.push(response.data);
+							toastr.success('note copied', 'success');
 							console.log('note copied');
 							return;
 						}, function(response) {
+							toastr.error('note cannot be copied', 'Error');
 							console.log('note cannot be copied');
 							return;
 						});
@@ -220,9 +233,11 @@ todo
 						var httpresponse = homeService.archivenote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
+							toastr.success('note archived', 'success');
 							console.log('note archived');
 							return;
 						}, function(response) {
+							toastr.error('note cannot be archived', 'error');
 							console.log('note cannot be archived');
 							return;
 						});
@@ -236,11 +251,12 @@ todo
 						var httpresponse = homeService.pinnote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
-
+							toastr.success('note pinned', 'success');
 							console.log('note pinned');
 							return;
 						}, function(response) {
 							note.pinned = !note.pinned;
+							toastr.error('note cannot be pinned', 'error');
 							console.log('note cannot be pinned');
 							return;
 						});
@@ -252,6 +268,15 @@ todo
 						console.log('notes loaded');
 						console.log(response.data);
 						$scope.notes = (response.data);
+						/*
+						 * for (i = 0; i < $scope.notes.length; i++) {
+						 * $scope.dateNotes[i] = $scope.notes[i];
+						 * if($scope.dateNotes[i].reminder != null)
+						 * $scope.dateNotes[i].reminder = new Date(
+						 * $scope.dateNotes[i].reminder); }
+						 */
+						toastr.success('Notes are ready', 'Welcome !');
+
 					}, function(response) {
 						console.log('error loading notes');
 					});
@@ -263,10 +288,10 @@ todo
 						var httpresponse = homeService.color(note, accessToken,
 								refreshToken);
 						httpresponse.then(function(response) {
-							var id = note.noteId;
-
 							console.log('note colored with: ' + color);
+							toastr.success('note colored', 'success')
 						}, function(response) {
+							toastr.error('note cannot be colored', 'error');
 							console.log('note cannot be colored');
 							note.color = temp;
 						})
@@ -279,10 +304,13 @@ todo
 						var httpresponse = homeService.logout(
 								accessTokenObject, refreshTokenObject);
 						httpresponse.then(function(response) {
+							toastr.success('user logged out successfully',
+									'success');
 							console.log('user logged out successfully');
 							$location.path('/login');
 							localStorage.clear();
 						}, function(response) {
+							toastr.error('user cannot be logged out', 'error');
 							console.log('user cannot be logged out');
 							$location.path('/login');
 						})
@@ -295,6 +323,8 @@ todo
 						console.log('setting collabNote');
 						$('#collaborate-modal').modal('show');
 					}
+
+					var getEmails;
 
 					$scope.collaborateUser = function(user) {
 						if (user == null)
@@ -309,11 +339,13 @@ todo
 								if ($scope.notes[i] == note.noteId)
 									notes[i].collabUsers.push(response.data);
 							$scope.collabUsers.push(response.data);
+							toastr.success('collaboration complete', 'success')
 
 							return;
 							console.log('collaborated user successfully');
 						}, function(response) {
 							console.log('collaborated user failed');
+							toastr.error('collaboration failed', 'error');
 						});
 					}
 
@@ -330,12 +362,15 @@ todo
 						var httpresponse = homeService.uncollaborateuser(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
+							toastr.success('Note uncollaborated', 'success');
 							console.log('uncollaborated success!');
 							var index = $scope.notes.indexOf(note);
 							$scope.notes.splice(index, 1);
 						}, function(response) {
 							// $scope.noSuchEmail = true;
-							window.alert('Email is not Registered with us');
+							toastr
+									.error('note cannot be collaborated',
+											'error');
 							console.log('uncollaborated failed');
 						});
 					}
@@ -344,43 +379,26 @@ todo
 						$scope.uploadingImageTo = note;
 						$('input[type=file').click();
 					}
+					$scope.filepreview = "";
+					$scope.$watch('filepreview', function(newfile, oldfile) {
+						console.log($scope.filepreview == "")
+						if ($scope.filepreview != "") {
+							var newImage = $scope.filepreview;
+							$scope.uploadingImageTo.image = newImage;
+							var newNote = $scope.uploadingImageTo;
+							$scope.filepreview = "";
+							var httpresponse = homeService.updatenote(newNote,
+									accessToken, refreshToken);
+							$scope.filepreview = "";
+							httpresponse.then(function(response) {
 
-					$scope.temp = {};
-					$scope.upload = function(file) {
-						var base64image;
-						console.log('uploading image: ');
-						console.log(file);
-						var reader = new window.FileReader();
-						reader.readAsDataURL(file);
-						reader.onloadend = function() {
-							base64image = reader.result;
+								toastr.success('Image uploaded', 'success');
+								console.log('Image upload success');
+							}, function(response) {
+
+								console.log('Image upload failure');
+							});
 						}
-						console.log(base64image);
-						var newNote = $scope.uploadingImageTo;
-						newNote.image = base64image;
-						console.log(newNote.image instanceof String);
-						console.log(newNote.image);
-						var httpresponse = homeService.updatenote(newNote,
-								accessToken, refreshToken);
-						httpresponse.then(function(response) {
-							console.log('Image upload success');
-						}, function(response) {
-							console.log('Image upload failure');
-						});
-					};
-
-					$scope.$watch('file', function(newfile, oldfile) {
-						var newImage = $scope.filepreview;
-						$scope.uploadingImageTo.image = newImage;
-						var newNote = $scope.uploadingImageTo;
-						console.log(newNote);
-						var httpresponse = homeService.updatenote(newNote,
-								accessToken, refreshToken);
-						httpresponse.then(function(response) {
-							console.log('Image upload success');
-						}, function(response) {
-							console.log('Image upload failure');
-						});
 					});
 
 					$scope.removeImage = function(Note) {
@@ -389,6 +407,7 @@ todo
 						var httpresponse = homeService.updatenote(Note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
+							toastr.success('Image removed', 'success');
 							console.log('Image removal success');
 						}, function(response) {
 							console.log('Image removal failure');
@@ -419,8 +438,11 @@ todo
 						}, function(response) {
 							if (response && !response.error_message) {
 								console.log('Posting completed.');
+								toastr.success('Note Shared', 'success')
 							} else {
 								console.log('Error while posting');
+								toastr.error('Note could not be shared',
+										'error');
 							}
 						});
 					};
@@ -430,24 +452,78 @@ todo
 						var httpresponse = homeService.updatenote(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
-							console.log('Image removal success');
+							var today = new Date();
+							var todaymilli = today.getTime();
+							var remindermilli = note.reminder.getTime();
+							var alarm = remindermilli - todaymilli;
+							if (alarm < 0) {
+								toastr.warning('invalid date-time', 'Warning');
+								return;
+							}
+							console.log('todaymilli: ' + todaymilli
+									+ ' remindermilli: ' + remindermilli
+									+ ' alarm: ' + alarm);
+
+							$timeout(function() {
+								console.log('reminding user: ' + note);
+								alert(note.title + '__ ' + note.description
+										+ '__' + ' set at' + '__'
+										+ note.reminder);
+
+								$scope.removeReminder(note);
+							}, alarm);
+
+							toastr.success('reminder set', 'success')
 						}, function(response) {
-							console.log('Image removal failure');
+							console.log('reminder set failure');
+							toastr.error('reminder could not be set', 'error')
 							$state.reload();
 						});
 					}
 
 					$scope.removeReminder = function(note) {
+
 						console.log('removing reminder for: ' + note.noteId);
 						var httpresponse = homeService.updatenote(note,
 								accessToken, refreshToken);
 						note.reminder = null;
 						httpresponse.then(function(response) {
+							toastr.success('reminder removed', 'success')
 							console.log('reminder removal success');
 						}, function(response) {
+							toastr.error('reminder could not be removed',
+									'error');
 							console.log('reminder removal failure');
 							$state.reload();
 						});
 					}
+
+					$scope.getProperConverter = function(reminder) {
+						var d = new Date(reminder[0], reminder[1], reminder[2],
+								reminder[3], reminder[4], 0, 0);
+						alert(d);
+					}
+
+					$scope.createLabel = function(label) {
+						console.log('creating label: ' + JSON.stringify(label));
+						var httpresponse = homeService.createlabel(accessToken,
+								refreshToken, label);
+						httpresponse.then(function(response) {
+							console.log('label created: ' + response.data);
+
+						}, function(response) {
+							console.log('label cannot be created');
+						});
+					}
+
+					var getLabels = homeService.getlabels(accessToken,
+							refreshToken);
+					getLabels.then(function(response) {
+						console.log('labels loaded');
+						$scope.labels = response.data;
+						console.log(response.data);
+					}, function(response) {
+						console.log('error loading labels');
+					});
 
 				});

@@ -9,7 +9,7 @@ todo.factory('loginService', function($http) {
 			url : 'login',
 			data : user
 		});
-	}	
+	}
 	// return login response from backend
 
 	login.fbLogin = function(user) {
@@ -32,83 +32,76 @@ todo.factory('loginService', function($http) {
 			}
 		});
 	}
-	
-	
-	
-	
-	
 	return login;
 });
 
-
-
-
 todo.service("uploadService", function($http, $q) {
 
-    return ({
-      upload: upload
-    });
+	return ({
+		upload : upload
+	});
 
-    function upload(file) {
-      var upl = $http({
-        method: 'POST',
-        url: 'http://jsonplaceholder.typicode.com/posts', // /api/upload
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        data: {
-          upload: file
-        },
-        transformRequest: function(data, headersGetter) {
-          var formData = new FormData();
-          angular.forEach(data, function(value, key) {
-            formData.append(key, value);
-          });
+	function upload(file) {
 
-          var headers = headersGetter();
-          delete headers['Content-Type'];
+		var upl = $http({
+			method : 'POST',
+			url : 'http://jsonplaceholder.typicode.com/posts', // /api/upload
+			headers : {
+				'Content-Type' : 'multipart/form-data'
+			},
+			data : {
+				upload : file
+			},
+			transformRequest : function(data, headersGetter) {
+				var formData = new FormData();
+				angular.forEach(data, function(value, key) {
+					formData.append(key, value);
+				});
 
-          return formData;
-        }
-      });
-      return upl.then(handleSuccess, handleError);
+				var headers = headersGetter();
+				delete headers['Content-Type'];
 
-    } // End upload function
+				return formData;
+			}
+		});
+		return upl.then(handleSuccess, handleError);
 
-    // ---
-    // PRIVATE METHODS.
-    // ---
-  
-    function handleError(response, data) {
-      if (!angular.isObject(response.data) ||!response.data.message) {
-        return ($q.reject("An unknown error occurred."));
-      }
+	} // End upload function
 
-      return ($q.reject(response.data.message));
-    }
+	// ---
+	// PRIVATE METHODS.
+	// ---
 
-    function handleSuccess(response) {
-      return (response);
-    }
+	function handleError(response, data) {
+		if (!angular.isObject(response.data) || !response.data.message) {
+			return ($q.reject("An unknown error occurred."));
+		}
 
-  })
- todo.directive("fileinput", [function() {
-    return {
-      scope: {
-        fileinput: "=",
-        filepreview: "="
-      },
-      link: function(scope, element, attributes) {
-        element.bind("change", function(changeEvent) {
-          scope.fileinput = changeEvent.target.files[0];
-          var reader = new FileReader();
-          reader.onload = function(loadEvent) {
-            scope.$apply(function() {
-              scope.filepreview = loadEvent.target.result;
-            });
-          }
-          reader.readAsDataURL(scope.fileinput);
-        });
-      }
-    }
-  }]);
+		return ($q.reject(response.data.message));
+	}
+
+	function handleSuccess(response) {
+		return (response);
+	}
+
+})
+todo.directive("fileinput", [ function() {
+	return {
+		scope : {
+			fileinput : "=",
+			filepreview : "="
+		},
+		link : function(scope, element, attributes) {
+			element.bind("change", function(changeEvent) {
+				scope.fileinput = changeEvent.target.files[0];
+				var reader = new FileReader();
+				reader.onload = function(loadEvent) {
+					scope.$apply(function() {
+						scope.filepreview = loadEvent.target.result;
+					});
+				}
+				reader.readAsDataURL(scope.fileinput);
+			});
+		}
+	}
+} ]);

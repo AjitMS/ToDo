@@ -51,17 +51,17 @@
 			<div class="row form-group"
 				style="background-color: transparent; margin: 5px;"
 				ng-show="note.reminder">
-				<input class="" type="text" ng-model="note.reminder" disabled /> <a
+				<input class="" type="text" ng-click="setReminder(note)" ng-value="note.reminder" disabled /> <a
 					href="" class="closebtn" ng-click="removeReminder(note)">&times;</a>
+
 			</div>
 
 			<div class="row note-menu">
 				<div class="col-2">
 
-					<div class="dropdown">
-						<a class="dropdown-toggle" style="overflow: scroll;"
-							id="dropdownMenuButton" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false"><i
+					<div class="dropdown" style="overflow: visible;">
+						<a class="dropdown-toggle" id="dropdownMenuButton"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
 							class="material-icons note-menu-icons">touch_app</i></a>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 							<datetimepicker data-on-set-time="setReminder(note)"
@@ -94,7 +94,7 @@
 
 				</div>
 				<div class="col-2">
-					<a title="Archive" href=""
+					<a title="Archive" href=""	
 						ng-click="archiveNote(note); $event.stopPropagation()"> <i
 						class="material-icons note-menu-icons">archive</i>
 					</a>

@@ -38,6 +38,8 @@
 	href="bower_components/angularjs-datepicker/dist/angular-datepicker.css" />
 <link rel="stylesheet"
 	href="node_modules/angular-bootstrap-datetimepicker/src/css/datetimepicker.css" />
+<link rel="stylesheet" type="text/css"
+	href="bower_components/angular-toastr/dist/angular-toastr.css" />
 
 
 <script
@@ -82,6 +84,8 @@
 	src="node_modules/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
 
 
+<script type="text/javascript"
+	src="bower_components/angular-toastr/dist/angular-toastr.tpls.js"></script>
 <!-- FOR FACEBOOK SHARE -->
 <script src="https://connect.facebook.net/enUS/all.js"></script>
 

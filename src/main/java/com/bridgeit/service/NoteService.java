@@ -2,6 +2,7 @@ package com.bridgeit.service;
 
 import java.util.List;
 
+import com.bridgeit.entity.Label;
 import com.bridgeit.entity.Note;
 import com.bridgeit.entity.User;
 
@@ -66,5 +67,9 @@ public interface NoteService {
 	public List<Note> getCompleteTrashedNoteList();
 	
 	public void removeFromTrash(Note note);
+	
+	public Label createLabel(User user, Label label);
+	
+	public List<Label> getLabels(User user);
 
 }

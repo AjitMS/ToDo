@@ -14,7 +14,7 @@
 
 			<input type="text" class="form-control hide-border modal-title"
 				ng-style="{'background-color' : updatedNote.color, 'border' : updatedNote.color}"
-				ng-model="updatedNote.title" id="note-title" />
+				ng-model="updatedNote.title" id="note-title" ng-change="updateNote(updatedNote)"/>
 
 			<div class="modal-body">
 				<textarea

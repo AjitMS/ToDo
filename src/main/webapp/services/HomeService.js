@@ -150,11 +150,35 @@ todo.factory('homeService', function($http) {
 
 	methodChain.userexists = function(note) {
 		return $http({
-			method : POST,
+			method : 'POST',
 			data : note,
 			url : 'userexists'
 		});
 	}
 
+	methodChain.createlabel = function(accessToken, refreshToken, label) {
+		return $http({
+			method : 'POST',
+			data : label,
+			headers : {
+				'accessToken' : accessToken,
+				'refreshToken' : refreshToken
+			},
+			url : 'usernotes/createlabel'
+		});
+	}
+
+	methodChain.getlabels = function(accessToken, refreshToken) {
+		return $http({
+			method : 'GET',
+			headers : {
+				'accessToken' : accessToken,
+				'refreshToken' : refreshToken
+			},
+			url : 'usernotes/getlabels'
+		});
+	}
+
+	
 	return methodChain;
 })

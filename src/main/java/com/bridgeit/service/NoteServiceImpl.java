@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bridgeit.dao.NoteDao;
+import com.bridgeit.entity.Label;
 import com.bridgeit.entity.Note;
 import com.bridgeit.entity.User;
 
@@ -51,7 +52,7 @@ public class NoteServiceImpl implements NoteService {
 		noteList = dao.getAllNoteList(uId);
 		return noteList;
 	}
-	
+
 	@Override
 	@Transactional
 	public Note createNote(Integer uId, Note note) {
@@ -59,8 +60,6 @@ public class NoteServiceImpl implements NoteService {
 
 	}
 
-	
-	
 	@Override
 	@Transactional
 	public void moveToTrash(Integer nId) {
@@ -104,6 +103,17 @@ public class NoteServiceImpl implements NoteService {
 	@Override
 	public void removeFromTrash(Note note) {
 		dao.removeFromTrash(note);
+	}
+
+	@Override
+	@Transactional
+	public Label createLabel(User user, Label label) {
+		return dao.createLabel(user, label);
+	}
+
+	@Override
+	public List<Label> getLabels(User user) {
+		return dao.getLabels(user);
 	}
 
 }

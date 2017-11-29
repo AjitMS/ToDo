@@ -16,6 +16,7 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.bridgeit.entity.Label;
 import com.bridgeit.entity.Note;
 import com.bridgeit.entity.User;
 
@@ -342,6 +343,41 @@ public class NoteDaoImpl implements NoteDao {
 		session.delete(note);
 		tx.commit();
 		session.close();
+	}
+
+	@Override
+	public Label createLabel(User user, Label label) {
+		System.out.println("LABEL IS: "+label);
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		label.setId(null);
+		label.setUser(user);
+		session.save(label);
+		tx.commit();
+		session.close();
+		return label;
+	}
+
+	@Override
+	public List<Label> getLabels(User user) {
+
+		logger.info("Into getLabels()");
+		Session session = sessionFactory.openSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Label> criteria = builder.createQuery(Label.class);
+		criteria.from(Label.class);
+		List<Label> entireLabelList = session.createQuery(criteria).getResultList();
+		// learn a more efficient way to retrieve notes
+		List<Label> labelList = new ArrayList<>();
+
+		// retrieve labels of which user is owner
+		if (entireLabelList.size() != 0)
+
+			for (Label tempLabel : entireLabelList)
+				if (tempLabel.getUser().getId().compareTo(user.getId()) == 0) {
+					labelList.add(tempLabel);
+				}
+		return labelList;
 	}
 
 }

@@ -81,6 +81,18 @@ public class Note {
 	@Column(name = "reminder")
 	private LocalDateTime reminder;
 
+	@ManyToMany
+	@JoinTable(name = "note_label", joinColumns = @JoinColumn(name = "labelid"), inverseJoinColumns = @JoinColumn(name = "noteid"))
+	private Set<Label> label;
+
+	public Set<Label> getLabel() {
+		return label;
+	}
+
+	public void setLabel(Set<Label> label) {
+		this.label = label;
+	}
+
 	public LocalDateTime getReminder() {
 		return reminder;
 	}
@@ -99,7 +111,7 @@ public class Note {
 
 	public Note(String title, Integer noteId, LocalDateTime createdDate, LocalDateTime modifiedDate, String description,
 			boolean isArchived, boolean inTrash, boolean isPinned, User user, Set<User> collabUsers, String color,
-			String image) {
+			String image, LocalDateTime reminder, Set<Label> label) {
 		super();
 		this.title = title;
 		this.noteId = noteId;
@@ -113,6 +125,8 @@ public class Note {
 		this.collabUsers = collabUsers;
 		this.color = color;
 		this.image = image;
+		this.reminder = reminder;
+		this.label = label;
 	}
 
 	public String getColor() {
@@ -223,8 +237,8 @@ public class Note {
 	public String toString() {
 		return "Note [title=" + title + ", noteId=" + noteId + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + ", description=" + description + ", isArchived=" + isArchived + ", inTrash=" + inTrash
-				+ ", isPinned=" + isPinned + ", user=" + user + ", collabUsers=" + collabUsers + ", color=" + color
-				+ ", image=" + image + ", reminder=" + reminder + "]";
+				+ ", isPinned=" + isPinned + ", collabUsers=" + collabUsers + ", color=" + color + ", image=" + image
+				+ ", reminder=" + reminder + ", label=" + label + "]";
 	}
 
 	public Note() {
