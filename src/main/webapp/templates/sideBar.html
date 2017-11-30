@@ -3,24 +3,35 @@
 
 	<div ng-click="redirectToHome()"
 		class="row container-fluid sidebar-menu">
-		<a>Notes</a>
+		<div class="col-12">
+			<div class="col-6">
+				<i class="material-icons">lightbulb_outline</i>
+			</div>
+			<div class="col-6" style="float: left !important">
+				<a>Notes</a>
+			</div>
+		</div>
 	</div>
 	<div ng-click="redirectToArchive()"
 		class="row container-fluid sidebar-menu">
-		<a>Archive</a>
+		<i class="material-icons">archive</i><a>Archive</a>
+
 	</div>
 	<hr />
 
 	<div class="row container-fluid sidebar-menu"
-		ng-repeat="label in labels">
+		ng-repeat="label in labels track by $index" ng-click="redirectToLabel(label)"> 
 		<a>{{label.name}}</a>
 	</div>
 
-	<div class="row container-fluid sidebar-menu">
-		<input type="text" ng-model="label.name" class="form-control" />
+	<div class="row container-fluid">
+		<input placeholder="create new label" type="text"
+			ng-model="label.name" class="form-control" />
 		<button class="btn btn-danger btn-block" ng-click="createLabel(label)">+</button>
 	</div>
+	
 	<hr />
+	
 	<div ng-click="redirectToTrash()"
 		class="row container-fluid sidebar-menu">
 		<a>Trash</a>
@@ -29,8 +40,9 @@
 		class="row container-fluid sidebar-menu">
 		<a>Reminder</a>
 	</div>
+
 	<div class="row container-fluid sidebar-menu">
-		<a href="">Contact</a>
+		<i class="material-icons">touch_app</i> <a href="">Reminder</a>
 	</div>
 
 </div>

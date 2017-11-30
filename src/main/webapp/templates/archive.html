@@ -1,6 +1,10 @@
 <nav-bar></nav-bar>
 
 <side-bar></side-bar>
+
+<show-note-modal></show-note-modal>
+
+<collaborate-modal></collaborate-modal>
 <div id="main">
 	<div class="row container-flex">
 		<div class="col-md-9 col-xs-12 container-fluid">
@@ -14,8 +18,8 @@
 				<div id="{{note.noteId}}" ng-class="view"
 					ng-style="{'background-color' : note.color, 'border' : note.color}"
 					ng-repeat="note in notes | filter: {inTrash : false} | filter: {pinned : false} | filter: {archived : true} track by $index ">
-					<div style="margin: 0px; padding: 0px" ng-click="showNote(note)">
-						<div class="card-title">
+					<div style="margin: 0px; padding: 0px">
+						<div class="card-title" ng-click="showNote(note)">
 							<strong class="card-title">{{note.title}}</strong>
 							<div class="float-right">
 								<a title="Pin note"
@@ -25,7 +29,7 @@
 							</div>
 
 						</div>
-						<div class="card-body">
+						<div ng-click="showNote(note)" class="card-body">
 							<p class="card-text">{{note.description}}</p>
 						</div>
 					</div>
@@ -107,6 +111,10 @@
 		</div>
 	</div>
 </div>
+
+
+
+
 
 
 

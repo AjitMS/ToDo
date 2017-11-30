@@ -1,5 +1,6 @@
 package com.bridgeit.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -27,7 +28,7 @@ public class Label {
 
 	@JsonIgnore
 	@ManyToMany(mappedBy="label")
-	private Set<Note> notes;
+	private Set<Note> notes = new HashSet<>();
 
 	@JsonIgnore
 	@ManyToOne

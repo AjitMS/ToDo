@@ -82,8 +82,8 @@ public class Note {
 	private LocalDateTime reminder;
 
 	@ManyToMany
-	@JoinTable(name = "note_label", joinColumns = @JoinColumn(name = "labelid"), inverseJoinColumns = @JoinColumn(name = "noteid"))
-	private Set<Label> label;
+	@JoinTable(name = "note_label", joinColumns = @JoinColumn(name = "noteid"), inverseJoinColumns = @JoinColumn(name = "labelid"))
+	private Set<Label> label = new HashSet<>();
 
 	public Set<Label> getLabel() {
 		return label;
@@ -238,7 +238,7 @@ public class Note {
 		return "Note [title=" + title + ", noteId=" + noteId + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + ", description=" + description + ", isArchived=" + isArchived + ", inTrash=" + inTrash
 				+ ", isPinned=" + isPinned + ", collabUsers=" + collabUsers + ", color=" + color + ", image=" + image
-				+ ", reminder=" + reminder + ", label=" + label + "]";
+				+ ", reminder=" + reminder + ", ]";
 	}
 
 	public Note() {

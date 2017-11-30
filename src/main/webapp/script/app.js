@@ -43,6 +43,10 @@ todo.config(function($stateProvider, $urlRouterProvider) {
 		url : '/reminder',
 		controller : 'homeController',
 		templateUrl : 'templates/reminder.html'
+	}).state('label/:labelName', {
+		url : '/label/:labelName',
+		controller : 'homeController',
+		templateUrl : 'templates/userLabel.html'
 	})
 
 	$urlRouterProvider.otherwise('login');

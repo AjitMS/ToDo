@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.log4j.Logger;
+import org.dom4j.IllegalAddException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -294,8 +295,7 @@ public class NoteDaoImpl implements NoteDao {
 			for (User tempUser : collabUsers) {
 				if (cUser.getId().compareTo(tempUser.getId()) == 0) {
 					isNoteCollab = true;
-					logger.info("User is already collaborated");
-					return;
+					throw new IllegalAddException("User is already collaborated");
 				}
 			}
 		}
@@ -347,7 +347,7 @@ public class NoteDaoImpl implements NoteDao {
 
 	@Override
 	public Label createLabel(User user, Label label) {
-		System.out.println("LABEL IS: "+label);
+		System.out.println("LABEL IS: " + label);
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		label.setId(null);

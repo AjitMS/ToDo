@@ -156,7 +156,7 @@ public class NoteController {
 	@PutMapping(value = "/usernotes/updatenote")
 	public ResponseEntity<Note> updateNote(@RequestBody Note updatedNote, HttpServletRequest request)
 			throws IOException {
-		System.out.println("updatedNOte.image: " + updatedNote.getImage());
+
 		Integer uId = (Integer) request.getAttribute("userId");
 		Integer nId = updatedNote.getNoteId();
 		System.out.println("imafge : " + updatedNote.getImage());
@@ -276,44 +276,43 @@ public class NoteController {
 	@PostMapping(value = "/usernotes/collaborate")
 	public ResponseEntity<User> collaborateNote(@RequestBody Note cNote, HttpServletRequest request,
 			HttpServletResponse response) {
-		User cUser = new User();
-		logger.info("Note Object: " + cNote);
+
 		if (cNote == null) {
 			logger.info("Note Empty");
 			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
-		String email = request.getHeader("userEmail");
-		User tempUser = new User();
-		tempUser = userService.getUserByEmail(email, tempUser);
-		if (!userService.userExists(tempUser)) {
-			logger.info("Invalid Email in collaborator");
-			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-		}
-		Integer userId = (Integer) request.getAttribute("userId");
 		if (request.getHeader("userEmail") == null) {
 			logger.info("*********No email received*********");
 			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
-
-		logger.info("collaborating note with id: " + cNote.getNoteId());
-
-		cNote = noteService.getNoteById(cNote.getUser().getId(), cNote.getNoteId());
-		System.out.println("cNOte: " + cNote);
-		if (cNote == null) {
-			logger.info("Note does not exist");
+		logger.info("Note Object: " + cNote);
+		String email = request.getHeader("userEmail");
+		User cUser = new User();
+		Integer userId = (Integer) request.getAttribute("userId");
+		cUser = userService.getUserByEmail(email, cUser);
+		if (!userService.userExists(cUser)) {
+			logger.info("Invalid Email in collaborator");
 			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
-		Integer cUserId = tempUser.getId();
-		// check if logged in user is editing note.
-		// or collaborated users editing note //
 
-		if (userId.compareTo(cNote.getUser().getId()) == 0) {
+		logger.info("collaborating note with id: " + cNote.getNoteId());
+		Integer cUserId = cUser.getId();
+		// check if logged in user is editing note.
+		// or collaborated users' editing note //
+		User loggedUser = new User();
+		loggedUser = userService.getUserById(userId, loggedUser);
+		if (loggedUser.getId().compareTo(cNote.getUser().getId()) == 0 || cNote.getCollabUsers().contains(loggedUser)) {
 			cUser = userService.getUserById(cUserId, cUser);
-			noteService.collaborateUser(cUser, cNote);
+			try {
+				noteService.collaborateUser(cUser, cNote);
+			} catch (Exception E) {
+				logger.info("User is already collaborated");
+				return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+			}
 
 		} else {
 			logger.info("Note Owner Authorization failed");
-			return new ResponseEntity<User>(cUser, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
 		}
 
 		return new ResponseEntity<User>(cUser, HttpStatus.OK);

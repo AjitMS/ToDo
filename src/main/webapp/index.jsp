@@ -105,6 +105,7 @@
 <script type="text/javascript" src="directives/collaborateModal.js"></script>
 <script type="text/javascript" src="directives/showNoteModal.js"></script>
 <script type="text/javascript" src="directives/ngFiles.js"></script>
+<script type="text/javascript" src="directives/LabelFilter.js"></script>
 
 
 </head>

@@ -2,8 +2,6 @@ var todo = angular.module('todo');
 todo.controller('resetPasswordController', function($scope,
 		resetPasswordService, $location, $stateParams) {
 	
-	
-	
 	$scope.reset = function() {
 		console.log('hello');
 		$scope.user.id = JSON.parse(localStorage.getItem('forgotToken')).userId;

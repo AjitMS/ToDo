@@ -3,7 +3,7 @@ todo
 		.controller(
 				'homeController',
 				function($state, $location, $scope, $timeout, homeService,
-						uploadService, toastr) {
+						uploadService, toastr, $stateParams) {
 					$scope.gridView = "card note col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-3";
 					$scope.listView = "card note col-xs-8 col-lg-8";
 					$scope.view = $scope.gridView;
@@ -22,6 +22,9 @@ todo
 					$scope.collabNote = {};
 					$scope.collabUsers = {};
 					$scope.uploadingImageTo = {};
+					$scope.labellingNote = {};
+					$scope.labelName = {};
+					$scope.labelObject = {};
 
 					$scope.colors = {
 						color1 : "#FFFFFF",
@@ -47,6 +50,13 @@ todo
 							columnWidth : '.grid-sizer'
 						}
 					});
+
+					$scope.labelName = $stateParams.labelName
+					for (var i = 0; i < $scope.labels.length; i++)
+						if ($scope.labels[i].name == labelName) {
+							$scope.labelObject = $scope.labels[i];
+							break;
+						}
 
 					$scope.sidebarOpened = true;
 
@@ -95,7 +105,7 @@ todo
 					}
 
 					$scope.redirectToTrash = function() {
-						$location.path('/trash');
+						$state.go('trash');
 					}
 
 					$scope.redirectToArchive = function() {
@@ -268,14 +278,7 @@ todo
 						console.log('notes loaded');
 						console.log(response.data);
 						$scope.notes = (response.data);
-						/*
-						 * for (i = 0; i < $scope.notes.length; i++) {
-						 * $scope.dateNotes[i] = $scope.notes[i];
-						 * if($scope.dateNotes[i].reminder != null)
-						 * $scope.dateNotes[i].reminder = new Date(
-						 * $scope.dateNotes[i].reminder); }
-						 */
-						toastr.success('Notes are ready', 'Welcome !');
+						/* toastr.success('Notes are ready', 'Welcome !'); */
 
 					}, function(response) {
 						console.log('error loading notes');
@@ -352,22 +355,24 @@ todo
 					$scope.unCollaborateUser = function(user, note) {
 						console.log('un-collaborating note: ' + note.noteId
 								+ ' with user: ' + user.id);
-						for (var i = 0; i < note.collabUsers.length; i++)
-							if (note.collabUsers[i].id == user.id)
-								var index = note.collabUsers.indexOf(user);
-							else
-								return;
-						note.collabUsers.splice(index, 1);
+						for (var i = 0; i < note.collabUsers.length; i++) {
+							console.log('note.collabUsers[i].id: '
+									+ note.collabUsers[i].id + ', user.id: '
+									+ user.id);
+							if (note.collabUsers[i].id == user.id) {
 
+								var index = note.collabUsers.indexOf(user);
+								note.collabUsers.splice(index, 1);
+							}
+						}
 						var httpresponse = homeService.uncollaborateuser(note,
 								accessToken, refreshToken);
 						httpresponse.then(function(response) {
 							toastr.success('Note uncollaborated', 'success');
 							console.log('uncollaborated success!');
-							var index = $scope.notes.indexOf(note);
-							$scope.notes.splice(index, 1);
 						}, function(response) {
 							// $scope.noSuchEmail = true;
+							$state.reload();
 							toastr
 									.error('note cannot be collaborated',
 											'error');
@@ -510,7 +515,7 @@ todo
 								refreshToken, label);
 						httpresponse.then(function(response) {
 							console.log('label created: ' + response.data);
-
+							$scope.labels.push(response.data);
 						}, function(response) {
 							console.log('label cannot be created');
 						});
@@ -525,5 +530,52 @@ todo
 					}, function(response) {
 						console.log('error loading labels');
 					});
+
+					$scope.redirectToLabel = function(label) {
+						console.log('redirecting to label: ' + label.name);
+						$location.path('/label/' + label.name);
+					}
+
+					$scope.labelNote = function(label, isLabelled) {
+						console.log('isLabelled: ' + isLabelled);
+						console.log('isl label null ' + label);
+						if (isLabelled) {
+
+							console.log(JSON.stringify(label));
+							var note = $scope.labellingNote;
+							console.log(note);
+							note.label.push(label);
+							console.log(note);
+							var httpresponse = homeService.updatenote(note,
+									accessToken, refreshToken);
+							httpresponse.then(function(response) {
+								console.log('note labelled');
+								console.log(note);
+
+								toastr.success('Note Labelled', 'success');
+							}, function(response) {
+								/* $state.reload(); */
+								toastr.error('Note could not be Labelled',
+										'error');
+								console.log(note);
+							});
+						}
+					}
+
+					$scope.labelNoteModal = function(note) {
+						$('#labelNoteModal').modal('show');
+						$scope.labellingNote = note;
+					}
+
+					$scope.isLabelExists = function(label) {
+						
+						console.log($scope.labellingNote);
+						if ($scope.labellingNote.label == undefined)
+							return false;
+						for (var i = 0; i < $scope.labellingNote.label.length; i++)
+							if ($scope.labellingNote.label[i] == label)
+								return true;
+						return false;
+					}
 
 				});

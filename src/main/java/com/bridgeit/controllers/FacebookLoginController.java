@@ -63,7 +63,7 @@ public class FacebookLoginController {
 	 *             After we get the access token we must use it further to get the
 	 *             graph data graph data provides user profile in JSON format.
 	 *             parsing JSON and mapping into User object and saving into DB with
-	 *             appropriate credentials and Tokens. finally redirect toi display
+	 *             appropriate credentials and Tokens. finally redirect to display
 	 *             page.
 	 */
 	@GetMapping("/fblogin")

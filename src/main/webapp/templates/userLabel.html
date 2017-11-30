@@ -1,0 +1,147 @@
+<nav-bar></nav-bar>
+
+<side-bar></side-bar>
+
+<show-note-modal></show-note-modal>
+
+<collaborate-modal></collaborate-modal>
+
+<div id="main">
+	<div class="row container-flex">
+		<div class="col-md-9 col-xs-12 container-fluid">
+			<div id="justify-center"
+				class="d-flex flex-wrap col-12 container-flex">
+				<div class="row container-fluid">
+					<div class="col-10 container-fluid">
+						<h4>{{labelName}}</h4>
+					</div>
+				</div>
+
+				<div id="{{note.noteId}}" ng-class="view" class="grid-item"
+					ng-style="{'background-color' : note.color, 'border' : note.color}"
+					ng-repeat="note in notes | filter: {inTrash : false} | filter: {pinned : false} | filter: {archived : false} | filter: {label: {name : labelName}} track by $index ">
+					<!-- <div ng-repeat="label in note.label | filter: { name : labelName }"> -->
+
+
+						<div style="margin: 0px; padding: 0px" ng-click="showNote(note)">
+
+							<div>
+								<img ng-src="{{note.image}}"
+									class="img-fluid img-thumbnail show-modal-image"
+									ng-show="note.image" />
+							</div>
+
+							<div class="card-title">
+								<strong class="card-title">{{note.title}}</strong>
+								<div class="float-right">
+									<a title="Pin note"
+										ng-click="pinNote(note); $event.stopPropagation()" href="">
+										<i class="material-icons note-menu-icons">offline_pin</i>
+									</a>
+								</div>
+							</div>
+							<div class="card-body">
+								<p class="card-text">{{note.description}}</p>
+							</div>
+						</div>
+
+						<div class="row container-fluid">
+							<div ng-show="loggedUser.id != note.user.id" class="col-1">
+								<img title="{{user.email}}" class="rounded-circle"
+									ng-src="{{note.user.image}}" alt="{{user.firstName}}"
+									width="40px" />
+							</div>
+							<div class="col-10" ng-repeat="user in note.collabUsers"
+								class="row container-fluid">
+								<div class="col-2" ng-hide="user.id == loggedUser.id">
+									<img title="{{user.email}}" class="rounded-circle"
+										ng-src="{{user.image}}" alt="{{user.firstName}}" width="40px" />
+								</div>
+							</div>
+						</div>
+
+						<div class="row form-group"
+							style="background-color: transparent; margin: 5px;"
+							ng-show="note.reminder">
+							<input class="" type="text" ng-click="setReminder(note)"
+								ng-value="note.reminder" disabled /> <a href=""
+								class="closebtn" ng-click="removeReminder(note)">&times;</a>
+
+						</div>
+
+						<div class="row note-menu">
+							<div class="col-2">
+
+								<div class="dropdown" style="overflow: visible;">
+									<a class="dropdown-toggle" id="dropdownMenuButton"
+										data-toggle="dropdown" aria-haspopup="true"
+										aria-expanded="false"><i
+										class="material-icons note-menu-icons">touch_app</i></a>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+										<datetimepicker data-on-set-time="setReminder(note)"
+											ng-model="note.reminder"></datetimepicker>
+
+									</div>
+								</div>
+
+							</div>
+							<div class="col-2">
+								<a title="Collaborator" ng-click="collaborateModal(note)"
+									href=""> <i class="material-icons note-menu-icons">person_add</i>
+								</a>
+
+							</div>
+							<div class="col-2">
+
+								<div id="color-menu" title="change color">
+
+									<color-picker color="newColor" options="colors"
+										on-color-changed="colorNote(note, newColor)"> </color-picker>
+								</div>
+							</div>
+
+
+							<div class="col-2">
+								<a title="Add picture" ng-click="openFileUpload(note)" href="">
+									<i class="material-icons note-menu-icons">photo</i>
+								</a>
+
+							</div>
+							<div class="col-2">
+								<a title="Archive" href=""
+									ng-click="archiveNote(note); $event.stopPropagation()"> <i
+									class="material-icons note-menu-icons">archive</i>
+								</a>
+
+							</div>
+							<div class="col-2">
+								<div class="dropdown show" role="button" id="dropdownMenuLink"
+									data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false">
+									<a title="More" href=""> <i
+										class="material-icons note-menu-icons">more_vert</i>
+									</a>
+
+									<div class="dropdown-menu custom-menu"
+										aria-labelledby="dropdownMenuLink" data-toggle="dropdown">
+										<a class="dropdown-item menu custom-menu-item"
+											ng-click="trashNote(note)"
+											ng-show="note.user.id == loggedUser.id" href="">Delete
+											Note</a> <a class="dropdown-item menu custom-menu-item"
+											ng-click="trashNote(note)"
+											ng-hide="note.user.id == loggedUser.id" href="">Remove
+											myself</a> <a class="dropdown-item menu custom-menu-item"
+											ng-click="copyNote(note); " href="">Make a copy</a> <a
+											class="dropdown-item menu custom-menu-item"
+											ng-click="fbAsyncSocialShare(note); " href="">Share with
+											facebook</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

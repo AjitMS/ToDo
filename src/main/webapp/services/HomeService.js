@@ -179,6 +179,18 @@ todo.factory('homeService', function($http) {
 		});
 	}
 
-	
+	methodChain.labelnote = function(note, accessToken, refreshToken) {
+		return $http({
+			data : 'note',
+			method : 'PUT',
+			url : 'usernotes/updatenote',
+			headers : {
+				'accessToken' : accessToken,
+				'refreshToken' : refreshToken
+			}
+		});
+
+	}
+
 	return methodChain;
 })
