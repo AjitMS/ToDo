@@ -362,6 +362,7 @@ public class NoteDaoImpl implements NoteDao {
 	public List<Label> getLabels(User user) {
 
 		logger.info("Into getLabels()");
+		System.out.println("User is: " + user);
 		Session session = sessionFactory.openSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Label> criteria = builder.createQuery(Label.class);

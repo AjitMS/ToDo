@@ -3,6 +3,7 @@ package com.bridgeit.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,13 +28,13 @@ public class Label {
 	private String name;
 
 	@JsonIgnore
-	@ManyToMany(mappedBy="label")
+	@ManyToMany(mappedBy="label", cascade=CascadeType.ALL)
 	private Set<Note> notes = new HashSet<>();
 
 	@JsonIgnore
 	@ManyToOne
 	private User user;
-	
+
 	public User getUser() {
 		return user;
 	}

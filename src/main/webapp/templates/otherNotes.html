@@ -137,15 +137,16 @@
 		<div class="modal-content">
 
 			<div class="modal-title">
-				<h4>Labels</h4>
+				<h4>Labels for {{labellingNote.title}}</h4>
 			</div>
 			<div class="modal-body">
-				<div class="row container-fluid" ng-repeat="label in labels">
-					<div class="col-1">
-						<input type="checkbox"
-							ng-checked="isLabelExists(labellingNote, label)"
-							ng-model="isLabelled" ng-change="labelNote(label, isLabelled)"
-							class=" form-check-input" />
+				<div class="row container-fluid">
+					<div class="col-8">
+						<input type="text" ng-model="addLabel.name" class="form-control"
+							ng-change="blurButton(addLabel.name)"/>
+						<hr />
+						<button id="labelNoteButton" ng-click="labelNote(addLabel)"
+							class="btn btn-success btn-block">+</button>
 					</div>
 					<div class="col-4">
 						<label>{{label.name}}</label>

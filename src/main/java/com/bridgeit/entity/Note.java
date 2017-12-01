@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -81,7 +82,7 @@ public class Note {
 	@Column(name = "reminder")
 	private LocalDateTime reminder;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "note_label", joinColumns = @JoinColumn(name = "noteid"), inverseJoinColumns = @JoinColumn(name = "labelid"))
 	private Set<Label> label = new HashSet<>();
 

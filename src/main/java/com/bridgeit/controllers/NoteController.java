@@ -346,7 +346,13 @@ public class NoteController {
 		logger.info("Got Id in request is: " + uId);
 		User user = new User();
 		user = userService.getUserById(uId, user);
-		List<Label> labelList = noteService.getLabels(user);
+		List<Label> labelList = new ArrayList<>();
+		try {
+			labelList = noteService.getLabels(user);
+		} catch (Exception E) {
+			E.printStackTrace();
+		}
+
 		return new ResponseEntity<List<Label>>(labelList, HttpStatus.OK);
 	}
 

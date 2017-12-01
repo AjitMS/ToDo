@@ -461,7 +461,7 @@ todo
 							var todaymilli = today.getTime();
 							var remindermilli = note.reminder.getTime();
 							var alarm = remindermilli - todaymilli;
-							if (alarm < 0) {
+							if (alarm <= 0) {
 								toastr.warning('invalid date-time', 'Warning');
 								return;
 							}
@@ -536,16 +536,13 @@ todo
 						$location.path('/label/' + label.name);
 					}
 
-					$scope.labelNote = function(label, isLabelled) {
-						console.log('isLabelled: ' + isLabelled);
-						console.log('isl label null ' + label);
-						if (isLabelled) {
+					$scope.labelNote = function(label) {
 
-							console.log(JSON.stringify(label));
+						console.log('isl label null ' + $scope.labelCopy);
+						if (true) {
+							console.log(label);
 							var note = $scope.labellingNote;
-							console.log(note);
 							note.label.push(label);
-							console.log(note);
 							var httpresponse = homeService.updatenote(note,
 									accessToken, refreshToken);
 							httpresponse.then(function(response) {
@@ -563,19 +560,31 @@ todo
 					}
 
 					$scope.labelNoteModal = function(note) {
-						$('#labelNoteModal').modal('show');
 						$scope.labellingNote = note;
+						$('#labelNoteModal').modal('show');
+						console.log($scope.labellingNote)
+					}
+					$scope.labelCopy = {};
+					$scope.isLabelExists = function(label) {
+						if ($scope.labellingNote.label == undefined)
+							return;
+						$scope.labelCopy = angular.copy(label);
+						for (var i = 0; i < $scope.labellingNote.label.length; i++) {
+							if ($scope.labellingNote.label[i].name == label.name) {
+								return false;
+							} else {
+								return true;
+							}
+						}
 					}
 
-					$scope.isLabelExists = function(label) {
-						
-						console.log($scope.labellingNote);
-						if ($scope.labellingNote.label == undefined)
-							return false;
+					$scope.blurButton = function(addLabel) {
+						console.log('changing')
 						for (var i = 0; i < $scope.labellingNote.label.length; i++)
-							if ($scope.labellingNote.label[i] == label)
-								return true;
-						return false;
+							if ($scope.labellingNote.label[i].name == addLabel)
+								$('#labelNoteButton').prop("disabled", true);
+							else
+								$('#labelNoteButton').prop("disabled", false);
 					}
 
 				});
